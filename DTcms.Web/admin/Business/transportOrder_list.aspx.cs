@@ -36,7 +36,7 @@ namespace DTcms.Web.admin.Business
             if (!Page.IsPostBack)
             {
                 TreeBind(""); //绑定类别
-                RptBind("b.Id>0" + CombSqlTxt(_carNumber, _customer1, _customer2, _beginTime, _endTime, this.keywords), "Id desc");
+                RptBind("Id>0" + CombSqlTxt(_carNumber, _customer1, _customer2, _beginTime, _endTime, this.keywords), "Id desc");
             }
         }
 
@@ -52,25 +52,6 @@ namespace DTcms.Web.admin.Business
             {
                 this.ddlCarNumber.Items.Add(new ListItem(dr["CarCode"].ToString(), dr["CarCode"].ToString()));
             }
-
-            BLL.Customer customerBll = new BLL.Customer();
-            DataTable customerDT = customerBll.GetList(0, strWhere, "Id desc").Tables[0];
-
-            ddlCustomer1.Items.Clear();
-            ddlCustomer1.Items.Add(new ListItem("托运方不限", ""));
-            ddlCustomer2.Items.Clear();
-            ddlCustomer2.Items.Add(new ListItem("收货方不限", ""));
-            foreach (DataRow dr in customerDT.Rows)
-            {
-                if (!dr["Category"].ToString().Equals("托运方"))
-                {
-                    this.ddlCustomer2.Items.Add(new ListItem(dr["ShortName"].ToString(), dr["ShortName"].ToString()));
-                }
-                if (!dr["Category"].ToString().Equals("收货方"))
-                {
-                    this.ddlCustomer1.Items.Add(new ListItem(dr["ShortName"].ToString(), dr["ShortName"].ToString()));
-                }
-            }
         }
         #endregion
 
@@ -82,14 +63,6 @@ namespace DTcms.Web.admin.Business
             {
                 ddlCarNumber.SelectedValue = _carNumber;
             }
-            if (!string.IsNullOrEmpty(_customer1))
-            {
-                ddlCustomer1.SelectedValue = _customer1;
-            }
-            if (!string.IsNullOrEmpty(_customer2))
-            {
-                ddlCustomer2.SelectedValue = _customer2;
-            }
             if (!string.IsNullOrEmpty(_beginTime))
             {
                 txtBeginTime.Text = _beginTime;
@@ -100,7 +73,7 @@ namespace DTcms.Web.admin.Business
             }
             this.txtKeywords.Text = this.keywords;
             BLL.TransportOrder bll = new BLL.TransportOrder();
-            this.rptList.DataSource = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
+            this.rptList.DataSource = bll.GetMyList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
             this.rptList.DataBind();
 
             //绑定页码
@@ -171,18 +144,6 @@ namespace DTcms.Web.admin.Business
         {
             Response.Redirect(Utils.CombUrlTxt("transportOrder_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}",
                 ddlCarNumber.SelectedValue, _customer1, _customer2,_beginTime, _endTime, keywords));
-        }
-
-        protected void ddlCustomer1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Response.Redirect(Utils.CombUrlTxt("transportOrder_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}}",
-                _carNumber, ddlCustomer1.SelectedValue, _customer2,_beginTime, _endTime, this.keywords));
-        }
-
-        protected void ddlCustomer2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Response.Redirect(Utils.CombUrlTxt("transportOrder_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}",
-                _carNumber, _customer1, ddlCustomer2.SelectedValue, _beginTime, _endTime, this.keywords));
         }
 
         //设置分页数量

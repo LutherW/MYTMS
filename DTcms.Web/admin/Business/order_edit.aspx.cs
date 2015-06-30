@@ -13,6 +13,7 @@ namespace DTcms.Web.admin.Business
         string defaultpassword = "0|0|0|0"; //默认显示密码
         protected string action = DTEnums.ActionEnum.Add.ToString(); //操作类型
         private int id = 0;
+        private int transportOrderId = 0;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -29,6 +30,16 @@ namespace DTcms.Web.admin.Business
                 if (!new BLL.Order().Exists(this.id))
                 {
                     JscriptMsg("信息不存在或已被删除！", "back", "Error");
+                    return;
+                }
+            }
+            if (!string.IsNullOrEmpty(_action) && _action == DTEnums.ActionEnum.Add.ToString())
+            {
+                this.action = DTEnums.ActionEnum.Add.ToString();//修改类型
+                this.transportOrderId = DTRequest.GetQueryInt("transportOrderId");
+                if (this.transportOrderId == 0)
+                {
+                    JscriptMsg("传输参数不正确！", "back", "Error");
                     return;
                 }
             }
@@ -54,11 +65,6 @@ namespace DTcms.Web.admin.Business
             {
                 this.ddlHaulway.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
             }
-
-            ddlFormula.Items.Clear();
-            ddlFormula.Items.Add(new ListItem("计量*运费单价", "1"));
-            ddlFormula.Items.Add(new ListItem("计量*公里*运费单价", "2"));
-            ddlFormula.Items.Add(new ListItem("固定运费", "3"));
 
             BLL.Customer customerBll = new BLL.Customer();
             DataTable customerDT = customerBll.GetList(0, strWhere, "Id desc").Tables[0];
@@ -104,11 +110,6 @@ namespace DTcms.Web.admin.Business
             {
                 this.ddlGoods.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
             }
-
-            ddlSettleAccountsWay.Items.Clear();
-            ddlSettleAccountsWay.Items.Add(new ListItem("现结", "现结"));
-            ddlSettleAccountsWay.Items.Add(new ListItem("月结", "月结"));
-            ddlSettleAccountsWay.Items.Add(new ListItem("预付", "预付"));
         }
 
         protected void ddlHaulway_SelectedIndexChanged(object sender, EventArgs e)
@@ -122,25 +123,6 @@ namespace DTcms.Web.admin.Business
                     txtLoadingCapacityRunning.Text = haulway.LoadingCapacityRunning.ToString();
                     txtNoLoadingCapacityRunning.Text = haulway.NoLoadingCapacityRunning.ToString();
                 }
-            }
-        }
-
-        protected void ddlFormula_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string val = ddlFormula.SelectedValue;
-            switch (val)
-            {
-                case "1":
-                    txtTotalPrice.Text = (Convert.ToDecimal(txtQuantity.Text.Trim()) * Convert.ToDecimal(txtUnitPrice.Text.Trim())).ToString("0.00");
-                    break;
-                case "2":
-                    txtTotalPrice.Text = (Convert.ToDecimal(txtQuantity.Text.Trim()) * Convert.ToDecimal(txtLoadingCapacityRunning.Text.Trim()) * Convert.ToDecimal(txtUnitPrice.Text.Trim())).ToString("0.00");
-                    break;
-                case "3":
-                    txtTotalPrice.Text = (Convert.ToDecimal(txtUnitPrice.Text.Trim())).ToString("0.00");
-                    break;
-                default:
-                    break;
             }
         }
 
@@ -192,6 +174,7 @@ namespace DTcms.Web.admin.Business
             BLL.Order bll = new BLL.Order();
             Model.Order model = bll.GetModel(_id);
 
+            txtCode.Text = model.Code;
             txtAcceptOrderTime.Text = model.AcceptOrderTime.ToString("yyyy-MM-dd");
             txtArrivedTime.Text = model.ArrivedTime.ToString("yyyy-MM-dd");
             txtQuantity.Text = model.Quantity.ToString();
@@ -200,16 +183,8 @@ namespace DTcms.Web.admin.Business
             {
                 ddlHaulway.Items.FindByText(model.Haulway).Selected = true;
             }
-            
             txtLoadingCapacityRunning.Text = model.LoadingCapacityRunning.ToString();
             txtNoLoadingCapacityRunning.Text = model.NoLoadingCapacityRunning.ToString();
-            if (!string.IsNullOrEmpty(model.Formula))
-            {
-                ddlFormula.Items.FindByText(model.Formula).Selected = true;
-            }
-            txtUnitPrice.Text = model.UnitPrice.ToString();
-            txtTotalPrice.Text = model.TotalPrice.ToString();
-
             if (!string.IsNullOrEmpty(model.Shipper))
             {
                 ddlShipper.Items.FindByText(model.Shipper).Selected = true;
@@ -233,10 +208,6 @@ namespace DTcms.Web.admin.Business
             {
                 ddlUnloadingAddress.Items.FindByText(model.UnloadingAddress).Selected = true;
             }
-            if (!string.IsNullOrEmpty(model.SettleAccountsWay))
-            {
-                ddlSettleAccountsWay.Items.FindByText(model.SettleAccountsWay).Selected = true;
-            }
             if (!string.IsNullOrEmpty(model.Goods))
             {
                 ddlGoods.Items.FindByText(model.Goods).Selected = true;
@@ -253,7 +224,7 @@ namespace DTcms.Web.admin.Business
             Model.Order model = new Model.Order();
             BLL.Order bll = new BLL.Order();
 
-            model.Code = "No" + DateTime.Now.ToString("yyyyMMddhhmmss");
+            model.Code = txtCode.Text.Trim();
             model.AcceptOrderTime = Convert.ToDateTime(txtAcceptOrderTime.Text.Trim());
             model.ArrivedTime = Convert.ToDateTime(txtArrivedTime.Text.Trim());
             model.Shipper = ddlShipper.SelectedItem.Text;
@@ -275,10 +246,10 @@ namespace DTcms.Web.admin.Business
             model.NoLoadingCapacityRunning = Convert.ToDecimal(txtNoLoadingCapacityRunning.Text.Trim());
             model.BillNumber = txtBillNumber.Text.Trim();
             model.WeighbridgeNumber = txtWeighbridgeNumber.Text.Trim();
-            model.Formula = ddlFormula.SelectedItem.Text;
-            model.UnitPrice = Convert.ToDecimal(txtUnitPrice.Text.Trim());
-            model.TotalPrice = Convert.ToDecimal(txtTotalPrice.Text.Trim());
-            model.SettleAccountsWay = ddlSettleAccountsWay.SelectedValue;
+            //model.Formula = ddlFormula.SelectedItem.Text;
+            //model.UnitPrice = Convert.ToDecimal(txtUnitPrice.Text.Trim());
+            //model.TotalPrice = Convert.ToDecimal(txtTotalPrice.Text.Trim());
+            //model.SettleAccountsWay = ddlSettleAccountsWay.SelectedValue;
             model.Status = 0;
             model.Remarks = txtRemarks.Text.Trim();
 

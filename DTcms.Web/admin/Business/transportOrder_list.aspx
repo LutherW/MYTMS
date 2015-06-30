@@ -19,10 +19,32 @@
         $(function () {
 
         });
+
         function print() {
             $("#print_content").jqprint();
         }
 
+        function addOrder(id) {
+            var dialog = $.dialog({
+                title: '收费项',
+                content: 'url:order_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>&transportOrderId=' + id,
+                min: false,
+                max: false,
+                lock: true,
+                width: 700
+            });
+        }
+
+        function showOrders(id) {
+            var dialog = $.dialog({
+                title: '收费项',
+                content: 'url:order_list.aspx?action=<%=DTEnums.ActionEnum.Add %>&transportOrderId=' + id,
+                min: false,
+                max: false,
+                lock: true,
+                width: 700
+            });
+        }
     </script>
 </head>
 
@@ -35,7 +57,7 @@
             <i class="arrow"></i>
             <span>业务管理</span>
             <i class="arrow"></i>
-            <span>派车调度列表</span>
+            <span>运输单列表</span>
         </div>
         <!--/导航栏-->
 
@@ -59,16 +81,6 @@
                         </span>
                         <div class="rule-single-select">
                             <asp:DropDownList ID="ddlCarNumber" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlCarNumber_SelectedIndexChanged"></asp:DropDownList>
-                        </div>
-                        <span style="font-size: 12px;">托运方:
-                        </span>
-                        <div class="rule-single-select">
-                            <asp:DropDownList ID="ddlCustomer1" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlCustomer1_SelectedIndexChanged"></asp:DropDownList>
-                        </div>
-                        <span style="font-size: 12px;">收货方:
-                        </span>
-                        <div class="rule-single-select">
-                            <asp:DropDownList ID="ddlCustomer2" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlCustomer2_SelectedIndexChanged"></asp:DropDownList>
                         </div>
                     </div>
                 </div>
@@ -131,7 +143,10 @@
                         <td align="center"><%#Eval("Unit")%></td>
                         <td align="center"><%#Eval("DispatchCount").ToString().Equals("0.00") ? "包车" : Eval("DispatchCount").ToString()%></td>
                         <td align="center"><%#Eval("FactDispatchCount")%></td>
-                        <td align="center"><%#(Eval("Status").ToString().Equals("0") || Eval("Status").ToString().Equals("1")) ? string.Format("<a href=\"transportOrder_edit.aspx?action={0}&id={1}\">{2}</a>", DTEnums.ActionEnum.Edit, Eval("Id"), "修改") : "已报账"%></td>
+                        <td align="center">
+                            <%#(Eval("Status").ToString().Equals("0") || Eval("Status").ToString().Equals("1")) ? string.Format("<a href=\"transportOrder_edit.aspx?action={0}&id={1}\">{2}</a>", DTEnums.ActionEnum.Edit, Eval("Id"), "修改") : "已报账"%>
+                            <a href='javascript:void(0);' onclick="addOrder(<%#Eval("Id") %>);">添加订单</a>
+                        </td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>

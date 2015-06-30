@@ -254,6 +254,11 @@ namespace DTcms.BLL
             return dal.GetList(pageSize, pageIndex, strWhere, filedOrder, out recordCount);
         }
 
+        public DataSet GetMyList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
+        {
+            return dal.GetMyList(pageSize, pageIndex, strWhere, filedOrder, out recordCount);
+        }
+
         public DataSet GetRecordsList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
         {
             return dal.GetRecordsList(pageSize, pageIndex, strWhere, filedOrder, out recordCount);

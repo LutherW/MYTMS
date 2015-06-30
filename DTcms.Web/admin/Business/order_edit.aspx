@@ -20,10 +20,6 @@
         $(function () {
             //初始化表单验证
             $("#form1").initValidform();
-            //初始化上传控件
-            //$(".upload-img").each(function () {
-            //    $(this).InitSWFUpload({ sendurl: "../../tools/upload_ajax.ashx", flashurl: "../../scripts/swfupload/swfupload.swf" });
-            //});
 
             $("#ddlHaulway").change(function () {
                 var val = $(this).val();
@@ -40,39 +36,39 @@
                 }
             });
 
-            $("#ddlFormula").change(function () {
-                var val = $(this).val();
-                var quantity = $("#txtQuantity").val();
-                var unitPrice = $("#txtUnitPrice").val();
+            //$("#ddlFormula").change(function () {
+            //    var val = $(this).val();
+            //    var quantity = $("#txtQuantity").val();
+            //    var unitPrice = $("#txtUnitPrice").val();
 
-                if (val == 1) {
-                    if (quantity > 0 && unitPrice > 0) {
-                        $("#txtTotalPrice").val(quantity * unitPrice);
-                    }
-                } else if (val == 2) {
-                    var loadingCapacityRunning = $("#txtLoadingCapacityRunning").val();
-                    if (quantity > 0 && unitPrice > 0 && loadingCapacityRunning > 0) {
-                        $("#txtTotalPrice").val(quantity * unitPrice * loadingCapacityRunning);
-                    }
-                }
-            });
+            //    if (val == 1) {
+            //        if (quantity > 0 && unitPrice > 0) {
+            //            $("#txtTotalPrice").val(quantity * unitPrice);
+            //        }
+            //    } else if (val == 2) {
+            //        var loadingCapacityRunning = $("#txtLoadingCapacityRunning").val();
+            //        if (quantity > 0 && unitPrice > 0 && loadingCapacityRunning > 0) {
+            //            $("#txtTotalPrice").val(quantity * unitPrice * loadingCapacityRunning);
+            //        }
+            //    }
+            //});
 
-            $("#txtTotalPrice").focus(function () {
-                var val = $("#ddlFormula").val();
-                var quantity = $("#txtQuantity").val();
-                var unitPrice = $("#txtUnitPrice").val();
+            //$("#txtTotalPrice").focus(function () {
+            //    var val = $("#ddlFormula").val();
+            //    var quantity = $("#txtQuantity").val();
+            //    var unitPrice = $("#txtUnitPrice").val();
 
-                if (val == 1) {
-                    if (quantity > 0 && unitPrice > 0) {
-                        $(this).val(quantity * unitPrice);
-                    }
-                } else if (val == 2) {
-                    var loadingCapacityRunning = $("#txtLoadingCapacityRunning").val();
-                    if (quantity > 0 && unitPrice > 0 && loadingCapacityRunning > 0) {
-                        $(this).val(quantity * unitPrice * loadingCapacityRunning);
-                    }
-                }
-            });
+            //    if (val == 1) {
+            //        if (quantity > 0 && unitPrice > 0) {
+            //            $(this).val(quantity * unitPrice);
+            //        }
+            //    } else if (val == 2) {
+            //        var loadingCapacityRunning = $("#txtLoadingCapacityRunning").val();
+            //        if (quantity > 0 && unitPrice > 0 && loadingCapacityRunning > 0) {
+            //            $(this).val(quantity * unitPrice * loadingCapacityRunning);
+            //        }
+            //    }
+            //});
 
             $("#ddlShipper").change(function () {
                 var val = $(this).val();
@@ -107,9 +103,6 @@
             $("#ddlGoods").change(function () {
                 var val = $(this).val();
                 if (val > 0) {
-                    //$.getJSON("../../tools/Goods.ashx", { "action": "details", "id": val }, function (data) {
-                    //    console.info(data);
-                    //});
                     $.getJSON("../../tools/Goods.ashx", { "action": "details", "id": val }, function (data) {
                         if (data.status == 1) {
                             $("#txtUnit").val(data.unit);
@@ -152,6 +145,13 @@
 
         <div class="tab-content">
             <dl>
+                <dt>订单号</dt>
+                <dd>
+                    <asp:TextBox ID="txtCode" runat="server" CssClass="input normal" datatype="*1-100" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip">*订单号，100字符内</span>
+                </dd>
+            </dl>
+            <dl>
                 <dt>接单时间</dt>
                 <dd>
                     <span class="input-date"><asp:TextBox ID="txtAcceptOrderTime" runat="server" CssClass="input normal date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox><i>日期</i></span>
@@ -188,7 +188,7 @@
                 <dd>
                     <asp:TextBox ID="txtNoLoadingCapacityRunning" runat="server" CssClass="input small" Text="0.00"></asp:TextBox></dd>
             </dl>
-            <dl>
+            <%--<dl>
                 <dt>计费公式</dt>
                 <dd>
                     <div class="rule-single-select" style="z-index:9999">
@@ -213,6 +213,27 @@
                         <asp:DropDownList ID="ddlSettleAccountsWay" runat="server" datatype="*" errormsg="请选择结算方式" sucmsg=" "></asp:DropDownList>
                     </div>
                 </dd>
+            </dl>--%>
+            <dl>
+                <dt>合同号</dt>
+                <dd>
+                    <asp:TextBox ID="txtContractNumber" runat="server" CssClass="input high"></asp:TextBox>
+                    <span class="Validform_checktip"></span>
+                </dd>
+            </dl>
+            <dl>
+                <dt>提单号</dt>
+                <dd>
+                    <asp:TextBox ID="txtBillNumber" runat="server" CssClass="input high"></asp:TextBox>
+                    <span class="Validform_checktip"></span>
+                </dd>
+            </dl>
+            <dl>
+                <dt>地磅号</dt>
+                <dd>
+                    <asp:TextBox ID="txtWeighbridgeNumber" runat="server" CssClass="input high"></asp:TextBox>
+                    <span class="Validform_checktip"></span>
+                </dd>
             </dl>
         </div>
 
@@ -235,27 +256,7 @@
                     <span class="Validform_checktip"></span>
                 </dd>
             </dl>
-            <dl>
-                <dt>合同号</dt>
-                <dd>
-                    <asp:TextBox ID="txtContractNumber" runat="server" CssClass="input high"></asp:TextBox>
-                    <span class="Validform_checktip"></span>
-                </dd>
-            </dl>
-            <dl>
-                <dt>提单号</dt>
-                <dd>
-                    <asp:TextBox ID="txtBillNumber" runat="server" CssClass="input high"></asp:TextBox>
-                    <span class="Validform_checktip"></span>
-                </dd>
-            </dl>
-            <dl>
-                <dt>地磅号</dt>
-                <dd>
-                    <asp:TextBox ID="txtWeighbridgeNumber" runat="server" CssClass="input high"></asp:TextBox>
-                    <span class="Validform_checktip"></span>
-                </dd>
-            </dl>
+            
             <dl>
                 <dt>托运方</dt>
                 <dd>
