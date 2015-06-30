@@ -26,7 +26,7 @@
 
         function addOrder(id) {
             var dialog = $.dialog({
-                title: '收费项',
+                title: '添加订单',
                 content: 'url:order_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>&transportOrderId=' + id,
                 min: false,
                 max: false,
@@ -37,7 +37,7 @@
 
         function showOrders(id) {
             var dialog = $.dialog({
-                title: '收费项',
+                title: '订单列表',
                 content: 'url:order_list.aspx?action=<%=DTEnums.ActionEnum.Add %>&transportOrderId=' + id,
                 min: false,
                 max: false,
@@ -107,19 +107,16 @@
                         <tr>
                             <th width="5%">选择</th>
                             <th align="left">运输单编号</th>
-                            <th width="8%">提单号</th>
                             <th align="left" width="7%">计划出车时间</th>
-                            <th width="7%">提货地址</th>
-                            <th width="8%">目的地址</th>
-                            <th width="8%">车号</th>
+                            <th width="10%">客户描述</th>
+                            <th width="10%">路线描述</th>
+                            <th width="10%">车队</th>
                             <th width="5%">司机</th>
-                            <th width="8%">托运方</th>
-                            <th width="8%">收货方</th>
-                            <th width="5%">承运货物</th>
-                            <th width="5%">单位</th>
+                            <th width="8%">车号</th>
+                            <th width="5%">司机运费</th>
                             <th width="5%">预发量</th>
-                            <th width="5%">实发量</th>
-                            <th width="5%">操作</th>
+                            <th width="5%">运输总价</th>
+                            <th width="8%">操作</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
@@ -131,18 +128,15 @@
                         <td width="64">
                             <%#(Eval("Status").ToString().Equals("0") || Eval("Status").ToString().Equals("1")) ? string.Format("<a href=\"transportOrder_edit.aspx?action={0}&id={1}\">{2}</a>", DTEnums.ActionEnum.Edit, Eval("Id"), Eval("Code")) : Eval("Code")%>
                         </td>
-                        <td align="center"><%#Eval("BillNumber")%></td>
                         <td><%#string.Format("{0:d}", Eval("DispatchTime"))%></td>
-                        <td align="center"><%#Eval("LoadingAddress")%></td>
-                        <td align="center"><%#Eval("UnloadingAddress")%></td>
-                        <td align="center"><%#Eval("CarNumber")%></td>
+                        <td align="center"><%#Eval("CustomerRemarks")%></td>
+                        <td align="center"><%#Eval("HaulwayRemarks")%></td>
+                        <td align="center"><%#Eval("MotorcadeName")%></td>
                         <td align="center"><%#Eval("Driver")%></td>
-                        <td align="center"><%#Eval("Shipper")%></td>
-                        <td align="center"><%#Eval("Receiver")%></td>
-                        <td align="center"><%#Eval("Goods")%></td>
-                        <td align="center"><%#Eval("Unit")%></td>
-                        <td align="center"><%#Eval("DispatchCount").ToString().Equals("0.00") ? "包车" : Eval("DispatchCount").ToString()%></td>
-                        <td align="center"><%#Eval("FactDispatchCount")%></td>
+                        <td align="center"><%#Eval("CarNumber")%></td>
+                        <td align="center"><%#Eval("Carriage")%></td>
+                        <td align="center"><%#Eval("DispatchCount")%></td>
+                        <td align="center"><%#Eval("TotalPrice")%></td>
                         <td align="center">
                             <%#(Eval("Status").ToString().Equals("0") || Eval("Status").ToString().Equals("1")) ? string.Format("<a href=\"transportOrder_edit.aspx?action={0}&id={1}\">{2}</a>", DTEnums.ActionEnum.Edit, Eval("Id"), "修改") : "已报账"%>
                             <a href='javascript:void(0);' onclick="addOrder(<%#Eval("Id") %>);">添加订单</a>
@@ -150,7 +144,7 @@
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"15\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"12\">暂无记录</td></tr>" : ""%>
 </table>
                 </FooterTemplate>
             </asp:Repeater>

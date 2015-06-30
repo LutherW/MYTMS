@@ -289,10 +289,6 @@ namespace DTcms.Web.admin.Business
             model.NoLoadingCapacityRunning = Convert.ToDecimal(txtNoLoadingCapacityRunning.Text.Trim());
             model.BillNumber = txtBillNumber.Text.Trim();
             model.WeighbridgeNumber = txtWeighbridgeNumber.Text.Trim();
-            model.Formula = ddlFormula.SelectedItem.Text;
-            model.UnitPrice = Convert.ToDecimal(txtUnitPrice.Text.Trim());
-            model.TotalPrice = Convert.ToDecimal(txtTotalPrice.Text.Trim());
-            model.SettleAccountsWay = ddlSettleAccountsWay.SelectedValue;
             model.Remarks = txtRemarks.Text.Trim();
 
             if (bll.Update(model))

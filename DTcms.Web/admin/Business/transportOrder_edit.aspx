@@ -118,7 +118,6 @@
                 <div class="content-tab-ul-wrap">
                     <ul>
                         <li><a href="javascript:;" onclick="tabs(this);" class="selected">运输单信息</a></li>
-                        <li><a href="javascript:;" onclick="tabs(this);">运单项信息</a></li>
                     </ul>
                 </div>
             </div>
@@ -160,13 +159,37 @@
                     <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
+                <dt>客户描述</dt>
+                <dd>
+                    <asp:TextBox ID="txtCustomerRemarks" runat="server" CssClass="input high" datatype="*2-100" errormsg="输入2-100个字符" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip">*</span></dd>
+            </dl>
+            <dl>
+                <dt>运输路线描述</dt>
+                <dd>
+                    <asp:TextBox ID="txtHaulwayRemarks" runat="server" CssClass="input high" datatype="*2-100" errormsg="输入2-100个字符" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip">*</span></dd>
+            </dl>
+            <dl>
+                <dt>运费</dt>
+                <dd>
+                    <asp:TextBox ID="txtTotalPrice" runat="server" CssClass="input high" datatype="*2-100" errormsg="输入2-100个字符" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip">*</span></dd>
+            </dl>
+            <dl>
+                <dt>应付司机费用</dt>
+                <dd>
+                    <asp:TextBox ID="txtCarriage" runat="server" CssClass="input high" datatype="*2-100" errormsg="输入2-100个字符" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip">*</span></dd>
+            </dl>
+            <dl>
                 <dt>备注</dt>
                 <dd>
                     <asp:TextBox ID="txtRemarks" runat="server" CssClass="input" TextMode="MultiLine"></asp:TextBox>
                 </dd>
             </dl>
         </div>
-        <div class="tab-content" style="display: none; padding: 0 0 10px 0;">
+        <%--<div class="tab-content" style="display: none; padding: 0 0 10px 0;">
             <table style="margin-top: 15px; width: 100%;">
                 <tr style="padding-bottom: 20px;">
                     <td colspan="12" style="text-align: center; font-weight: bold;">待调度订单</td>
@@ -228,7 +251,7 @@
                 </tr>
                 <%=transportOrderItems %>
             </table>
-        </div>
+        </div>--%>
         <!--/内容-->
 
         <!--工具栏-->

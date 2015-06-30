@@ -81,10 +81,6 @@ namespace DTcms.Web.admin.Business
                     this.ddlCarNumber.Items.Add(new ListItem(dr["CarCode"].ToString(), dr["CarCode"].ToString()));
                 }
             }
-
-            BLL.Order orderBll = new BLL.Order();
-            this.rptList.DataSource = orderBll.GetList(" Quantity > DispatchedCount or (IsCharteredCar = 1 and DispatchedCount = 0.00)");
-            this.rptList.DataBind();
         }
         #endregion
 
