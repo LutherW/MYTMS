@@ -69,7 +69,7 @@ namespace DTcms.Web.admin.Business
             }
             this.txtKeywords.Text = this.keywords;
             BLL.TransportOrder bll = new BLL.TransportOrder();
-            this.rptList.DataSource = bll.GetMyList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
+            this.rptList.DataSource = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
             this.rptList.DataBind();
 
             //绑定页码

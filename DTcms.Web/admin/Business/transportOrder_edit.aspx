@@ -171,15 +171,33 @@
                     <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
-                <dt>运费</dt>
+                <dt>预发量</dt>
                 <dd>
-                    <asp:TextBox ID="txtTotalPrice" runat="server" CssClass="input high" datatype="*2-100" errormsg="输入2-100个字符" sucmsg=" "></asp:TextBox>
+                    <asp:TextBox ID="txtDispatchCount" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
                     <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
-                <dt>应付司机费用</dt>
+                <dt>单价</dt>
                 <dd>
-                    <asp:TextBox ID="txtCarriage" runat="server" CssClass="input high" datatype="*2-100" errormsg="输入2-100个字符" sucmsg=" "></asp:TextBox>
+                    <asp:TextBox ID="txtUnitPrice" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip">*</span></dd>
+            </dl>
+            <dl>
+                <dt>运费</dt>
+                <dd>
+                    <asp:TextBox ID="txtTotalPrice" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip">*</span></dd>
+            </dl>
+            <dl>
+                <dt>司机费用单价</dt>
+                <dd>
+                    <asp:TextBox ID="txtCarriageUnitPrice" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip">*</span></dd>
+            </dl>
+            <dl>
+                <dt>司机费用总价</dt>
+                <dd>
+                    <asp:TextBox ID="txtCarriage" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
                     <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
@@ -189,69 +207,6 @@
                 </dd>
             </dl>
         </div>
-        <%--<div class="tab-content" style="display: none; padding: 0 0 10px 0;">
-            <table style="margin-top: 15px; width: 100%;">
-                <tr style="padding-bottom: 20px;">
-                    <td colspan="12" style="text-align: center; font-weight: bold;">待调度订单</td>
-                </tr>
-            </table>
-            <asp:Repeater ID="rptList" runat="server">
-                <HeaderTemplate>
-                    <table id="orders" width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable" style="margin-top: 15px; width: 100%; border: none;">
-                        <tr>
-                            <th width="5%">选择</th>
-                            <th width="8%">合同号</th>
-                            <th width="8%">提单号</th>
-                            <th width="9%">要求到货时间</th>
-                            <th width="10%">托运方</th>
-                            <th width="10%">收货方</th>
-                            <th width="8%">货物</th>
-                            <th width="5%">计量单位</th>
-                            <th width="8%">包车/预发/已调</th>
-                            <th width="5%">单价</th>
-                            <th width="5%">总价</th>
-                        </tr>
-                </HeaderTemplate>
-                <ItemTemplate>
-                    <tr data-name="dispatching">
-                        <td align="center">
-                            <input type="checkbox" name="chkId" value="<%#Eval("Id")%>" style="vertical-align: middle;" />
-                        </td>
-                        <td id="contractNumber_<%#Eval("Id")%>" align="center"><%#Eval("ContractNumber")%></td>
-                        <td id="billNumber_<%#Eval("Id")%>" align="center"><%#Eval("BillNumber")%></td>
-                        <td id="arrivedTime_<%#Eval("Id")%>" align="center"><%#Eval("ArrivedTime")%></td>
-                        <td id="shipper_<%#Eval("Id")%>" align="center"><%#Eval("Shipper")%></td>
-                        <td id="receiver_<%#Eval("Id")%>" align="center"><%#Eval("Receiver")%></td>
-                        <td id="goods_<%#Eval("Id")%>" align="center"><%#Eval("Goods")%></td>
-                        <td id="unit_<%#Eval("Id")%>" align="center"><%#Eval("Unit")%></td>
-                        <td id="quantity_<%#Eval("Id")%>" align="center"><%#Eval("IsCharteredCar").ToString().Equals("1") ? "包车" : Eval("Quantity").ToString() + "/" + Eval("DispatchedCount").ToString()%></td>
-                        <td id="unitPrice_<%#Eval("Id")%>" align="center">￥<%#string.Format("{0:N2}", Eval("UnitPrice"))%></td>
-                        <td id="totalPrice_<%#Eval("Id")%>" align="center">￥<%#string.Format("{0:N2}", Eval("TotalPrice"))%></td>
-                    </tr>
-                </ItemTemplate>
-                <FooterTemplate></table></FooterTemplate>
-            </asp:Repeater>
-            <table style="margin-top: 15px; width: 100%;">
-                <tr style="padding-bottom: 20px;">
-                    <td colspan="12" style="text-align: center; font-weight: bold;">已调度订单</td>
-                </tr>
-            </table>
-            <table id="transportOrderItems" style="margin-top: 15px; width: 100%; border: none;" class="ltable">
-                <tr data-name="dispatched">
-                    <td width="5%"></td>
-                    <td width="10%">提单号</td>
-                    <td width="10%">托运方</td>
-                    <td width="10%">收货方</td>
-                    <td width="9%">货物</td>
-                    <td width="6%">计量单位</td>
-                    <td width="10%">包车/预发/已调</td>
-                    <td width="9%">调度计量</td>
-                    <td width="5%">单价</td>
-                    <td width="5%">总价</td>
-                </tr>
-                <%=transportOrderItems %>
-            </table>
-        </div>--%>
         <!--/内容-->
 
         <!--工具栏-->

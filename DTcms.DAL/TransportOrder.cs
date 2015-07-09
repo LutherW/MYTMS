@@ -30,803 +30,231 @@ namespace DTcms.DAL
         /// <summary>
         /// 增加一条数据
         /// </summary>
-        public int Add(Model.TransportOrder model, List<Model.TransportOrderItem> item_list, List<Model.Order> order_list)
+        public int Add(DTcms.Model.TransportOrder model)
         {
-
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into mtms_TransportOrder(");
-            strSql.Append("Code,DispatchTime,FactDispatchTime,TimeLimit,BackTime,FactBackTime,MotorcadeName,CarNumber,Trailer,Driver,Advance,Payee,Repayment,FactRepayment,Percentage,Carriage,FactCarriage,CostTotal,Profit,AddTime,Status,Remarks");
+            strSql.Append("Code,DispatchTime,FactDispatchTime,TimeLimit,ReceiptTime,WarningTime,BackTime,FactBackTime,DriverId,Advance,Payee,Repayment,FactRepayment,CarriageUnitPrice,Carriage,FactCarriage,CostTotal,Profit,AddTime,Status,CustomerRemarks,HaulwayRemarks,Remarks,FactTotalPrice,TotalPrice,UnitPrice,FactDispatchCount,DispatchCount,ReceivedWeight,UnloadingWeight,ArriveDate,FactArriveDate,LoadingCapacityRunning,NoLoadingCapacityRunning,Weight,LoadingDate");
             strSql.Append(") values (");
-            strSql.Append("@Code,@DispatchTime,@FactDispatchTime,@TimeLimit,@BackTime,@FactBackTime,@MotorcadeName,@CarNumber,@Trailer,@Driver,@Advance,@Payee,@Repayment,@FactRepayment,@Percentage,@Carriage,@FactCarriage,@CostTotal,@Profit,@AddTime,@Status,@Remarks");
+            strSql.Append("@Code,@DispatchTime,@FactDispatchTime,@TimeLimit,@ReceiptTime,@WarningTime,@BackTime,@FactBackTime,@DriverId,@Advance,@Payee,@Repayment,@FactRepayment,@CarriageUnitPrice,@Carriage,@FactCarriage,@CostTotal,@Profit,@AddTime,@Status,@CustomerRemarks,@HaulwayRemarks,@Remarks,@FactTotalPrice,@TotalPrice,@UnitPrice,@FactDispatchCount,@DispatchCount,@ReceivedWeight,@UnloadingWeight,@ArriveDate,@FactArriveDate,@LoadingCapacityRunning,@NoLoadingCapacityRunning,@Weight,@LoadingDate");
             strSql.Append(") ");
-            strSql.Append(";set @ReturnValue= @@IDENTITY");
+            strSql.Append(";select @@IDENTITY");
             SqlParameter[] parameters = {
 			            new SqlParameter("@Code", SqlDbType.VarChar,254) ,            
                         new SqlParameter("@DispatchTime", SqlDbType.DateTime) ,            
                         new SqlParameter("@FactDispatchTime", SqlDbType.DateTime) ,            
                         new SqlParameter("@TimeLimit", SqlDbType.Int,4) ,            
+                        new SqlParameter("@ReceiptTime", SqlDbType.DateTime) ,            
+                        new SqlParameter("@WarningTime", SqlDbType.DateTime) ,            
                         new SqlParameter("@BackTime", SqlDbType.DateTime) ,            
                         new SqlParameter("@FactBackTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@MotorcadeName", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@CarNumber", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Trailer", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Driver", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@DriverId", SqlDbType.Int,4) ,            
                         new SqlParameter("@Advance", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@Payee", SqlDbType.VarChar,254) ,            
                         new SqlParameter("@Repayment", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@FactRepayment", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@Percentage", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@CarriageUnitPrice", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@Carriage", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@FactCarriage", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@CostTotal", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@Profit", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@AddTime", SqlDbType.DateTime) ,            
                         new SqlParameter("@Status", SqlDbType.Int,4) ,            
-                        new SqlParameter("@Remarks", SqlDbType.VarChar,254),
-                    new SqlParameter("@ReturnValue",SqlDbType.Int)};
+                        new SqlParameter("@CustomerRemarks", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@HaulwayRemarks", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@Remarks", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@FactTotalPrice", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@TotalPrice", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@UnitPrice", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@FactDispatchCount", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@DispatchCount", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@ReceivedWeight", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@UnloadingWeight", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@ArriveDate", SqlDbType.DateTime) ,            
+                        new SqlParameter("@FactArriveDate", SqlDbType.DateTime) ,            
+                        new SqlParameter("@LoadingCapacityRunning", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@NoLoadingCapacityRunning", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@Weight", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@LoadingDate", SqlDbType.DateTime)             
+              
+            };
 
             parameters[0].Value = model.Code;
             parameters[1].Value = model.DispatchTime;
-            parameters[2].Value = null;
+            parameters[2].Value = model.FactDispatchTime;
             parameters[3].Value = model.TimeLimit;
-            parameters[4].Value = model.BackTime;
-            parameters[5].Value = null;
-            parameters[6].Value = model.MotorcadeName;
-            parameters[7].Value = model.CarNumber;
-            parameters[8].Value = model.Trailer;
-            parameters[9].Value = model.Driver;
-            parameters[10].Value = model.Advance;
-            parameters[11].Value = model.Payee;
-            parameters[12].Value = model.Repayment;
-            parameters[13].Value = model.FactRepayment;
-            parameters[14].Value = model.Percentage;
-            parameters[15].Value = model.Carriage;
-            parameters[16].Value = model.FactCarriage;
-            parameters[17].Value = model.CostTotal;
-            parameters[18].Value = model.Profit;
-            parameters[19].Value = DateTime.Now;
-            parameters[20].Value = model.Status;
-            parameters[21].Value = model.Remarks;
-            parameters[22].Direction = ParameterDirection.Output;
+            parameters[4].Value = model.ReceiptTime;
+            parameters[5].Value = model.WarningTime;
+            parameters[6].Value = model.BackTime;
+            parameters[7].Value = model.FactBackTime;
+            parameters[8].Value = model.DriverId;
+            parameters[9].Value = model.Advance;
+            parameters[10].Value = model.Payee;
+            parameters[11].Value = model.Repayment;
+            parameters[12].Value = model.FactRepayment;
+            parameters[13].Value = model.CarriageUnitPrice;
+            parameters[14].Value = model.Carriage;
+            parameters[15].Value = model.FactCarriage;
+            parameters[16].Value = model.CostTotal;
+            parameters[17].Value = model.Profit;
+            parameters[18].Value = model.AddTime;
+            parameters[19].Value = model.Status;
+            parameters[20].Value = model.CustomerRemarks;
+            parameters[21].Value = model.HaulwayRemarks;
+            parameters[22].Value = model.Remarks;
+            parameters[23].Value = model.FactTotalPrice;
+            parameters[24].Value = model.TotalPrice;
+            parameters[25].Value = model.UnitPrice;
+            parameters[26].Value = model.FactDispatchCount;
+            parameters[27].Value = model.DispatchCount;
+            parameters[28].Value = model.ReceivedWeight;
+            parameters[29].Value = model.UnloadingWeight;
+            parameters[30].Value = model.ArriveDate;
+            parameters[31].Value = model.FactArriveDate;
+            parameters[32].Value = model.LoadingCapacityRunning;
+            parameters[33].Value = model.NoLoadingCapacityRunning;
+            parameters[34].Value = model.Weight;
+            parameters[35].Value = model.LoadingDate;
 
-            List<CommandInfo> sqllist = new List<CommandInfo>();
-            CommandInfo cmd = new CommandInfo(strSql.ToString(), parameters);
-            sqllist.Add(cmd);
-
-            //运输子项
-            if (item_list != null)
+            object obj = DbHelperSQL.GetSingle(strSql.ToString(), parameters);
+            if (obj == null)
             {
-                foreach (Model.TransportOrderItem modelt in item_list)
-                {
-                    StringBuilder strSql1 = new StringBuilder();
-                    strSql1.Append("insert into mtms_TransportOrderItem(");
-                    strSql1.Append("TransportOrderId,RoundStatus,ContractNumber,BillNumber,Shipper,Receiver,LoadingAddress,UnloadingAddress,Goods,Unit,FactDispatchCount,FactReceivedCount,CompensationCosts,MyCosts,Haulway,LoadingCapacityRunning,NoLoadingCapacityRunning,Formula,UnitPrice,TotalPrice,CompanyPrice,DispatchCount,OrderCode,OrderId");
-                    strSql1.Append(") values (");
-                    strSql1.Append("@TransportOrderId,@RoundStatus,@ContractNumber,@BillNumber,@Shipper,@Receiver,@LoadingAddress,@UnloadingAddress,@Goods,@Unit,@FactDispatchCount,@FactReceivedCount,@CompensationCosts,@MyCosts,@Haulway,@LoadingCapacityRunning,@NoLoadingCapacityRunning,@Formula,@UnitPrice,@TotalPrice,@CompanyPrice,@DispatchCount,@OrderCode,@OrderId");
-                    strSql1.Append(") ");
-                    SqlParameter[] parameters1 = {
-			            new SqlParameter("@TransportOrderId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@RoundStatus", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@ContractNumber", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@BillNumber", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Shipper", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Receiver", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@LoadingAddress", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@UnloadingAddress", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Goods", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Unit", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@FactDispatchCount", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@FactReceivedCount", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@CompensationCosts", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@MyCosts", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@Haulway", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@LoadingCapacityRunning", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@NoLoadingCapacityRunning", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@Formula", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@UnitPrice", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@TotalPrice", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@CompanyPrice", SqlDbType.Decimal,9),
-                        new SqlParameter("@DispatchCount", SqlDbType.Decimal,9),
-                        new SqlParameter("@OrderCode", SqlDbType.VarChar,254),
-                        new SqlParameter("@OrderId", SqlDbType.Int,4)};
-
-                    parameters1[0].Direction = ParameterDirection.InputOutput;
-                    parameters1[1].Value = modelt.RoundStatus;
-                    parameters1[2].Value = modelt.ContractNumber;
-                    parameters1[3].Value = modelt.BillNumber;
-                    parameters1[4].Value = modelt.Shipper;
-                    parameters1[5].Value = modelt.Receiver;
-                    parameters1[6].Value = modelt.LoadingAddress;
-                    parameters1[7].Value = modelt.UnloadingAddress;
-                    parameters1[8].Value = modelt.Goods;
-                    parameters1[9].Value = modelt.Unit;
-                    parameters1[10].Value = modelt.FactDispatchCount;
-                    parameters1[11].Value = modelt.FactReceivedCount;
-                    parameters1[12].Value = modelt.CompensationCosts;
-                    parameters1[13].Value = modelt.MyCosts;
-                    parameters1[14].Value = modelt.Haulway;
-                    parameters1[15].Value = modelt.LoadingCapacityRunning;
-                    parameters1[16].Value = modelt.NoLoadingCapacityRunning;
-                    parameters1[17].Value = modelt.Formula;
-                    parameters1[18].Value = modelt.UnitPrice;
-                    parameters1[19].Value = modelt.TotalPrice;
-                    parameters1[20].Value = modelt.CompanyPrice;
-                    parameters1[21].Value = modelt.DispatchCount;
-                    parameters1[22].Value = modelt.OrderCode;
-                    parameters1[23].Value = modelt.OrderId;
-
-                    cmd = new CommandInfo(strSql1.ToString(), parameters1);
-
-                    sqllist.Add(cmd);
-
-                    StringBuilder strSql2 = new StringBuilder();
-                    strSql2.Append("update mtms_Order set ");
-                    strSql2.Append(" DispatchedCount+=@DispatchedCount ");
-                    strSql2.Append(" where Id=@Id ");
-                    SqlParameter[] parameters2 = {
-			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
-                        new SqlParameter("@DispatchedCount", SqlDbType.Decimal)};
-
-                    parameters2[0].Value = modelt.OrderId;
-                    parameters2[1].Value = modelt.FactDispatchCount;
-
-                    cmd = new CommandInfo(strSql2.ToString(), parameters2);
-                    sqllist.Add(cmd);
-                }
+                return 0;
             }
-            //订单
-            //if (order_list != null)
-            //{
-            //    foreach (Model.Order modelt in order_list)
-            //    {
-            //        StringBuilder strSql2 = new StringBuilder();
-            //        strSql2.Append("update mtms_Order set ");
-            //        strSql2.Append(" DispatchedCount=@DispatchedCount ");
-            //        strSql2.Append(" where Id=@Id ");
-            //        SqlParameter[] parameters2 = {
-            //            new SqlParameter("@Id", SqlDbType.Int,4) ,            
-            //            new SqlParameter("@DispatchedCount", SqlDbType.Decimal)};
-
-            //        parameters2[0].Value = modelt.Id;
-            //        parameters2[1].Value = modelt.DispatchedCount;
-
-            //        cmd = new CommandInfo(strSql2.ToString(), parameters2);
-            //        sqllist.Add(cmd);
-            //    }
-            //}
-
-            DbHelperSQL.ExecuteSqlTranWithIndentity(sqllist);
-            return (int)parameters[22].Value;
-        }
-        //更新
-        public bool Update(Model.TransportOrder model, List<Model.TransportOrderItem> Item_list)
-        {
-            using (SqlConnection conn = new SqlConnection(DbHelperSQL.connectionString))
+            else
             {
-                conn.Open();
-                using (SqlTransaction trans = conn.BeginTransaction())
-                {
-                    try
-                    {
-                        StringBuilder strSql = new StringBuilder();
-                        strSql.Append("update mtms_TransportOrder set ");
 
-                        strSql.Append(" Code = @Code , ");
-                        strSql.Append(" DispatchTime = @DispatchTime , ");
-                        strSql.Append(" FactDispatchTime = @FactDispatchTime , ");
-                        strSql.Append(" TimeLimit = @TimeLimit , ");
-                        strSql.Append(" BackTime = @BackTime , ");
-                        strSql.Append(" FactBackTime = @FactBackTime , ");
-                        strSql.Append(" MotorcadeName = @MotorcadeName , ");
-                        strSql.Append(" CarNumber = @CarNumber , ");
-                        strSql.Append(" Trailer = @Trailer , ");
-                        strSql.Append(" Driver = @Driver , ");
-                        strSql.Append(" Advance = @Advance , ");
-                        strSql.Append(" Payee = @Payee , ");
-                        strSql.Append(" Repayment = @Repayment , ");
-                        strSql.Append(" FactRepayment = @FactRepayment , ");
-                        strSql.Append(" Percentage = @Percentage , ");
-                        strSql.Append(" Carriage = @Carriage , ");
-                        strSql.Append(" FactCarriage = @FactCarriage , ");
-                        strSql.Append(" CostTotal = @CostTotal , ");
-                        strSql.Append(" Profit = @Profit , ");
-                        strSql.Append(" AddTime = @AddTime , ");
-                        strSql.Append(" Status = @Status , ");
-                        strSql.Append(" WarningTime = @WarningTime , ");
-                        strSql.Append(" Remarks = @Remarks  ");
-                        strSql.Append(" where Id=@Id ");
+                return Convert.ToInt32(obj);
 
-                        SqlParameter[] parameters = {
-			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
-                        new SqlParameter("@Code", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@DispatchTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@FactDispatchTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@TimeLimit", SqlDbType.Int,4) ,            
-                        new SqlParameter("@BackTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@FactBackTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@MotorcadeName", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@CarNumber", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Trailer", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Driver", SqlDbType.VarChar,254) ,            
-       
-                        new SqlParameter("@Advance", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@Payee", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Repayment", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@FactRepayment", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@Percentage", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@Carriage", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@FactCarriage", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@CostTotal", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@Profit", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@AddTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@Status", SqlDbType.Int,4) ,             
-                        new SqlParameter("@WarningTime", SqlDbType.DateTime) ,           
-                        new SqlParameter("@Remarks", SqlDbType.VarChar,254)};
-
-                        parameters[0].Value = model.Id;
-                        parameters[1].Value = model.Code;
-                        parameters[2].Value = model.DispatchTime;
-                        parameters[3].Value = model.FactDispatchTime;
-                        parameters[4].Value = model.TimeLimit;
-                        parameters[5].Value = model.BackTime;
-                        parameters[6].Value = model.FactBackTime;
-                        parameters[7].Value = model.MotorcadeName;
-                        parameters[8].Value = model.CarNumber;
-                        parameters[9].Value = model.Trailer;
-                        parameters[10].Value = model.Driver;
-                        parameters[11].Value = model.Advance;
-                        parameters[12].Value = model.Payee;
-                        parameters[13].Value = model.Repayment;
-                        parameters[14].Value = model.FactRepayment;
-                        parameters[15].Value = model.Percentage;
-                        parameters[16].Value = model.Carriage;
-                        parameters[17].Value = model.FactCarriage;
-                        parameters[18].Value = model.CostTotal;
-                        parameters[19].Value = model.Profit;
-                        parameters[20].Value = model.AddTime;
-                        parameters[21].Value = model.Status;
-                        parameters[22].Value = model.WarningTime;
-                        parameters[23].Value = model.Remarks;
-                        DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
-
-                        //if (Item_list != null)
-                        //{
-                        //    foreach (Model.TransportOrderItem modelt in Item_list)
-                        //    {
-                        //        StringBuilder strSql1 = new StringBuilder();
-                        //        strSql1.Append("update mtms_TransportOrderItem set ");
-
-                        //        strSql1.Append(" TransportOrderId = @TransportOrderId , ");
-                        //        strSql1.Append(" RoundStatus = @RoundStatus , ");
-                        //        strSql1.Append(" ContractNumber = @ContractNumber , ");
-                        //        strSql1.Append(" BillNumber = @BillNumber , ");
-                        //        strSql1.Append(" Shipper = @Shipper , ");
-                        //        strSql1.Append(" Receiver = @Receiver , ");
-                        //        strSql1.Append(" LoadingAddress = @LoadingAddress , ");
-                        //        strSql1.Append(" UnloadingAddress = @UnloadingAddress , ");
-                        //        strSql1.Append(" Goods = @Goods , ");
-                        //        strSql1.Append(" Unit = @Unit , ");
-                        //        strSql1.Append(" FactDispatchCount = @FactDispatchCount , ");
-                        //        strSql1.Append(" FactReceivedCount = @FactReceivedCount , ");
-                        //        strSql1.Append(" CompensationCosts = @CompensationCosts , ");
-                        //        strSql1.Append(" MyCosts = @MyCosts , ");
-                        //        strSql1.Append(" Haulway = @Haulway , ");
-                        //        strSql1.Append(" LoadingCapacityRunning = @LoadingCapacityRunning , ");
-                        //        strSql1.Append(" NoLoadingCapacityRunning = @NoLoadingCapacityRunning , ");
-                        //        strSql1.Append(" Formula = @Formula , ");
-                        //        strSql1.Append(" UnitPrice = @UnitPrice , ");
-                        //        strSql1.Append(" TotalPrice = @TotalPrice , ");
-                        //        strSql1.Append(" CompanyPrice = @CompanyPrice,  ");
-                        //        strSql1.Append(" OrderCode = @OrderCode,  ");
-                        //        strSql1.Append(" OrderId = @OrderId  ");
-                        //        strSql1.Append(" where Id=@Id ");
-
-                        //        SqlParameter[] parameters1 = {
-                        //new SqlParameter("@Id", SqlDbType.Int,4) ,            
-                        //new SqlParameter("@TransportOrderId", SqlDbType.Int,4) ,            
-                        //new SqlParameter("@RoundStatus", SqlDbType.VarChar,254) ,            
-                        //new SqlParameter("@ContractNumber", SqlDbType.VarChar,254) ,            
-                        //new SqlParameter("@BillNumber", SqlDbType.VarChar,254) ,            
-                        //new SqlParameter("@Shipper", SqlDbType.VarChar,254) ,            
-                        //new SqlParameter("@Receiver", SqlDbType.VarChar,254) ,            
-                        //new SqlParameter("@LoadingAddress", SqlDbType.VarChar,254) ,            
-                        //new SqlParameter("@UnloadingAddress", SqlDbType.VarChar,254) ,            
-                        //new SqlParameter("@Goods", SqlDbType.VarChar,254) ,            
-                        //new SqlParameter("@Unit", SqlDbType.VarChar,254) ,            
-                        //new SqlParameter("@FactDispatchCount", SqlDbType.Decimal,9) ,            
-                        //new SqlParameter("@FactReceivedCount", SqlDbType.Decimal,9) ,            
-                        //new SqlParameter("@CompensationCosts", SqlDbType.Decimal,9) ,            
-                        //new SqlParameter("@MyCosts", SqlDbType.Decimal,9) ,            
-                        //new SqlParameter("@Haulway", SqlDbType.VarChar,254) ,            
-                        //new SqlParameter("@LoadingCapacityRunning", SqlDbType.Decimal,9) ,            
-                        //new SqlParameter("@NoLoadingCapacityRunning", SqlDbType.Decimal,9) ,            
-                        //new SqlParameter("@Formula", SqlDbType.VarChar,254) ,            
-                        //new SqlParameter("@UnitPrice", SqlDbType.Decimal,9) ,            
-                        //new SqlParameter("@TotalPrice", SqlDbType.Decimal,9) ,            
-                        //new SqlParameter("@CompanyPrice", SqlDbType.Decimal,9) ,
-                        //new SqlParameter("@OrderCode", SqlDbType.VarChar,254) ,
-                        //new SqlParameter("@OrderId", SqlDbType.Int,4)};
-
-                        //        parameters1[0].Value = modelt.Id;
-                        //        parameters1[1].Value = modelt.TransportOrderId;
-                        //        parameters1[2].Value = modelt.RoundStatus;
-                        //        parameters1[3].Value = modelt.ContractNumber;
-                        //        parameters1[4].Value = modelt.BillNumber;
-                        //        parameters1[5].Value = modelt.Shipper;
-                        //        parameters1[6].Value = modelt.Receiver;
-                        //        parameters1[7].Value = modelt.LoadingAddress;
-                        //        parameters1[8].Value = modelt.UnloadingAddress;
-                        //        parameters1[9].Value = modelt.Goods;
-                        //        parameters1[10].Value = modelt.Unit;
-                        //        parameters1[11].Value = modelt.FactDispatchCount;
-                        //        parameters1[12].Value = modelt.FactReceivedCount;
-                        //        parameters1[13].Value = modelt.CompensationCosts;
-                        //        parameters1[14].Value = modelt.MyCosts;
-                        //        parameters1[15].Value = modelt.Haulway;
-                        //        parameters1[16].Value = modelt.LoadingCapacityRunning;
-                        //        parameters1[17].Value = modelt.NoLoadingCapacityRunning;
-                        //        parameters1[18].Value = modelt.Formula;
-                        //        parameters1[19].Value = modelt.UnitPrice;
-                        //        parameters1[20].Value = modelt.TotalPrice;
-                        //        parameters1[21].Value = modelt.CompanyPrice;
-                        //        parameters1[22].Value = modelt.OrderCode;
-                        //        parameters1[23].Value = modelt.OrderId;
-                        //        DbHelperSQL.ExecuteSql(conn, trans, strSql1.ToString(), parameters1);
-                        //    }
-                        //}
-                        trans.Commit();
-                    }
-                    catch
-                    {
-                        trans.Rollback();
-                        return false;
-                    }
-                }
             }
-            return true;
+
         }
-        //更新
-        public bool Update(Model.TransportOrder model, List<Model.TransportOrderItem> Item_list, List<Model.Consumption> consumption_list, List<Model.Order> orders)
-        {
-            using (SqlConnection conn = new SqlConnection(DbHelperSQL.connectionString))
-            {
-                conn.Open();
-                using (SqlTransaction trans = conn.BeginTransaction())
-                {
-                    try
-                    {
-                        StringBuilder strSql = new StringBuilder();
-                        strSql.Append("update mtms_TransportOrder set ");
 
-                        strSql.Append(" Code = @Code , ");
-                        strSql.Append(" DispatchTime = @DispatchTime , ");
-                        strSql.Append(" FactDispatchTime = @FactDispatchTime , ");
-                        strSql.Append(" TimeLimit = @TimeLimit , ");
-                        strSql.Append(" BackTime = @BackTime , ");
-                        strSql.Append(" FactBackTime = @FactBackTime , ");
-                        strSql.Append(" MotorcadeName = @MotorcadeName , ");
-                        strSql.Append(" CarNumber = @CarNumber , ");
-                        strSql.Append(" Trailer = @Trailer , ");
-                        strSql.Append(" Driver = @Driver , ");
-                        strSql.Append(" Advance = @Advance , ");
-                        strSql.Append(" Payee = @Payee , ");
-                        strSql.Append(" Repayment = @Repayment , ");
-                        strSql.Append(" FactRepayment = @FactRepayment , ");
-                        strSql.Append(" Percentage = @Percentage , ");
-                        strSql.Append(" Carriage = @Carriage , ");
-                        strSql.Append(" FactCarriage = @FactCarriage , ");
-                        strSql.Append(" CostTotal = @CostTotal , ");
-                        strSql.Append(" Profit = @Profit , ");
-                        strSql.Append(" AddTime = @AddTime , ");
-                        strSql.Append(" Status = @Status , ");
-                        strSql.Append(" WarningTime = @WarningTime , ");
-                        strSql.Append(" Remarks = @Remarks  ");
-                        strSql.Append(" where Id=@Id ");
-
-                        SqlParameter[] parameters = {
-			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
-                        new SqlParameter("@Code", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@DispatchTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@FactDispatchTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@TimeLimit", SqlDbType.Int,4) ,            
-                        new SqlParameter("@BackTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@FactBackTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@MotorcadeName", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@CarNumber", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Trailer", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Driver", SqlDbType.VarChar,254) ,            
-       
-                        new SqlParameter("@Advance", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@Payee", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Repayment", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@FactRepayment", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@Percentage", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@Carriage", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@FactCarriage", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@CostTotal", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@Profit", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@AddTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@Status", SqlDbType.Int,4) ,          
-                        new SqlParameter("@WarningTime", SqlDbType.DateTime) ,           
-                        new SqlParameter("@Remarks", SqlDbType.VarChar,254)};
-
-                        parameters[0].Value = model.Id;
-                        parameters[1].Value = model.Code;
-                        parameters[2].Value = model.DispatchTime;
-                        parameters[3].Value = model.FactDispatchTime;
-                        parameters[4].Value = model.TimeLimit;
-                        parameters[5].Value = model.BackTime;
-                        parameters[6].Value = model.FactBackTime;
-                        parameters[7].Value = model.MotorcadeName;
-                        parameters[8].Value = model.CarNumber;
-                        parameters[9].Value = model.Trailer;
-                        parameters[10].Value = model.Driver;
-                        parameters[11].Value = model.Advance;
-                        parameters[12].Value = model.Payee;
-                        parameters[13].Value = model.Repayment;
-                        parameters[14].Value = model.FactRepayment;
-                        parameters[15].Value = model.Percentage;
-                        parameters[16].Value = model.Carriage;
-                        parameters[17].Value = model.FactCarriage;
-                        parameters[18].Value = model.CostTotal;
-                        parameters[19].Value = model.Profit;
-                        parameters[20].Value = model.AddTime;
-                        parameters[21].Value = model.Status;
-                        parameters[22].Value = model.WarningTime;
-                        parameters[23].Value = model.Remarks;
-                        DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
-
-                        if (Item_list != null)
-                        {
-                            foreach (Model.TransportOrderItem modelt in Item_list)
-                            {
-                                StringBuilder strSql1 = new StringBuilder();
-                                strSql1.Append("update mtms_TransportOrderItem set ");
-
-                                strSql1.Append(" TransportOrderId = @TransportOrderId , ");
-                                strSql1.Append(" RoundStatus = @RoundStatus , ");
-                                strSql1.Append(" ContractNumber = @ContractNumber , ");
-                                strSql1.Append(" BillNumber = @BillNumber , ");
-                                strSql1.Append(" Shipper = @Shipper , ");
-                                strSql1.Append(" Receiver = @Receiver , ");
-                                strSql1.Append(" LoadingAddress = @LoadingAddress , ");
-                                strSql1.Append(" UnloadingAddress = @UnloadingAddress , ");
-                                strSql1.Append(" Goods = @Goods , ");
-                                strSql1.Append(" Unit = @Unit , ");
-                                strSql1.Append(" FactDispatchCount = @FactDispatchCount , ");
-                                strSql1.Append(" FactReceivedCount = @FactReceivedCount , ");
-                                strSql1.Append(" CompensationCosts = @CompensationCosts , ");
-                                strSql1.Append(" MyCosts = @MyCosts , ");
-                                strSql1.Append(" Haulway = @Haulway , ");
-                                strSql1.Append(" LoadingCapacityRunning = @LoadingCapacityRunning , ");
-                                strSql1.Append(" NoLoadingCapacityRunning = @NoLoadingCapacityRunning , ");
-                                strSql1.Append(" Formula = @Formula , ");
-                                strSql1.Append(" UnitPrice = @UnitPrice , ");
-                                strSql1.Append(" TotalPrice = @TotalPrice , ");
-                                strSql1.Append(" CompanyPrice = @CompanyPrice,  ");
-                                strSql1.Append(" OrderCode = @OrderCode , ");
-                                strSql1.Append(" OrderId = @OrderId  ");
-                                strSql1.Append(" where Id=@Id ");
-
-                                SqlParameter[] parameters1 = {
-			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
-                        new SqlParameter("@TransportOrderId", SqlDbType.Int,4) ,            
-                        new SqlParameter("@RoundStatus", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@ContractNumber", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@BillNumber", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Shipper", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Receiver", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@LoadingAddress", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@UnloadingAddress", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Goods", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Unit", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@FactDispatchCount", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@FactReceivedCount", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@CompensationCosts", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@MyCosts", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@Haulway", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@LoadingCapacityRunning", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@NoLoadingCapacityRunning", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@Formula", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@UnitPrice", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@TotalPrice", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@CompanyPrice", SqlDbType.Decimal,9) ,
-                        new SqlParameter("@OrderCode", SqlDbType.VarChar,254) ,
-                        new SqlParameter("@OrderId", SqlDbType.Int,4)};
-
-                                parameters1[0].Value = modelt.Id;
-                                parameters1[1].Value = modelt.TransportOrderId;
-                                parameters1[2].Value = modelt.RoundStatus;
-                                parameters1[3].Value = modelt.ContractNumber;
-                                parameters1[4].Value = modelt.BillNumber;
-                                parameters1[5].Value = modelt.Shipper;
-                                parameters1[6].Value = modelt.Receiver;
-                                parameters1[7].Value = modelt.LoadingAddress;
-                                parameters1[8].Value = modelt.UnloadingAddress;
-                                parameters1[9].Value = modelt.Goods;
-                                parameters1[10].Value = modelt.Unit;
-                                parameters1[11].Value = modelt.FactDispatchCount;
-                                parameters1[12].Value = modelt.FactReceivedCount;
-                                parameters1[13].Value = modelt.CompensationCosts;
-                                parameters1[14].Value = modelt.MyCosts;
-                                parameters1[15].Value = modelt.Haulway;
-                                parameters1[16].Value = modelt.LoadingCapacityRunning;
-                                parameters1[17].Value = modelt.NoLoadingCapacityRunning;
-                                parameters1[18].Value = modelt.Formula;
-                                parameters1[19].Value = modelt.UnitPrice;
-                                parameters1[20].Value = modelt.TotalPrice;
-                                parameters1[21].Value = modelt.CompanyPrice;
-                                parameters1[22].Value = modelt.OrderCode;
-                                parameters1[23].Value = modelt.OrderId;
-                                DbHelperSQL.ExecuteSql(conn, trans, strSql1.ToString(), parameters1);
-                            }
-                        }
-
-                        if (consumption_list != null)
-                        {
-                            foreach (Model.Consumption modelt in consumption_list)
-                            {
-                                StringBuilder strSql2 = new StringBuilder();
-                                strSql2.Append("insert into mtms_Consumption(");
-                                strSql2.Append("Name,TransportOrderId,Money");
-                                strSql2.Append(") values (");
-                                strSql2.Append("@Name,@TransportOrderId,@Money");
-                                strSql2.Append(") ");
-                                SqlParameter[] parameters2 = {
-			                        new SqlParameter("@Name", SqlDbType.VarChar,254) ,            
-                                    new SqlParameter("@TransportOrderId", SqlDbType.Int,4) ,            
-                                    new SqlParameter("@Money", SqlDbType.Decimal,9)};
-
-                                parameters2[0].Value = modelt.Name;
-                                parameters2[1].Value = modelt.TransportOrderId;
-                                parameters2[2].Value = modelt.Money;
-                                DbHelperSQL.ExecuteSql(conn, trans, strSql2.ToString(), parameters2);
-                            }
-                        }
-
-                        if (orders.Count  > 0)
-                        {
-                            Order orderDAL = new Order();
-                            foreach (Model.Order order in orders)
-                            {
-                                orderDAL.UpdateField(conn, trans, order.Id, " DispatchedCount = " + order.DispatchedCount + " ");
-                            }
-                        }
-
-                        trans.Commit();
-                    }
-                    catch
-                    {
-                        trans.Rollback();
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
 
         /// <summary>
         /// 更新一条数据
         /// </summary>
-        public bool Update(Model.TransportOrder model, List<Model.TransportOrderItem> item_list, List<Model.Order> order_list)
+        public bool Update(DTcms.Model.TransportOrder model)
         {
-            using (SqlConnection conn = new SqlConnection(DbHelperSQL.connectionString))
-            {
-                conn.Open();
-                using (SqlTransaction trans = conn.BeginTransaction())
-                {
-                    try
-                    {
-                        StringBuilder strSql = new StringBuilder();
-                        strSql.Append("update mtms_TransportOrder set ");
-                        strSql.Append(" Code = @Code , ");
-                        strSql.Append(" DispatchTime = @DispatchTime , ");
-                        strSql.Append(" FactDispatchTime = @FactDispatchTime , ");
-                        strSql.Append(" TimeLimit = @TimeLimit , ");
-                        strSql.Append(" BackTime = @BackTime , ");
-                        strSql.Append(" FactBackTime = @FactBackTime , ");
-                        strSql.Append(" MotorcadeName = @MotorcadeName , ");
-                        strSql.Append(" CarNumber = @CarNumber , ");
-                        strSql.Append(" Trailer = @Trailer , ");
-                        strSql.Append(" Driver = @Driver , ");
-                        strSql.Append(" Advance = @Advance , ");
-                        strSql.Append(" Payee = @Payee , ");
-                        strSql.Append(" Repayment = @Repayment , ");
-                        strSql.Append(" FactRepayment = @FactRepayment , ");
-                        strSql.Append(" Percentage = @Percentage , ");
-                        strSql.Append(" Carriage = @Carriage , ");
-                        strSql.Append(" FactCarriage = @FactCarriage , ");
-                        strSql.Append(" CostTotal = @CostTotal , ");
-                        strSql.Append(" Profit = @Profit , ");
-                        strSql.Append(" AddTime = @AddTime , ");
-                        strSql.Append(" Status = @Status , ");
-                        strSql.Append(" WarningTime = @WarningTime , ");
-                        strSql.Append(" Remarks = @Remarks  ");
-                        strSql.Append(" where Id=@Id ");
-                        SqlParameter[] parameters = {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("update mtms_TransportOrder set ");
+
+            strSql.Append(" Code = @Code , ");
+            strSql.Append(" DispatchTime = @DispatchTime , ");
+            strSql.Append(" FactDispatchTime = @FactDispatchTime , ");
+            strSql.Append(" TimeLimit = @TimeLimit , ");
+            strSql.Append(" ReceiptTime = @ReceiptTime , ");
+            strSql.Append(" WarningTime = @WarningTime , ");
+            strSql.Append(" BackTime = @BackTime , ");
+            strSql.Append(" FactBackTime = @FactBackTime , ");
+            strSql.Append(" DriverId = @DriverId , ");
+            strSql.Append(" Advance = @Advance , ");
+            strSql.Append(" Payee = @Payee , ");
+            strSql.Append(" Repayment = @Repayment , ");
+            strSql.Append(" FactRepayment = @FactRepayment , ");
+            strSql.Append(" CarriageUnitPrice = @CarriageUnitPrice , ");
+            strSql.Append(" Carriage = @Carriage , ");
+            strSql.Append(" FactCarriage = @FactCarriage , ");
+            strSql.Append(" CostTotal = @CostTotal , ");
+            strSql.Append(" Profit = @Profit , ");
+            strSql.Append(" AddTime = @AddTime , ");
+            strSql.Append(" Status = @Status , ");
+            strSql.Append(" CustomerRemarks = @CustomerRemarks , ");
+            strSql.Append(" HaulwayRemarks = @HaulwayRemarks , ");
+            strSql.Append(" Remarks = @Remarks , ");
+            strSql.Append(" FactTotalPrice = @FactTotalPrice , ");
+            strSql.Append(" TotalPrice = @TotalPrice , ");
+            strSql.Append(" UnitPrice = @UnitPrice , ");
+            strSql.Append(" FactDispatchCount = @FactDispatchCount , ");
+            strSql.Append(" DispatchCount = @DispatchCount , ");
+            strSql.Append(" ReceivedWeight = @ReceivedWeight , ");
+            strSql.Append(" UnloadingWeight = @UnloadingWeight , ");
+            strSql.Append(" ArriveDate = @ArriveDate , ");
+            strSql.Append(" FactArriveDate = @FactArriveDate , ");
+            strSql.Append(" LoadingCapacityRunning = @LoadingCapacityRunning , ");
+            strSql.Append(" NoLoadingCapacityRunning = @NoLoadingCapacityRunning , ");
+            strSql.Append(" Weight = @Weight , ");
+            strSql.Append(" LoadingDate = @LoadingDate  ");
+            strSql.Append(" where Id=@Id ");
+
+            SqlParameter[] parameters = {
 			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
                         new SqlParameter("@Code", SqlDbType.VarChar,254) ,            
                         new SqlParameter("@DispatchTime", SqlDbType.DateTime) ,            
                         new SqlParameter("@FactDispatchTime", SqlDbType.DateTime) ,            
                         new SqlParameter("@TimeLimit", SqlDbType.Int,4) ,            
+                        new SqlParameter("@ReceiptTime", SqlDbType.DateTime) ,            
+                        new SqlParameter("@WarningTime", SqlDbType.DateTime) ,            
                         new SqlParameter("@BackTime", SqlDbType.DateTime) ,            
                         new SqlParameter("@FactBackTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@MotorcadeName", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@CarNumber", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Trailer", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Driver", SqlDbType.VarChar,254) , 
+                        new SqlParameter("@DriverId", SqlDbType.Int,4) ,            
                         new SqlParameter("@Advance", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@Payee", SqlDbType.VarChar,254) ,            
                         new SqlParameter("@Repayment", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@FactRepayment", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@Percentage", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@CarriageUnitPrice", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@Carriage", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@FactCarriage", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@CostTotal", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@Profit", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@AddTime", SqlDbType.DateTime) ,            
-                        new SqlParameter("@Status", SqlDbType.Int,4) ,          
-                        new SqlParameter("@WarningTime", SqlDbType.DateTime) ,          
-                        new SqlParameter("@Remarks", SqlDbType.VarChar,254)};
-                        parameters[0].Value = model.Id;
-                        parameters[1].Value = model.Code;
-                        parameters[2].Value = model.DispatchTime;
-                        parameters[3].Value = model.FactDispatchTime;
-                        parameters[4].Value = model.TimeLimit;
-                        parameters[5].Value = model.BackTime;
-                        parameters[6].Value = model.FactBackTime;
-                        parameters[7].Value = model.MotorcadeName;
-                        parameters[8].Value = model.CarNumber;
-                        parameters[9].Value = model.Trailer;
-                        parameters[10].Value = model.Driver;
-                        parameters[11].Value = model.Advance;
-                        parameters[12].Value = model.Payee;
-                        parameters[13].Value = model.Repayment;
-                        parameters[14].Value = model.FactRepayment;
-                        parameters[15].Value = model.Percentage;
-                        parameters[16].Value = model.Carriage;
-                        parameters[17].Value = model.FactCarriage;
-                        parameters[18].Value = model.CostTotal;
-                        parameters[19].Value = model.Profit;
-                        parameters[20].Value = model.AddTime;
-                        parameters[21].Value = model.Status;
-                        parameters[22].Value = model.WarningTime;
-                        parameters[23].Value = model.Remarks;
-                        DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
-
-                        //删除运输子单
-                        new TransportOrderItem().DeleteBy(conn, trans, model.Id);
-
-                        //添加运输子单 List<Model.TransportOrderItem> item_list
-                        if (item_list != null)
-                        {
-                            StringBuilder strSql2;
-                            foreach (Model.TransportOrderItem modelt in item_list)
-                            {
-                                strSql2 = new StringBuilder();
-                                strSql2.Append("insert into mtms_TransportOrderItem(");
-                                strSql2.Append("TransportOrderId,RoundStatus,ContractNumber,BillNumber,Shipper,Receiver,LoadingAddress,UnloadingAddress,Goods,Unit,FactDispatchCount,FactReceivedCount,CompensationCosts,MyCosts,Haulway,LoadingCapacityRunning,NoLoadingCapacityRunning,Formula,UnitPrice,TotalPrice,CompanyPrice,DispatchCount,OrderCode,OrderId");
-                                strSql2.Append(") values (");
-                                strSql2.Append("@TransportOrderId,@RoundStatus,@ContractNumber,@BillNumber,@Shipper,@Receiver,@LoadingAddress,@UnloadingAddress,@Goods,@Unit,@FactDispatchCount,@FactReceivedCount,@CompensationCosts,@MyCosts,@Haulway,@LoadingCapacityRunning,@NoLoadingCapacityRunning,@Formula,@UnitPrice,@TotalPrice,@CompanyPrice,@DispatchCount,@OrderCode,@OrderId");
-                                strSql2.Append(") ");
-                                SqlParameter[] parameters2 = {
-			                                    new SqlParameter("@TransportOrderId", SqlDbType.Int,4) ,            
-                                                new SqlParameter("@RoundStatus", SqlDbType.VarChar,254) ,            
-                                                new SqlParameter("@ContractNumber", SqlDbType.VarChar,254) ,            
-                                                new SqlParameter("@BillNumber", SqlDbType.VarChar,254) ,            
-                                                new SqlParameter("@Shipper", SqlDbType.VarChar,254) ,            
-                                                new SqlParameter("@Receiver", SqlDbType.VarChar,254) ,            
-                                                new SqlParameter("@LoadingAddress", SqlDbType.VarChar,254) ,            
-                                                new SqlParameter("@UnloadingAddress", SqlDbType.VarChar,254) ,            
-                                                new SqlParameter("@Goods", SqlDbType.VarChar,254) ,            
-                                                new SqlParameter("@Unit", SqlDbType.VarChar,254) ,            
-                                                new SqlParameter("@FactDispatchCount", SqlDbType.Decimal,9) ,            
-                                                new SqlParameter("@FactReceivedCount", SqlDbType.Decimal,9) ,            
-                                                new SqlParameter("@CompensationCosts", SqlDbType.Decimal,9) ,            
-                                                new SqlParameter("@MyCosts", SqlDbType.Decimal,9) ,            
-                                                new SqlParameter("@Haulway", SqlDbType.VarChar,254) ,            
-                                                new SqlParameter("@LoadingCapacityRunning", SqlDbType.Decimal,9) ,            
-                                                new SqlParameter("@NoLoadingCapacityRunning", SqlDbType.Decimal,9) ,            
-                                                new SqlParameter("@Formula", SqlDbType.VarChar,254) ,            
-                                                new SqlParameter("@UnitPrice", SqlDbType.Decimal,9) ,            
-                                                new SqlParameter("@TotalPrice", SqlDbType.Decimal,9) ,            
-                                                new SqlParameter("@CompanyPrice", SqlDbType.Decimal,9),
-                                                new SqlParameter("@DispatchCount", SqlDbType.Decimal,9),
-                                                new SqlParameter("@OrderCode", SqlDbType.VarChar,254),
-                                                new SqlParameter("@OrderId", SqlDbType.Int,4)};
-
-                                parameters2[0].Value = model.Id;
-                                parameters2[1].Value = modelt.RoundStatus;
-                                parameters2[2].Value = modelt.ContractNumber;
-                                parameters2[3].Value = modelt.BillNumber;
-                                parameters2[4].Value = modelt.Shipper;
-                                parameters2[5].Value = modelt.Receiver;
-                                parameters2[6].Value = modelt.LoadingAddress;
-                                parameters2[7].Value = modelt.UnloadingAddress;
-                                parameters2[8].Value = modelt.Goods;
-                                parameters2[9].Value = modelt.Unit;
-                                parameters2[10].Value = modelt.FactDispatchCount;
-                                parameters2[11].Value = modelt.FactReceivedCount;
-                                parameters2[12].Value = modelt.CompensationCosts;
-                                parameters2[13].Value = modelt.MyCosts;
-                                parameters2[14].Value = modelt.Haulway;
-                                parameters2[15].Value = modelt.LoadingCapacityRunning;
-                                parameters2[16].Value = modelt.NoLoadingCapacityRunning;
-                                parameters2[17].Value = modelt.Formula;
-                                parameters2[18].Value = modelt.UnitPrice;
-                                parameters2[19].Value = modelt.TotalPrice;
-                                parameters2[20].Value = modelt.CompanyPrice;
-                                parameters2[21].Value = modelt.DispatchCount;
-                                parameters2[22].Value = modelt.OrderCode;
-                                parameters2[23].Value = modelt.OrderId;
-                                DbHelperSQL.ExecuteSql(conn, trans, strSql2.ToString(), parameters2);
-
-                                new DAL.Order().UpdateField(conn, trans, modelt.OrderId, "DispatchedCount = DispatchedCount + " + modelt.FactDispatchCount + "");
-                            }
-                        }
-                        //更新订单数量 List<Model.Order> order_list
-
-                        trans.Commit();
-                    }
-                    catch
-                    {
-                        trans.Rollback();
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        public bool Update(int id, DateTime warningTime)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("update mtms_TransportOrder set ");
-
-            strSql.Append(" WarningTime = @WarningTime ");
-            strSql.Append(" where Id=@Id ");
-
-            SqlParameter[] parameters = {
-			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
-                        new SqlParameter("@WarningTime", SqlDbType.DateTime)         
-              
-            };
-
-            parameters[0].Value = id;
-            parameters[1].Value = warningTime;
-            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
-            if (rows > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public bool UpdateReceipt(Model.TransportOrder model)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("update mtms_TransportOrder set ");
-
-            strSql.Append(" ReceiptTime = @ReceiptTime ,");
-            strSql.Append(" Status = @Status , ");
-            strSql.Append(" Remarks = @Remarks  ");
-            strSql.Append(" where Id=@Id ");
-
-            SqlParameter[] parameters = {
-			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
-                        new SqlParameter("@ReceiptTime", SqlDbType.DateTime),
                         new SqlParameter("@Status", SqlDbType.Int,4) ,            
-                        new SqlParameter("@Remarks", SqlDbType.VarChar,254)      
+                        new SqlParameter("@CustomerRemarks", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@HaulwayRemarks", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@Remarks", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@FactTotalPrice", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@TotalPrice", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@UnitPrice", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@FactDispatchCount", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@DispatchCount", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@ReceivedWeight", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@UnloadingWeight", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@ArriveDate", SqlDbType.DateTime) ,            
+                        new SqlParameter("@FactArriveDate", SqlDbType.DateTime) ,            
+                        new SqlParameter("@LoadingCapacityRunning", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@NoLoadingCapacityRunning", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@Weight", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@LoadingDate", SqlDbType.DateTime)             
               
             };
 
             parameters[0].Value = model.Id;
-            parameters[1].Value = model.ReceiptTime;
-            parameters[2].Value = model.Status;
-            parameters[3].Value = model.Remarks;
+            parameters[1].Value = model.Code;
+            parameters[2].Value = model.DispatchTime;
+            parameters[3].Value = model.FactDispatchTime;
+            parameters[4].Value = model.TimeLimit;
+            parameters[5].Value = model.ReceiptTime;
+            parameters[6].Value = model.WarningTime;
+            parameters[7].Value = model.BackTime;
+            parameters[8].Value = model.FactBackTime;
+            parameters[9].Value = model.DriverId;
+            parameters[10].Value = model.Advance;
+            parameters[11].Value = model.Payee;
+            parameters[12].Value = model.Repayment;
+            parameters[13].Value = model.FactRepayment;
+            parameters[14].Value = model.CarriageUnitPrice;
+            parameters[15].Value = model.Carriage;
+            parameters[16].Value = model.FactCarriage;
+            parameters[17].Value = model.CostTotal;
+            parameters[18].Value = model.Profit;
+            parameters[19].Value = model.AddTime;
+            parameters[20].Value = model.Status;
+            parameters[21].Value = model.CustomerRemarks;
+            parameters[22].Value = model.HaulwayRemarks;
+            parameters[23].Value = model.Remarks;
+            parameters[24].Value = model.FactTotalPrice;
+            parameters[25].Value = model.TotalPrice;
+            parameters[26].Value = model.UnitPrice;
+            parameters[27].Value = model.FactDispatchCount;
+            parameters[28].Value = model.DispatchCount;
+            parameters[29].Value = model.ReceivedWeight;
+            parameters[30].Value = model.UnloadingWeight;
+            parameters[31].Value = model.ArriveDate;
+            parameters[32].Value = model.FactArriveDate;
+            parameters[33].Value = model.LoadingCapacityRunning;
+            parameters[34].Value = model.NoLoadingCapacityRunning;
+            parameters[35].Value = model.Weight;
+            parameters[36].Value = model.LoadingDate;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -844,6 +272,7 @@ namespace DTcms.DAL
         /// </summary>
         public bool Delete(int Id)
         {
+
             StringBuilder strSql = new StringBuilder();
             strSql.Append("delete from mtms_TransportOrder ");
             strSql.Append(" where Id=@Id");
@@ -852,22 +281,9 @@ namespace DTcms.DAL
 			};
             parameters[0].Value = Id;
 
-            List<CommandInfo> sqllist = new List<CommandInfo>();
-            CommandInfo cmd = new CommandInfo(strSql.ToString(), parameters);
-            sqllist.Add(cmd);
 
-            StringBuilder strSql2 = new StringBuilder();
-            strSql2.Append("delete from mtms_TransportOrderItem ");
-            strSql2.Append(" where TransportOrderId=@TransportOrderId");
-            SqlParameter[] parameters2 = {
-					new SqlParameter("@TransportOrderId", SqlDbType.Int,4)
-			};
-            parameters2[0].Value = Id;
-            cmd = new CommandInfo(strSql2.ToString(), parameters2);
-            sqllist.Add(cmd);
-
-            int rowsAffected = DbHelperSQL.ExecuteSqlTran(sqllist);
-            if (rowsAffected > 0)
+            int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
+            if (rows > 0)
             {
                 return true;
             }
@@ -900,11 +316,11 @@ namespace DTcms.DAL
         /// <summary>
         /// 得到一个对象实体
         /// </summary>
-        public Model.TransportOrder GetModel(int Id)
+        public DTcms.Model.TransportOrder GetModel(int Id)
         {
 
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select Id, Code, DispatchTime, FactDispatchTime, TimeLimit, BackTime, FactBackTime, MotorcadeName, CarNumber, Trailer, Driver, Advance, Payee, Repayment, FactRepayment, Percentage, Carriage, FactCarriage, CostTotal, Profit, AddTime, Status,WarningTime, Remarks  ");
+            strSql.Append("select Id, Code, DispatchTime, FactDispatchTime, TimeLimit, ReceiptTime, WarningTime, BackTime, FactBackTime, DriverId, Advance, Payee, Repayment, FactRepayment, CarriageUnitPrice, Carriage, FactCarriage, CostTotal, Profit, AddTime, Status, CustomerRemarks, HaulwayRemarks, Remarks, FactTotalPrice, TotalPrice, UnitPrice, FactDispatchCount, DispatchCount, ReceivedWeight, UnloadingWeight, ArriveDate, FactArriveDate, LoadingCapacityRunning, NoLoadingCapacityRunning, Weight, LoadingDate  ");
             strSql.Append("  from mtms_TransportOrder ");
             strSql.Append(" where Id=@Id");
             SqlParameter[] parameters = {
@@ -913,7 +329,7 @@ namespace DTcms.DAL
             parameters[0].Value = Id;
 
 
-            Model.TransportOrder model = new Model.TransportOrder();
+            DTcms.Model.TransportOrder model = new DTcms.Model.TransportOrder();
             DataSet ds = DbHelperSQL.Query(strSql.ToString(), parameters);
 
             if (ds.Tables[0].Rows.Count > 0)
@@ -935,6 +351,14 @@ namespace DTcms.DAL
                 {
                     model.TimeLimit = int.Parse(ds.Tables[0].Rows[0]["TimeLimit"].ToString());
                 }
+                if (ds.Tables[0].Rows[0]["ReceiptTime"].ToString() != "")
+                {
+                    model.ReceiptTime = DateTime.Parse(ds.Tables[0].Rows[0]["ReceiptTime"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["WarningTime"].ToString() != "")
+                {
+                    model.WarningTime = DateTime.Parse(ds.Tables[0].Rows[0]["WarningTime"].ToString());
+                }
                 if (ds.Tables[0].Rows[0]["BackTime"].ToString() != "")
                 {
                     model.BackTime = DateTime.Parse(ds.Tables[0].Rows[0]["BackTime"].ToString());
@@ -943,10 +367,10 @@ namespace DTcms.DAL
                 {
                     model.FactBackTime = DateTime.Parse(ds.Tables[0].Rows[0]["FactBackTime"].ToString());
                 }
-                model.MotorcadeName = ds.Tables[0].Rows[0]["MotorcadeName"].ToString();
-                model.CarNumber = ds.Tables[0].Rows[0]["CarNumber"].ToString();
-                model.Trailer = ds.Tables[0].Rows[0]["Trailer"].ToString();
-                model.Driver = ds.Tables[0].Rows[0]["Driver"].ToString();
+                if (ds.Tables[0].Rows[0]["DriverId"].ToString() != "")
+                {
+                    model.DriverId = int.Parse(ds.Tables[0].Rows[0]["DriverId"].ToString());
+                }
                 if (ds.Tables[0].Rows[0]["Advance"].ToString() != "")
                 {
                     model.Advance = decimal.Parse(ds.Tables[0].Rows[0]["Advance"].ToString());
@@ -960,9 +384,9 @@ namespace DTcms.DAL
                 {
                     model.FactRepayment = decimal.Parse(ds.Tables[0].Rows[0]["FactRepayment"].ToString());
                 }
-                if (ds.Tables[0].Rows[0]["Percentage"].ToString() != "")
+                if (ds.Tables[0].Rows[0]["CarriageUnitPrice"].ToString() != "")
                 {
-                    model.Percentage = decimal.Parse(ds.Tables[0].Rows[0]["Percentage"].ToString());
+                    model.CarriageUnitPrice = decimal.Parse(ds.Tables[0].Rows[0]["CarriageUnitPrice"].ToString());
                 }
                 if (ds.Tables[0].Rows[0]["Carriage"].ToString() != "")
                 {
@@ -988,11 +412,61 @@ namespace DTcms.DAL
                 {
                     model.Status = int.Parse(ds.Tables[0].Rows[0]["Status"].ToString());
                 }
-                if (ds.Tables[0].Rows[0]["WarningTime"].ToString() != "")
-                {
-                    model.WarningTime = DateTime.Parse(ds.Tables[0].Rows[0]["WarningTime"].ToString());
-                }
+                model.CustomerRemarks = ds.Tables[0].Rows[0]["CustomerRemarks"].ToString();
+                model.HaulwayRemarks = ds.Tables[0].Rows[0]["HaulwayRemarks"].ToString();
                 model.Remarks = ds.Tables[0].Rows[0]["Remarks"].ToString();
+                if (ds.Tables[0].Rows[0]["FactTotalPrice"].ToString() != "")
+                {
+                    model.FactTotalPrice = decimal.Parse(ds.Tables[0].Rows[0]["FactTotalPrice"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["TotalPrice"].ToString() != "")
+                {
+                    model.TotalPrice = decimal.Parse(ds.Tables[0].Rows[0]["TotalPrice"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["UnitPrice"].ToString() != "")
+                {
+                    model.UnitPrice = decimal.Parse(ds.Tables[0].Rows[0]["UnitPrice"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["FactDispatchCount"].ToString() != "")
+                {
+                    model.FactDispatchCount = decimal.Parse(ds.Tables[0].Rows[0]["FactDispatchCount"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["DispatchCount"].ToString() != "")
+                {
+                    model.DispatchCount = decimal.Parse(ds.Tables[0].Rows[0]["DispatchCount"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["ReceivedWeight"].ToString() != "")
+                {
+                    model.ReceivedWeight = decimal.Parse(ds.Tables[0].Rows[0]["ReceivedWeight"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["UnloadingWeight"].ToString() != "")
+                {
+                    model.UnloadingWeight = decimal.Parse(ds.Tables[0].Rows[0]["UnloadingWeight"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["ArriveDate"].ToString() != "")
+                {
+                    model.ArriveDate = DateTime.Parse(ds.Tables[0].Rows[0]["ArriveDate"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["FactArriveDate"].ToString() != "")
+                {
+                    model.FactArriveDate = DateTime.Parse(ds.Tables[0].Rows[0]["FactArriveDate"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["LoadingCapacityRunning"].ToString() != "")
+                {
+                    model.LoadingCapacityRunning = decimal.Parse(ds.Tables[0].Rows[0]["LoadingCapacityRunning"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["NoLoadingCapacityRunning"].ToString() != "")
+                {
+                    model.NoLoadingCapacityRunning = decimal.Parse(ds.Tables[0].Rows[0]["NoLoadingCapacityRunning"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["Weight"].ToString() != "")
+                {
+                    model.Weight = decimal.Parse(ds.Tables[0].Rows[0]["Weight"].ToString());
+                }
+                if (ds.Tables[0].Rows[0]["LoadingDate"].ToString() != "")
+                {
+                    model.LoadingDate = DateTime.Parse(ds.Tables[0].Rows[0]["LoadingDate"].ToString());
+                }
 
                 return model;
             }
@@ -1037,99 +511,6 @@ namespace DTcms.DAL
             }
             strSql.Append(" order by " + filedOrder);
             return DbHelperSQL.Query(strSql.ToString());
-        }
-
-        /// <summary>
-        /// 获得查询分页数据
-        /// </summary>
-        public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("SELECT a.Id AS TransportOrderItemId, a.Shipper, a.Receiver, a.BillNumber, a.Goods, a.Unit,a.DispatchCount,FactDispatchCount,a.LoadingAddress,a.UnloadingAddress, ");
-            strSql.Append("b.Id AS Id,b.Code,b.DispatchTime,b.FactDispatchTime,b.FactBackTime,b.CarNumber,b.Driver,b.Status,b.WarningTime ");
-            strSql.Append("FROM mtms_TransportOrderItem a LEFT JOIN mtms_TransportOrder b ON a.TransportOrderId = b.Id ");
-            if (strWhere.Trim() != "")
-            {
-                strSql.Append(" where " + strWhere);
-            }
-            recordCount = recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
-
-            return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
-        }
-
-        public DataSet GetMyList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("SELECT * ");
-            strSql.Append("FROM mtms_TransportOrder ");
-            if (strWhere.Trim() != "")
-            {
-                strSql.Append(" where " + strWhere);
-            }
-            recordCount = recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
-
-            return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
-        }
-
-        public DataSet GetRecordsList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("SELECT a.Id AS TransportOrderItemId, a.Shipper, a.Receiver, a.BillNumber, a.Goods, a.Unit,a.DispatchCount,FactDispatchCount,a.LoadingAddress,a.UnloadingAddress,a.UnitPrice,a.TotalPrice, ");
-            strSql.Append("b.Id AS Id,b.Code,b.DispatchTime,b.FactDispatchTime,b.FactBackTime,b.CarNumber,b.Driver,b.Status, b.ReceiptTime,b.WarningTime, ");
-            strSql.Append("c.AcceptOrderTime ");
-            strSql.Append("FROM mtms_TransportOrderItem a LEFT JOIN mtms_TransportOrder b ON a.TransportOrderId = b.Id, mtms_Order c WHERE a.OrderId = c.Id ");
-            if (strWhere.Trim() != "")
-            {
-                strSql.Append(strWhere);
-            }
-            //recordCount = 0;
-            recordCount = recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
-            //throw new Exception(PagingHelper.CreateCountingSql(strSql.ToString()));
-            return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
-        }
-
-        public DataSet GetTransportOrders(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("SELECT * ");
-            strSql.Append("FROM mtms_TransportOrder ");
-            if (strWhere.Trim() != "")
-            {
-                strSql.Append(" where " + strWhere);
-            }
-            recordCount = recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
-
-            return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
-        }
-
-        public DataSet GetTransportOrdersAndItem(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append("SELECT * ");
-            strSql.Append("FROM mtms_TransportOrder ");
-            if (strWhere.Trim() != "")
-            {
-                strSql.Append(" where " + strWhere);
-            }
-            recordCount = recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
-
-            return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
-        }
-
-        public DataSet GetTransportOrdersAndDriver(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
-        {
-            StringBuilder strSql = new StringBuilder();
-            strSql.Append(@"select  a.Id AS Id, a.Code,a.FactBackTime,a.CarNumber,a.Driver,a.WarningTime,
-                            b.LinkTel,b.RealName,b.IdCardNumber,b.LinkAddress 
-                            FROM mtms_TransportOrder a 
-                            left join mtms_Driver b  on a.CarNumber = b.CarNumber ");
-            if (strWhere.Trim() != "")
-            {
-                strSql.Append(" where " + strWhere);
-            }
-            recordCount = recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
-
-            return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
         }
     }
 }

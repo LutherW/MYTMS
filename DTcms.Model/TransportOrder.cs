@@ -34,18 +34,11 @@ namespace DTcms.Model
             get { return _dispatchtime; }
             set { _dispatchtime = value; }
         }
-
-        private DateTime _receiptTime;
-        public DateTime ReceiptTime
-        {
-            get { return _receiptTime; }
-            set { _receiptTime = value; }
-        }
         /// <summary>
         /// FactDispatchTime
         /// </summary>		
-        private DateTime? _factdispatchtime;
-        public DateTime? FactDispatchTime
+        private DateTime _factdispatchtime;
+        public DateTime FactDispatchTime
         {
             get { return _factdispatchtime; }
             set { _factdispatchtime = value; }
@@ -60,6 +53,24 @@ namespace DTcms.Model
             set { _timelimit = value; }
         }
         /// <summary>
+        /// ReceiptTime
+        /// </summary>		
+        private DateTime _receipttime;
+        public DateTime ReceiptTime
+        {
+            get { return _receipttime; }
+            set { _receipttime = value; }
+        }
+        /// <summary>
+        /// WarningTime
+        /// </summary>		
+        private DateTime _warningtime;
+        public DateTime WarningTime
+        {
+            get { return _warningtime; }
+            set { _warningtime = value; }
+        }
+        /// <summary>
         /// BackTime
         /// </summary>		
         private DateTime _backtime;
@@ -71,74 +82,20 @@ namespace DTcms.Model
         /// <summary>
         /// FactBackTime
         /// </summary>		
-        private DateTime? _factbacktime;
-        public DateTime? FactBackTime
+        private DateTime _factbacktime;
+        public DateTime FactBackTime
         {
             get { return _factbacktime; }
             set { _factbacktime = value; }
         }
         /// <summary>
-        /// MotorcadeName
+        /// DriverId
         /// </summary>		
-        private string _motorcadename;
-        public string MotorcadeName
+        private int _driverid;
+        public int DriverId
         {
-            get { return _motorcadename; }
-            set { _motorcadename = value; }
-        }
-        /// <summary>
-        /// CarNumber
-        /// </summary>		
-        private string _carnumber;
-        public string CarNumber
-        {
-            get { return _carnumber; }
-            set { _carnumber = value; }
-        }
-        /// <summary>
-        /// Trailer
-        /// </summary>		
-        private string _trailer;
-        public string Trailer
-        {
-            get { return _trailer; }
-            set { _trailer = value; }
-        }
-        /// <summary>
-        /// Driver
-        /// </summary>		
-        private string _driver;
-        public string Driver
-        {
-            get { return _driver; }
-            set { _driver = value; }
-        }
-        /// <summary>
-        /// DispatchCount
-        /// </summary>		
-        private decimal _dispatchcount;
-        public decimal DispatchCount
-        {
-            get { return _dispatchcount; }
-            set { _dispatchcount = value; }
-        }
-        /// <summary>
-        /// FactDispatchCount
-        /// </summary>		
-        private decimal _factdispatchcount;
-        public decimal FactDispatchCount
-        {
-            get { return _factdispatchcount; }
-            set { _factdispatchcount = value; }
-        }
-        /// <summary>
-        /// FactReceivedCount
-        /// </summary>		
-        private decimal _factreceivedcount;
-        public decimal FactReceivedCount
-        {
-            get { return _factreceivedcount; }
-            set { _factreceivedcount = value; }
+            get { return _driverid; }
+            set { _driverid = value; }
         }
         /// <summary>
         /// Advance
@@ -177,13 +134,13 @@ namespace DTcms.Model
             set { _factrepayment = value; }
         }
         /// <summary>
-        /// Percentage
+        /// CarriageUnitPrice
         /// </summary>		
-        private decimal _percentage;
-        public decimal Percentage
+        private decimal _carriageunitprice;
+        public decimal CarriageUnitPrice
         {
-            get { return _percentage; }
-            set { _percentage = value; }
+            get { return _carriageunitprice; }
+            set { _carriageunitprice = value; }
         }
         /// <summary>
         /// Carriage
@@ -240,6 +197,24 @@ namespace DTcms.Model
             set { _status = value; }
         }
         /// <summary>
+        /// CustomerRemarks
+        /// </summary>		
+        private string _customerremarks;
+        public string CustomerRemarks
+        {
+            get { return _customerremarks; }
+            set { _customerremarks = value; }
+        }
+        /// <summary>
+        /// HaulwayRemarks
+        /// </summary>		
+        private string _haulwayremarks;
+        public string HaulwayRemarks
+        {
+            get { return _haulwayremarks; }
+            set { _haulwayremarks = value; }
+        }
+        /// <summary>
         /// Remarks
         /// </summary>		
         private string _remarks;
@@ -249,14 +224,121 @@ namespace DTcms.Model
             set { _remarks = value; }
         }
         /// <summary>
-        /// 回单提醒
+        /// FactTotalPrice
         /// </summary>		
-        private DateTime? _warningTime;
-        public DateTime? WarningTime
+        private decimal _facttotalprice;
+        public decimal FactTotalPrice
         {
-            get { return _warningTime; }
-            set { _warningTime = value; }
+            get { return _facttotalprice; }
+            set { _facttotalprice = value; }
         }
-
+        /// <summary>
+        /// TotalPrice
+        /// </summary>		
+        private decimal _totalprice;
+        public decimal TotalPrice
+        {
+            get { return _totalprice; }
+            set { _totalprice = value; }
+        }
+        /// <summary>
+        /// UnitPrice
+        /// </summary>		
+        private decimal _unitprice;
+        public decimal UnitPrice
+        {
+            get { return _unitprice; }
+            set { _unitprice = value; }
+        }
+        /// <summary>
+        /// FactDispatchCount
+        /// </summary>		
+        private decimal _factdispatchcount;
+        public decimal FactDispatchCount
+        {
+            get { return _factdispatchcount; }
+            set { _factdispatchcount = value; }
+        }
+        /// <summary>
+        /// DispatchCount
+        /// </summary>		
+        private decimal _dispatchcount;
+        public decimal DispatchCount
+        {
+            get { return _dispatchcount; }
+            set { _dispatchcount = value; }
+        }
+        /// <summary>
+        /// ReceivedWeight
+        /// </summary>		
+        private decimal _receivedweight;
+        public decimal ReceivedWeight
+        {
+            get { return _receivedweight; }
+            set { _receivedweight = value; }
+        }
+        /// <summary>
+        /// UnloadingWeight
+        /// </summary>		
+        private decimal _unloadingweight;
+        public decimal UnloadingWeight
+        {
+            get { return _unloadingweight; }
+            set { _unloadingweight = value; }
+        }
+        /// <summary>
+        /// ArriveDate
+        /// </summary>		
+        private DateTime _arrivedate;
+        public DateTime ArriveDate
+        {
+            get { return _arrivedate; }
+            set { _arrivedate = value; }
+        }
+        /// <summary>
+        /// FactArriveDate
+        /// </summary>		
+        private DateTime _factarrivedate;
+        public DateTime FactArriveDate
+        {
+            get { return _factarrivedate; }
+            set { _factarrivedate = value; }
+        }
+        /// <summary>
+        /// LoadingCapacityRunning
+        /// </summary>		
+        private decimal _loadingcapacityrunning;
+        public decimal LoadingCapacityRunning
+        {
+            get { return _loadingcapacityrunning; }
+            set { _loadingcapacityrunning = value; }
+        }
+        /// <summary>
+        /// NoLoadingCapacityRunning
+        /// </summary>		
+        private decimal _noloadingcapacityrunning;
+        public decimal NoLoadingCapacityRunning
+        {
+            get { return _noloadingcapacityrunning; }
+            set { _noloadingcapacityrunning = value; }
+        }
+        /// <summary>
+        /// Weight
+        /// </summary>		
+        private decimal _weight;
+        public decimal Weight
+        {
+            get { return _weight; }
+            set { _weight = value; }
+        }
+        /// <summary>
+        /// LoadingDate
+        /// </summary>		
+        private DateTime _loadingdate;
+        public DateTime LoadingDate
+        {
+            get { return _loadingdate; }
+            set { _loadingdate = value; }
+        }
     }
 }

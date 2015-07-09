@@ -17,6 +17,15 @@ namespace DTcms.Model
             set { _id = value; }
         }
         /// <summary>
+        /// TransportOrderId
+        /// </summary>		
+        private int _transportorderid;
+        public int TransportOrderId
+        {
+            get { return _transportorderid; }
+            set { _transportorderid = value; }
+        }
+        /// <summary>
         /// Code
         /// </summary>		
         private string _code;
@@ -44,58 +53,22 @@ namespace DTcms.Model
             set { _arrivedtime = value; }
         }
         /// <summary>
-        /// Shipper
+        /// ShipperId
         /// </summary>		
-        private string _shipper;
-        public string Shipper
+        private int _shipperid;
+        public int ShipperId
         {
-            get { return _shipper; }
-            set { _shipper = value; }
+            get { return _shipperid; }
+            set { _shipperid = value; }
         }
         /// <summary>
-        /// ShipperLinkMan
+        /// ReceiverId
         /// </summary>		
-        private string _shipperlinkman;
-        public string ShipperLinkMan
+        private int _receiverid;
+        public int ReceiverId
         {
-            get { return _shipperlinkman; }
-            set { _shipperlinkman = value; }
-        }
-        /// <summary>
-        /// ShipperLinkTel
-        /// </summary>		
-        private string _shipperlinktel;
-        public string ShipperLinkTel
-        {
-            get { return _shipperlinktel; }
-            set { _shipperlinktel = value; }
-        }
-        /// <summary>
-        /// Receiver
-        /// </summary>		
-        private string _receiver;
-        public string Receiver
-        {
-            get { return _receiver; }
-            set { _receiver = value; }
-        }
-        /// <summary>
-        /// ReceiverLinkMan
-        /// </summary>		
-        private string _receiverlinkman;
-        public string ReceiverLinkMan
-        {
-            get { return _receiverlinkman; }
-            set { _receiverlinkman = value; }
-        }
-        /// <summary>
-        /// ReceiverLinkTel
-        /// </summary>		
-        private string _receiverlinktel;
-        public string ReceiverLinkTel
-        {
-            get { return _receiverlinktel; }
-            set { _receiverlinktel = value; }
+            get { return _receiverid; }
+            set { _receiverid = value; }
         }
         /// <summary>
         /// ContractNumber
@@ -125,22 +98,13 @@ namespace DTcms.Model
             set { _unloadingaddress = value; }
         }
         /// <summary>
-        /// Goods
+        /// GoodsId
         /// </summary>		
-        private string _goods;
-        public string Goods
+        private int _goodsid;
+        public int GoodsId
         {
-            get { return _goods; }
-            set { _goods = value; }
-        }
-        /// <summary>
-        /// Unit
-        /// </summary>		
-        private string _unit;
-        public string Unit
-        {
-            get { return _unit; }
-            set { _unit = value; }
+            get { return _goodsid; }
+            set { _goodsid = value; }
         }
         /// <summary>
         /// IsCharteredCar
@@ -190,11 +154,11 @@ namespace DTcms.Model
         /// <summary>
         /// NoLoadingCapacityRunning
         /// </summary>		
-        private decimal _NoLoadingCapacityRunning;
+        private decimal _noloadingcapacityrunning;
         public decimal NoLoadingCapacityRunning
         {
-            get { return _NoLoadingCapacityRunning; }
-            set { _NoLoadingCapacityRunning = value; }
+            get { return _noloadingcapacityrunning; }
+            set { _noloadingcapacityrunning = value; }
         }
         /// <summary>
         /// BillNumber
@@ -215,13 +179,49 @@ namespace DTcms.Model
             set { _weighbridgenumber = value; }
         }
         /// <summary>
-        /// Formula
+        /// Status
         /// </summary>		
-        private string _formula;
-        public string Formula
+        private int _status;
+        public int Status
         {
-            get { return _formula; }
-            set { _formula = value; }
+            get { return _status; }
+            set { _status = value; }
+        }
+        /// <summary>
+        /// CreateDateTime
+        /// </summary>		
+        private DateTime _createdatetime;
+        public DateTime CreateDateTime
+        {
+            get { return _createdatetime; }
+            set { _createdatetime = value; }
+        }
+        /// <summary>
+        /// Remarks
+        /// </summary>		
+        private string _remarks;
+        public string Remarks
+        {
+            get { return _remarks; }
+            set { _remarks = value; }
+        }
+        /// <summary>
+        /// IsWeightNote
+        /// </summary>		
+        private bool _isweightnote;
+        public bool IsWeightNote
+        {
+            get { return _isweightnote; }
+            set { _isweightnote = value; }
+        }
+        /// <summary>
+        /// IsAllotted
+        /// </summary>		
+        private bool _isallotted;
+        public bool IsAllotted
+        {
+            get { return _isallotted; }
+            set { _isallotted = value; }
         }
         /// <summary>
         /// UnitPrice
@@ -233,40 +233,31 @@ namespace DTcms.Model
             set { _unitprice = value; }
         }
         /// <summary>
-        /// TotalPrice
+        /// Weight
         /// </summary>		
-        private decimal _totalprice;
-        public decimal TotalPrice
+        private decimal _weight;
+        public decimal Weight
         {
-            get { return _totalprice; }
-            set { _totalprice = value; }
+            get { return _weight; }
+            set { _weight = value; }
         }
         /// <summary>
-        /// SettleAccountsWay
+        /// Freight
         /// </summary>		
-        private string _settleaccountsway;
-        public string SettleAccountsWay
+        private decimal _freight;
+        public decimal Freight
         {
-            get { return _settleaccountsway; }
-            set { _settleaccountsway = value; }
+            get { return _freight; }
+            set { _freight = value; }
         }
         /// <summary>
-        /// Status
+        /// HandlingCharge
         /// </summary>		
-        private int _status;
-        public int Status
+        private decimal _handlingcharge;
+        public decimal HandlingCharge
         {
-            get { return _status; }
-            set { _status = value; }
-        }
-        /// <summary>
-        /// Remarks
-        /// </summary>		
-        private string _remarks;
-        public string Remarks
-        {
-            get { return _remarks; }
-            set { _remarks = value; }
+            get { return _handlingcharge; }
+            set { _handlingcharge = value; }
         }
 
     }

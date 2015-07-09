@@ -14,8 +14,6 @@ namespace DTcms.Web.admin.Business
         protected string action = DTEnums.ActionEnum.Add.ToString(); //操作类型
         private int id = 0;
 
-        protected string transportOrderItems = string.Empty;
-
         protected void Page_Load(object sender, EventArgs e)
         {
             string _action = DTRequest.GetQueryString("action");
@@ -95,27 +93,16 @@ namespace DTcms.Web.admin.Business
             ddlMotorcade.SelectedValue = model.MotorcadeName;
             ddlCarNumber.SelectedValue = model.CarNumber;
             txtDriver.Text = model.Driver;
+            txtCustomerRemarks.Text = model.CustomerRemarks;
+            txtHaulwayRemarks.Text = model.HaulwayRemarks;
+            txtDispatchCount.Text = model.DispatchCount.ToString();
+            txtUnitPrice.Text = model.UnitPrice.ToString();
+            txtTotalPrice.Text = model.TotalPrice.ToString();
+            txtCarriageUnitPrice.Text = model.CarriageUnitPrice.ToString();
+            txtCarriage.Text = model.Carriage.ToString();
             txtRemarks.Text = model.Remarks;
 
-            BLL.TransportOrderItem itemBll = new BLL.TransportOrderItem();
-            DataTable dt = itemBll.GetList(" TransportOrderId = " + model.Id + "").Tables[0];
-            foreach (DataRow dr in dt.Rows)
-            {
-                string dispatchCount = dr["DispatchCount"].ToString().Equals("0.00") ? "包车" : dr["DispatchCount"].ToString();
-                transportOrderItems += "<tr data-value=\"" + dr["Id"].ToString() + "\" data-order-id=\"" + dr["OrderId"].ToString() + "\">";
-                transportOrderItems += "<td width=\"5%\"><input type=\"hidden\" name=\"orderId\" value=\"" + dr["OrderId"].ToString() + "\"/></td>";
-                transportOrderItems += "<td width=\"10%\">" + dr["BillNumber"].ToString() + "</td>";
-                transportOrderItems += "<td width=\"10%\">" + dr["Shipper"].ToString() + "</td>";
-                transportOrderItems += "<td width=\"10%\">" + dr["Receiver"].ToString()  + "</td>";
-                transportOrderItems += "<td width=\"10%\">" + dr["Goods"].ToString()  + "</td>";
-                transportOrderItems += "<td width=\"9%\">" + dr["Unit"].ToString()  + "</td>";
-                transportOrderItems += "<td width=\"6%\">" + dispatchCount + "</td>";
-                transportOrderItems += "<td width=\"5%\"><input type=\"text\" name=\"factDispatchCount\" value=\"" + dr["FactDispatchCount"].ToString() + "\" class=\"input small\"/></td>";
-                transportOrderItems += "<td width=\"5%\">" + dr["UnitPrice"].ToString()  + "</td>";
-                transportOrderItems += "<td width=\"5%\">" + dr["TotalPrice"].ToString()  + "</td>";
-                transportOrderItems += "</tr>";
-            }
-          
+         
         }
         #endregion
 
