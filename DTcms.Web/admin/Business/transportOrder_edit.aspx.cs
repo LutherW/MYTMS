@@ -69,9 +69,7 @@ namespace DTcms.Web.admin.Business
             txtCustomerRemarks.Text = model.CustomerRemarks;
             txtHaulwayRemarks.Text = model.HaulwayRemarks;
             txtDispatchCount.Text = model.DispatchCount.ToString();
-            txtUnitPrice.Text = model.UnitPrice.ToString();
             txtWeight.Text = model.Weight.ToString();
-            txtTotalPrice.Text = model.TotalPrice.ToString();
             txtCarriageUnitPrice.Text = model.CarriageUnitPrice.ToString();
             txtCarriage.Text = model.Carriage.ToString();
             txtLoadingCapacityRunning.Text = model.LoadingCapacityRunning.ToString();
@@ -97,10 +95,8 @@ namespace DTcms.Web.admin.Business
             model.HaulwayRemarks = txtHaulwayRemarks.Text;
             model.DispatchCount = Convert.ToDecimal(txtDispatchCount.Text);
             model.FactDispatchCount = model.DispatchCount;
-            model.UnitPrice = Convert.ToDecimal(txtUnitPrice.Text);
             model.Weight = Convert.ToDecimal(txtWeight.Text);
             model.FactWeight = model.Weight;
-            model.TotalPrice = Convert.ToDecimal(txtTotalPrice.Text);
             model.FactTotalPrice = model.TotalPrice;
             model.CarriageUnitPrice = Convert.ToDecimal(txtCarriageUnitPrice.Text);
             model.Carriage = Convert.ToDecimal(txtCarriage.Text);
@@ -133,10 +129,8 @@ namespace DTcms.Web.admin.Business
             model.HaulwayRemarks = txtHaulwayRemarks.Text;
             model.DispatchCount = Convert.ToDecimal(txtDispatchCount.Text);
             model.FactDispatchCount = model.DispatchCount;
-            model.UnitPrice = Convert.ToDecimal(txtUnitPrice.Text);
             model.Weight = Convert.ToDecimal(txtWeight.Text);
             model.FactWeight = model.Weight;
-            model.TotalPrice = Convert.ToDecimal(txtTotalPrice.Text);
             model.FactTotalPrice = model.TotalPrice;
             model.CarriageUnitPrice = Convert.ToDecimal(txtCarriageUnitPrice.Text);
             model.Carriage = Convert.ToDecimal(txtCarriage.Text);

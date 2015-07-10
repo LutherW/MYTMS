@@ -27,11 +27,12 @@
         function addOrder(id) {
             var dialog = $.dialog({
                 title: '添加订单',
-                content: 'url:order_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>&transportOrderId=' + id,
+                content: 'url:dialog/dialog_order_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>&transportOrderId=' + id,
                 min: false,
                 max: false,
                 lock: true,
-                width: 700
+                width: 700,
+                height:550
             });
         }
 
@@ -107,7 +108,7 @@
                         <tr>
                             <th width="5%">选择</th>
                             <th align="left">运输单编号</th>
-                            <th align="left" width="6%">计划出车时间</th>
+                            <th align="left" width="7%">计划出车时间</th>
                             <th width="9%">客户描述</th>
                             <th width="9%">路线描述</th>
                             <th width="5%">司机</th>
@@ -116,8 +117,8 @@
                             <th width="8%">运费(总价)</th>
                             <th width="5%">预发重量</th>
                             <th width="5%">预发数量</th>
-                            <th width="9%">里程(装载/空载公里)</th>
-                            <th width="8%">操作</th>
+                            <th width="10%">里程(装载/空载公里)</th>
+                            <th width="10%">操作</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
@@ -134,14 +135,15 @@
                         <td align="center"><%#Eval("HaulwayRemarks")%></td>
                         <td align="center"><%#Eval("Driver")%></td>
                         <td align="center"><%#Eval("CarNumber")%></td>
-                        <td align="center"><%#string.Format("{0:N2}/{1:N2}", Eval("CarriageUnitPrice"), Eval("UnitPrice"))%></td>
-                        <td align="center"><%#string.Format("{0:N2}/{1:N2}", Eval("Carriage"), Eval("TotalPrice"))%></td>
+                        <td align="center"><%#string.Format("{0:N2}", Eval("CarriageUnitPrice"))%></td>
+                        <td align="center"><%#string.Format("{0:N2}", Eval("Carriage"))%></td>
                         <td align="center"><%#string.Format("{0:N2}", Eval("Weight"))%></td>
                         <td align="center"><%#string.Format("{0:N2}", Eval("DispatchCount"))%></td>
                         <td align="center"><%#string.Format("{0:N2}/{1:N2}", Eval("LoadingCapacityRunning"), Eval("NoLoadingCapacityRunning"))%></td>
                         <td align="center">
                             <%#(Eval("Status").ToString().Equals("0") || Eval("Status").ToString().Equals("1")) ? string.Format("<a href=\"transportOrder_edit.aspx?action={0}&id={1}\">{2}</a>", DTEnums.ActionEnum.Edit, Eval("Id"), "修改") : "已报账"%>
                             <a href='javascript:void(0);' onclick="addOrder(<%#Eval("Id") %>);">添加订单</a>
+                            <a href='javascript:void(0);' onclick="showOrders(<%#Eval("Id") %>);">订单</a>
                         </td>
                     </tr>
                 </ItemTemplate>

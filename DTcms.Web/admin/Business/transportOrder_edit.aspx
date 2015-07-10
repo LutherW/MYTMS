@@ -82,13 +82,6 @@
                     <asp:TextBox ID="txtDispatchCount" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
                     <span class="Validform_checktip">*</span></dd>
             </dl>
-            
-            <dl>
-                <dt>单价(运价)</dt>
-                <dd>
-                    <asp:TextBox ID="txtUnitPrice" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
-                    <span class="Validform_checktip">*</span></dd>
-            </dl>
             <dl>
                 <dt>重量(吨位)</dt>
                 <dd>
@@ -96,19 +89,13 @@
                     <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
-                <dt>运费</dt>
-                <dd>
-                    <asp:TextBox ID="txtTotalPrice" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
-                    <span class="Validform_checktip">*</span></dd>
-            </dl>
-            <dl>
-                <dt>司机费用单价</dt>
+                <dt>单价(运价)</dt>
                 <dd>
                     <asp:TextBox ID="txtCarriageUnitPrice" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
                     <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
-                <dt>司机费用总价</dt>
+                <dt>运费</dt>
                 <dd>
                     <asp:TextBox ID="txtCarriage" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
                     <span class="Validform_checktip">*</span></dd>
