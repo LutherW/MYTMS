@@ -271,6 +271,14 @@ namespace DTcms.BLL
         {
             return GetList("");
         }
+
+        /// <summary>
+        /// 获得查询分页数据
+        /// </summary>
+        public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
+        {
+            return dal.GetList(pageSize, pageIndex, strWhere, filedOrder, out recordCount);
+        }
         #endregion
 
     }

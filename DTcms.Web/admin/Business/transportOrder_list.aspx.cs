@@ -32,21 +32,21 @@ namespace DTcms.Web.admin.Business
             if (!Page.IsPostBack)
             {
                 TreeBind(""); //绑定类别
-                RptBind("Id>0" + CombSqlTxt(_carNumber,  _beginTime, _endTime, this.keywords), "Id desc");
+                RptBind("A.Status=0" + CombSqlTxt(_carNumber, _beginTime, _endTime, this.keywords), "DispatchTime desc");
             }
         }
 
         #region 绑定组别=================================
         private void TreeBind(string strWhere)
         {
-            BLL.Vehicle goodsBll = new BLL.Vehicle();
-            DataTable goodsDT = goodsBll.GetList(0, strWhere, "Id desc").Tables[0];
+            BLL.Driver driverBll = new BLL.Driver();
+            DataTable driverDT = driverBll.GetList(0, "IsDimission != 1 ", "Id desc").Tables[0];
 
-            ddlCarNumber.Items.Clear();
-            ddlCarNumber.Items.Add(new ListItem("不限", ""));
-            foreach (DataRow dr in goodsDT.Rows)
+            ddlDriver.Items.Clear();
+            ddlDriver.Items.Add(new ListItem("不限", ""));
+            foreach (DataRow dr in driverDT.Rows)
             {
-                this.ddlCarNumber.Items.Add(new ListItem(dr["CarCode"].ToString(), dr["CarCode"].ToString()));
+                this.ddlDriver.Items.Add(new ListItem(string.Format("{0}({1})", dr["CarNumber"].ToString(), dr["RealName"].ToString()), dr["CarNumber"].ToString()));
             }
         }
         #endregion
@@ -57,7 +57,7 @@ namespace DTcms.Web.admin.Business
             this.page = DTRequest.GetQueryInt("page", 1);
             if (!string.IsNullOrEmpty(_carNumber))
             {
-                ddlCarNumber.SelectedValue = _carNumber;
+                ddlDriver.SelectedValue = _carNumber;
             }
             if (!string.IsNullOrEmpty(_beginTime))
             {
@@ -86,20 +86,20 @@ namespace DTcms.Web.admin.Business
             StringBuilder strTemp = new StringBuilder();
             if (!string.IsNullOrEmpty(carNumber))
             {
-                strTemp.Append(" and CarNumber='" + carNumber + "'");
+                strTemp.Append(" and B.CarNumber='" + carNumber + "'");
             }
             if (!string.IsNullOrEmpty(beginTime))
             {
-                strTemp.Append(" and DispatchTime>='" + beginTime + "'");
+                strTemp.Append(" and A.DispatchTime>='" + beginTime + "'");
             }
             if (!string.IsNullOrEmpty(endTime))
             {
-                strTemp.Append(" and DispatchTime<='" + endTime + "'");
+                strTemp.Append(" and A.DispatchTime<='" + endTime + "'");
             }
             _keywords = _keywords.Replace("'", "");
             if (!string.IsNullOrEmpty(_keywords))
             {
-                strTemp.Append(" and (HaulwayRemarks like '%" + _keywords + "%' or CustomerRemarks like '%" + _keywords + "%' or Driver like '%" + _keywords + "%')");
+                strTemp.Append(" and (A.CustomerRemarks like '%" + _keywords + "%' or A.HaulwayRemarks like '%" + _keywords + "%')");
             }
             return strTemp.ToString();
         }
@@ -128,10 +128,10 @@ namespace DTcms.Web.admin.Business
         }
 
         //筛选类别
-        protected void ddlCarNumber_SelectedIndexChanged(object sender, EventArgs e)
+        protected void ddlDriver_SelectedIndexChanged(object sender, EventArgs e)
         {
             Response.Redirect(Utils.CombUrlTxt("transportOrder_list.aspx", "carNumber={0}&beginTime={1}&endTime={2}&keywords={3}",
-                ddlCarNumber.SelectedValue, _beginTime, _endTime, keywords));
+                ddlDriver.SelectedValue, _beginTime, _endTime, keywords));
         }
 
         //设置分页数量

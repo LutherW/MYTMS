@@ -20,81 +20,7 @@
         $(function () {
             //初始化表单验证
             $("#form1").initValidform();
-
-            $("#orders tr[data-name='dispatching'] :checkbox").click(function () {
-                var checked = $(this).attr("checked");
-                if (checked) {
-                    $(this).removeAttr("checked");
-                    removeTransportOrderItem($(this).val());
-                } else {
-                    $(this).attr("checked", "checked");
-                    var id = $(this).val();
-                    var order = {};
-                    order.id = id;
-                    order.code = $("#code_" + id).html();
-                    order.arrivedTime = $("#arrivedTime_" + id).html();
-                    order.shipper = $("#shipper_" + id).html();
-                    order.receiver = $("#receiver_" + id).html();
-                    order.unit = $("#unit_" + id).html();
-                    order.quantity = $("#quantity_" + id).html();
-                    order.goods = $("#goods_" + id).html();
-                    order.billNumber = $("#billNumber_" + id).html();
-                    order.unitPrice = $("#unitPrice_" + id).html();
-                    order.totalPrice = $("#totalPrice_" + id).html();
-                    addTransportOrderItem(order);
-                }
-            });
-
-            $("#ddlMotorcade").change(function () {
-                var val = $(this).val();
-                if (val != "") {
-                    $.getJSON("../../tools/Vehicle.ashx", { "action": "list", "motorcade": val }, function (data) {
-                        if (data.status == 1) {
-                            var options = "";
-                            $.each(data.vehicles, function (i, n) {
-                                options += "<option value='" + data.vehicles[i].carCode + "'>" + data.vehicles[i].carCode + "</option>"
-                            });
-                            $("#ddlCarNumber").html(options);
-                        }
-                    });
-                }
-            });
-
-            $("#ddlCarNumber").change(function () {
-                var val = $(this).val();
-                if (val != "") {
-                    $.getJSON("../../tools/Driver.ashx", { "action": "details", "carNumber": val }, function (data) {
-                        if (data.status == 1) {
-                            $("#txtDriver").val(data.name);
-                        }
-                    });
-                } else {
-                    $("#txtDriver").val("");
-                }
-            });
         });
-
-        function addTransportOrderItem(order) {
-            if ($("tr[data-order-id='" + order.id + "']").length == 0) {
-                var html = "<tr data-value=\"" + order.id + "\" data-order-id=\"" + order.id + "\">";
-                html += "<td width=\"5%\"><input type=\"hidden\" name=\"orderId\" value=\"" + order.id + "\"/></td>";
-                html += "<td width=\"10%\">" + order.billNumber + "</td>";
-                html += "<td width=\"10%\">" + order.shipper + "</td>";
-                html += "<td width=\"10%\">" + order.receiver + "</td>";
-                html += "<td width=\"10%\">" + order.goods + "</td>";
-                html += "<td width=\"9%\">" + order.unit + "</td>";
-                html += "<td width=\"6%\">" + order.quantity + "</td>";
-                html += "<td width=\"5%\"><input type=\"text\" class=\"input small\" name=\"factDispatchCount\" value=\"0.00\"/></td>";
-                html += "<td width=\"5%\">" + order.unitPrice + "</td>";
-                html += "<td width=\"5%\">" + order.totalPrice + "</td>";
-                html += "</tr>";
-                $("#transportOrderItems tr[data-name='dispatched']").after(html);
-            }
-        }
-
-        function removeTransportOrderItem(orderId) {
-            $("#transportOrderItems tr").remove("[data-value='" + orderId + "']");
-        }
     </script>
 </head>
 
@@ -131,31 +57,11 @@
                     <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
-                <dt>预计回车时间</dt>
-                <dd>
-                    <span class="input-date"><asp:TextBox ID="txtBackTime" runat="server" CssClass="input normal date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox><i>日期</i></span>
-                    <span class="Validform_checktip"></span></dd>
-            </dl>
-            <dl>
-                <dt>车队</dt>
-                <dd>
-                    <div class="rule-single-select" style="z-index:9999">
-                        <asp:DropDownList ID="ddlMotorcade" runat="server" datatype="*" errormsg="请选择车队" sucmsg=" "></asp:DropDownList>
-                    </div>
-                </dd>
-            </dl>
-            <dl>
-                <dt>车号</dt>
-                <dd>
-                    <div class="rule-single-select" style="z-index:9990">
-                        <asp:DropDownList ID="ddlCarNumber" runat="server" datatype="*" errormsg="请选择车辆" sucmsg=" "></asp:DropDownList>
-                    </div>
-                    <span class="Validform_checktip">*</span></dd>
-            </dl>
-            <dl>
                 <dt>司机</dt>
                 <dd>
-                    <asp:TextBox ID="txtDriver" runat="server" CssClass="input high" datatype="*2-100" errormsg="输入2-100个字符" sucmsg=" "></asp:TextBox>
+                    <div class="rule-single-select" style="z-index:9990">
+                        <asp:DropDownList ID="ddlDriver" runat="server" datatype="*" errormsg="请选择司机" sucmsg=" "></asp:DropDownList>
+                    </div>
                     <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
@@ -171,15 +77,22 @@
                     <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
-                <dt>预发量</dt>
+                <dt>预发数量</dt>
                 <dd>
                     <asp:TextBox ID="txtDispatchCount" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
                     <span class="Validform_checktip">*</span></dd>
             </dl>
+            
             <dl>
-                <dt>单价</dt>
+                <dt>单价(运价)</dt>
                 <dd>
                     <asp:TextBox ID="txtUnitPrice" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip">*</span></dd>
+            </dl>
+            <dl>
+                <dt>重量(吨位)</dt>
+                <dd>
+                    <asp:TextBox ID="txtWeight" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
                     <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
@@ -200,6 +113,20 @@
                     <asp:TextBox ID="txtCarriage" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
                     <span class="Validform_checktip">*</span></dd>
             </dl>
+            <dl>
+                <dt>装载里程</dt>
+                <dd>
+                    <asp:TextBox ID="txtLoadingCapacityRunning" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip">*</span></dd>
+            </dl>
+
+            <dl>
+                <dt>空载里程</dt>
+                <dd>
+                    <asp:TextBox ID="txtNoLoadingCapacityRunning" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip">*</span></dd>
+            </dl>
+
             <dl>
                 <dt>备注</dt>
                 <dd>

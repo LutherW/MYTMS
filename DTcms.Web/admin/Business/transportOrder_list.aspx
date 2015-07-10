@@ -80,7 +80,7 @@
                         <span style="font-size: 12px;">车号:
                         </span>
                         <div class="rule-single-select">
-                            <asp:DropDownList ID="ddlCarNumber" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlCarNumber_SelectedIndexChanged"></asp:DropDownList>
+                            <asp:DropDownList ID="ddlDriver" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlDriver_SelectedIndexChanged"></asp:DropDownList>
                         </div>
                     </div>
                 </div>
@@ -107,17 +107,16 @@
                         <tr>
                             <th width="5%">选择</th>
                             <th align="left">运输单编号</th>
-                            <th align="left" width="7%">计划出车时间</th>
-                            <th width="10%">客户描述</th>
-                            <th width="10%">路线描述</th>
+                            <th align="left" width="6%">计划出车时间</th>
+                            <th width="9%">客户描述</th>
+                            <th width="9%">路线描述</th>
                             <th width="5%">司机</th>
                             <th width="8%">车号</th>
-                            <th width="5%">单价(运价)</th>
-                            <th width="5%">运费(总价)</th>
+                            <th width="8%">单价(运价)</th>
+                            <th width="8%">运费(总价)</th>
                             <th width="5%">预发重量</th>
                             <th width="5%">预发数量</th>
-                            <th width="5%">预达日期</th>
-                            <th width="5%">里程</th>
+                            <th width="9%">里程(装载/空载公里)</th>
                             <th width="8%">操作</th>
                         </tr>
                 </HeaderTemplate>
@@ -135,12 +134,11 @@
                         <td align="center"><%#Eval("HaulwayRemarks")%></td>
                         <td align="center"><%#Eval("Driver")%></td>
                         <td align="center"><%#Eval("CarNumber")%></td>
-                        <td align="center"><%#Eval("CarriageUnitPrice")%></td>
-                        <td align="center"><%#Eval("Carriage")%></td>
-                        <td align="center"><%#Eval("Weight")%></td>
-                        <td align="center"><%#Eval("DispatchCount")%></td>
-                        <td align="center"><%#string.Format("{0:d}", Eval("ArriveDate"))%></td>
-                        <td align="center"><%#string.Format("{0}/{1}", Eval("LoadingCapacityRunning"), Eval("NoLoadingCapacityRunning"))%></td>
+                        <td align="center"><%#string.Format("{0:N2}/{1:N2}", Eval("CarriageUnitPrice"), Eval("UnitPrice"))%></td>
+                        <td align="center"><%#string.Format("{0:N2}/{1:N2}", Eval("Carriage"), Eval("TotalPrice"))%></td>
+                        <td align="center"><%#string.Format("{0:N2}", Eval("Weight"))%></td>
+                        <td align="center"><%#string.Format("{0:N2}", Eval("DispatchCount"))%></td>
+                        <td align="center"><%#string.Format("{0:N2}/{1:N2}", Eval("LoadingCapacityRunning"), Eval("NoLoadingCapacityRunning"))%></td>
                         <td align="center">
                             <%#(Eval("Status").ToString().Equals("0") || Eval("Status").ToString().Equals("1")) ? string.Format("<a href=\"transportOrder_edit.aspx?action={0}&id={1}\">{2}</a>", DTEnums.ActionEnum.Edit, Eval("Id"), "修改") : "已报账"%>
                             <a href='javascript:void(0);' onclick="addOrder(<%#Eval("Id") %>);">添加订单</a>
@@ -148,7 +146,7 @@
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"14\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"13\">暂无记录</td></tr>" : ""%>
 </table>
                 </FooterTemplate>
             </asp:Repeater>

@@ -29,6 +29,14 @@ namespace DTcms.Common
             _smtpClient.Host = smtpserver;//指定SMTP服务器
             _smtpClient.Credentials = new System.Net.NetworkCredential(userName, pwd);//用户名和密码
 
+            //图像附件
+            //var attach = new Attachment(@"D:\a.jpg", MediaTypeNames.Image.Jpeg);
+            ////设置ContentId
+            //attach.ContentId = "pic";
+
+            ////ZIP附件
+            //var attach2 = new Attachment(@"D:\b.zip", "application/x-zip-compressed");
+            
             //MailMessage _mailMessage = new MailMessage(strfrom, strto);
             MailAddress _from = new MailAddress(strfrom, nickName);
             MailAddress _to = new MailAddress(strto);
@@ -38,6 +46,10 @@ namespace DTcms.Common
             _mailMessage.BodyEncoding = System.Text.Encoding.Default;//正文编码
             _mailMessage.IsBodyHtml = true;//设置为HTML格式
             _mailMessage.Priority = MailPriority.Normal;//优先级
+
+            //_mailMessage.Attachments.Add(attach);
+            //_mailMessage.Attachments.Add(attach2);
+
             _smtpClient.Send(_mailMessage);
         }
         #endregion

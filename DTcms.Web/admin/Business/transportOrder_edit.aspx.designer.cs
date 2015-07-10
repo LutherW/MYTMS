@@ -31,40 +31,13 @@ namespace DTcms.Web.admin.Business {
         protected global::System.Web.UI.WebControls.TextBox txtDispatchTime;
         
         /// <summary>
-        /// txtBackTime 控件。
+        /// ddlDriver 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtBackTime;
-        
-        /// <summary>
-        /// ddlMotorcade 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlMotorcade;
-        
-        /// <summary>
-        /// ddlCarNumber 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlCarNumber;
-        
-        /// <summary>
-        /// txtDriver 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDriver;
+        protected global::System.Web.UI.WebControls.DropDownList ddlDriver;
         
         /// <summary>
         /// txtCustomerRemarks 控件。
@@ -103,6 +76,15 @@ namespace DTcms.Web.admin.Business {
         protected global::System.Web.UI.WebControls.TextBox txtUnitPrice;
         
         /// <summary>
+        /// txtWeight 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtWeight;
+        
+        /// <summary>
         /// txtTotalPrice 控件。
         /// </summary>
         /// <remarks>
@@ -128,6 +110,24 @@ namespace DTcms.Web.admin.Business {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtCarriage;
+        
+        /// <summary>
+        /// txtLoadingCapacityRunning 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtLoadingCapacityRunning;
+        
+        /// <summary>
+        /// txtNoLoadingCapacityRunning 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNoLoadingCapacityRunning;
         
         /// <summary>
         /// txtRemarks 控件。

@@ -46,38 +46,14 @@ namespace DTcms.Web.admin.Business
         #region 绑定类别=================================
         private void TreeBind(string strWhere)
         {
-            BLL.Motorcade bll = new BLL.Motorcade();
-            DataTable dt = bll.GetList(0, strWhere, "Id desc").Tables[0];
+            BLL.Driver driverBll = new BLL.Driver();
+            DataTable driverDT = driverBll.GetList(0, "IsDimission != 1 ", "Id desc").Tables[0];
 
-            ddlMotorcade.Items.Clear();
-            ddlMotorcade.Items.Add(new ListItem("请选择车队", ""));
-            foreach (DataRow dr in dt.Rows)
+            ddlDriver.Items.Clear();
+            ddlDriver.Items.Add(new ListItem("请选择司机", ""));
+            foreach (DataRow dr in driverDT.Rows)
             {
-                this.ddlMotorcade.Items.Add(new ListItem(dr["Name"].ToString(), dr["Name"].ToString()));
-            }
-            ddlMotorcade.SelectedIndex = 0;
-
-            string motorcadeName = ddlMotorcade.SelectedValue;
-            BLL.Vehicle vehicleBll = new BLL.Vehicle();
-            ddlCarNumber.Items.Clear();
-            ddlCarNumber.Items.Add(new ListItem("请选择车辆", ""));
-            if (!string.IsNullOrEmpty(motorcadeName))
-            {
-                DataTable vehicledt = vehicleBll.GetList(0, " MotorcadeName = '" + motorcadeName + "' ", "Id desc").Tables[0];
-
-                foreach (DataRow dr in vehicledt.Rows)
-                {
-                    this.ddlCarNumber.Items.Add(new ListItem(dr["CarCode"].ToString(), dr["CarCode"].ToString()));
-                }
-            }
-            else
-            {
-                DataTable vehicledt = vehicleBll.GetList(0, "", "Id desc").Tables[0];
-
-                foreach (DataRow dr in vehicledt.Rows)
-                {
-                    this.ddlCarNumber.Items.Add(new ListItem(dr["CarCode"].ToString(), dr["CarCode"].ToString()));
-                }
+                this.ddlDriver.Items.Add(new ListItem(string.Format("{0}({1})", dr["CarNumber"].ToString(), dr["RealName"].ToString()), dr["Id"].ToString()));
             }
         }
         #endregion
@@ -89,17 +65,17 @@ namespace DTcms.Web.admin.Business
             Model.TransportOrder model = bll.GetModel(_id);
 
             txtDispatchTime.Text = model.DispatchTime.ToString("yyyy-MM-dd");
-            txtBackTime.Text = model.BackTime.ToString("yyyy-MM-dd");
-            ddlMotorcade.SelectedValue = model.MotorcadeName;
-            ddlCarNumber.SelectedValue = model.CarNumber;
-            txtDriver.Text = model.Driver;
+            ddlDriver.SelectedValue = model.DriverId.ToString();
             txtCustomerRemarks.Text = model.CustomerRemarks;
             txtHaulwayRemarks.Text = model.HaulwayRemarks;
             txtDispatchCount.Text = model.DispatchCount.ToString();
             txtUnitPrice.Text = model.UnitPrice.ToString();
+            txtWeight.Text = model.Weight.ToString();
             txtTotalPrice.Text = model.TotalPrice.ToString();
             txtCarriageUnitPrice.Text = model.CarriageUnitPrice.ToString();
             txtCarriage.Text = model.Carriage.ToString();
+            txtLoadingCapacityRunning.Text = model.LoadingCapacityRunning.ToString();
+            txtNoLoadingCapacityRunning.Text = model.NoLoadingCapacityRunning.ToString();
             txtRemarks.Text = model.Remarks;
 
          
@@ -113,66 +89,30 @@ namespace DTcms.Web.admin.Business
             Model.TransportOrder model = new Model.TransportOrder();
             BLL.TransportOrder bll = new BLL.TransportOrder();
 
-            string[] orderIds = Request.Params.GetValues("orderId");
-            string[] factDispatchCounts = Request.Params.GetValues("factDispatchCount");
-            if (orderIds == null)
-            {
-                JscriptMsg("请填写运输项信息！", "", "Error");
-                return false;
-            }
-
             model.Code = "No" + DateTime.Now.ToString("yyyyMMddhhmmss");
             model.DispatchTime = Convert.ToDateTime(txtDispatchTime.Text.Trim());
-            model.FactDispatchTime = DateTime.Now;
-            model.BackTime = Convert.ToDateTime(txtBackTime.Text.Trim());
-            model.FactBackTime = DateTime.Now;
-            model.MotorcadeName = ddlMotorcade.SelectedValue;
-            model.CarNumber = ddlCarNumber.SelectedValue;
-            model.Driver = txtDriver.Text.Trim();
+            model.FactDispatchTime = model.DispatchTime;
+            model.DriverId = Convert.ToInt32(ddlDriver.SelectedValue);
+            model.CustomerRemarks = txtCustomerRemarks.Text;
+            model.HaulwayRemarks = txtHaulwayRemarks.Text;
+            model.DispatchCount = Convert.ToDecimal(txtDispatchCount.Text);
+            model.FactDispatchCount = model.DispatchCount;
+            model.UnitPrice = Convert.ToDecimal(txtUnitPrice.Text);
+            model.Weight = Convert.ToDecimal(txtWeight.Text);
+            model.FactWeight = model.Weight;
+            model.TotalPrice = Convert.ToDecimal(txtTotalPrice.Text);
+            model.FactTotalPrice = model.TotalPrice;
+            model.CarriageUnitPrice = Convert.ToDecimal(txtCarriageUnitPrice.Text);
+            model.Carriage = Convert.ToDecimal(txtCarriage.Text);
+            model.FactCarriage = model.Carriage;
+            model.LoadingCapacityRunning = Convert.ToDecimal(txtLoadingCapacityRunning.Text);
+            model.NoLoadingCapacityRunning = Convert.ToDecimal(txtNoLoadingCapacityRunning.Text);
             model.Remarks = txtRemarks.Text.Trim();
+            model.AddTime = DateTime.Now;
 
-            List<Model.TransportOrderItem> item_list = new List<Model.TransportOrderItem>();//运输子项
-            List<Model.Order> order_list = new List<Model.Order>();//订单
-            BLL.Order orderBll = new BLL.Order();
-            for (int i = 0; i < orderIds.Length; i++)
+            if (bll.Add(model) > 0)
             {
-                Model.Order order = orderBll.GetModel(Convert.ToInt32(orderIds[i]));
-                if (order != null)
-                {
-                    Model.TransportOrderItem item = new Model.TransportOrderItem();
-                    item.OrderId = order.Id;
-                    item.OrderCode = order.Code;
-                    item.ContractNumber = order.ContractNumber;
-                    item.BillNumber = order.BillNumber;
-                    item.Shipper = order.Shipper;
-                    item.Receiver = order.Receiver;
-                    item.LoadingAddress = order.LoadingAddress;
-                    item.UnloadingAddress = order.UnloadingAddress;
-                    item.Goods = order.Goods;
-                    item.Unit = order.Unit;
-                    item.DispatchCount = order.Quantity;
-                    item.FactDispatchCount = Convert.ToDecimal(factDispatchCounts[i]);
-                    item.FactReceivedCount = item.FactDispatchCount;
-                    item.CompensationCosts = 0.00M;
-                    item.MyCosts = 0.00m;
-                    item.Haulway = order.Haulway;
-                    item.LoadingCapacityRunning = order.LoadingCapacityRunning;
-                    item.NoLoadingCapacityRunning = order.NoLoadingCapacityRunning;
-                    item.Formula = order.Formula;
-                    item.UnitPrice = order.UnitPrice;
-                    item.TotalPrice = order.TotalPrice;
-                    item.CompanyPrice = item.TotalPrice;
-                    item_list.Add(item);
-
-                   // int status = (order.IsCharteredCar == 1 || ((order.DispatchedCount + item.FactDispatchCount) == order.Quantity)) ? 1 : 0;
-                    //order.Status = status;
-                    order.DispatchedCount = order.DispatchedCount + item.FactDispatchCount;
-                    order_list.Add(order);
-                }
-            }
-            if (bll.Add(model,item_list,order_list) > 0)
-            {
-                AddAdminLog(DTEnums.ActionEnum.Add.ToString(), "添加运输单:" + model.Code); //记录日志
+                AddAdminLog(DTEnums.ActionEnum.Add.ToString(), "添加运输单:" + model.Id); //记录日志
                 result = true;
             }
             return result;
@@ -186,71 +126,28 @@ namespace DTcms.Web.admin.Business
             BLL.TransportOrder bll = new BLL.TransportOrder();
             Model.TransportOrder model = bll.GetModel(_id);
 
-            string[] orderIds = Request.Params.GetValues("orderId");
-            string[] factDispatchCounts = Request.Params.GetValues("factDispatchCount");
-
-            if (orderIds == null)
-            {
-                JscriptMsg("请填写运输项信息！", "", "Error");
-                return false;
-            }
             model.DispatchTime = Convert.ToDateTime(txtDispatchTime.Text.Trim());
-            model.FactDispatchTime = DateTime.Now;
-            model.BackTime = Convert.ToDateTime(txtBackTime.Text.Trim());
-            model.FactBackTime = DateTime.Now;
-            model.MotorcadeName = ddlMotorcade.SelectedValue;
-            model.CarNumber = ddlCarNumber.SelectedValue;
-            model.Driver = txtDriver.Text.Trim();
+            model.FactDispatchTime = model.DispatchTime;
+            model.DriverId = Convert.ToInt32(ddlDriver.SelectedValue);
+            model.CustomerRemarks = txtCustomerRemarks.Text;
+            model.HaulwayRemarks = txtHaulwayRemarks.Text;
+            model.DispatchCount = Convert.ToDecimal(txtDispatchCount.Text);
+            model.FactDispatchCount = model.DispatchCount;
+            model.UnitPrice = Convert.ToDecimal(txtUnitPrice.Text);
+            model.Weight = Convert.ToDecimal(txtWeight.Text);
+            model.FactWeight = model.Weight;
+            model.TotalPrice = Convert.ToDecimal(txtTotalPrice.Text);
+            model.FactTotalPrice = model.TotalPrice;
+            model.CarriageUnitPrice = Convert.ToDecimal(txtCarriageUnitPrice.Text);
+            model.Carriage = Convert.ToDecimal(txtCarriage.Text);
+            model.FactCarriage = model.Carriage;
+            model.LoadingCapacityRunning = Convert.ToDecimal(txtLoadingCapacityRunning.Text);
+            model.NoLoadingCapacityRunning = Convert.ToDecimal(txtNoLoadingCapacityRunning.Text);
             model.Remarks = txtRemarks.Text.Trim();
-            model.AddTime = DateTime.Now;
-            model.Status = 0;
 
-            List<Model.TransportOrderItem> item_list = new List<Model.TransportOrderItem>();
-            List<Model.Order> order_list = new List<Model.Order>();//订单
-            BLL.Order orderBll = new BLL.Order();
-
-            //new BLL.TransportOrderItem().DeleteBy(model.Id);//删除该运输单下 所有 运输子项
-
-            for (int i = 0; i < orderIds.Length; i++)
+            if (bll.Update(model))
             {
-                Model.Order order = orderBll.GetModel(Convert.ToInt32(orderIds[i]));
-                if (order != null)
-                {
-                    Model.TransportOrderItem item = new Model.TransportOrderItem();
-                    item.OrderId = order.Id;
-                    item.OrderCode = order.Code;
-                    item.ContractNumber = order.ContractNumber;
-                    item.BillNumber = order.BillNumber;
-                    item.Shipper = order.Shipper;
-                    item.Receiver = order.Receiver;
-                    item.LoadingAddress = order.LoadingAddress;
-                    item.UnloadingAddress = order.UnloadingAddress;
-                    item.Goods = order.Goods;
-                    item.Unit = order.Unit;
-                    item.DispatchCount = order.Quantity;
-                    item.FactDispatchCount = Convert.ToDecimal(factDispatchCounts[i]);
-                    item.FactReceivedCount = item.FactDispatchCount;
-                    item.CompensationCosts = 0.00M;
-                    item.MyCosts = 0.00m;
-                    item.Haulway = order.Haulway;
-                    item.LoadingCapacityRunning = order.LoadingCapacityRunning;
-                    item.NoLoadingCapacityRunning = order.NoLoadingCapacityRunning;
-                    item.Formula = order.Formula;
-                    item.UnitPrice = order.UnitPrice;
-                    item.TotalPrice = order.TotalPrice;
-                    item.CompanyPrice = item.TotalPrice;
-                    item_list.Add(item);
-
-                    
-                    //int status = (order.IsCharteredCar == 1 || ((order.DispatchedCount + item.FactDispatchCount) == order.Quantity)) ? 1 : 0;
-                    //order.Status = status;
-                    //order.DispatchedCount = item.FactDispatchCount;
-                    //order_list.Add(order);
-                }
-            }
-            if (bll.Update(model,item_list,order_list))
-            {
-                AddAdminLog(DTEnums.ActionEnum.Edit.ToString(), "修改运输单信息:" + model.Code); //记录日志
+                AddAdminLog(DTEnums.ActionEnum.Edit.ToString(), "修改运输单信息:" + model.Id); //记录日志
                 result = true;
             }
             return result;

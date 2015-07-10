@@ -34,9 +34,9 @@ namespace DTcms.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into mtms_TransportOrder(");
-            strSql.Append("Code,DispatchTime,FactDispatchTime,TimeLimit,ReceiptTime,WarningTime,BackTime,FactBackTime,DriverId,Advance,Payee,Repayment,FactRepayment,CarriageUnitPrice,Carriage,FactCarriage,CostTotal,Profit,AddTime,Status,CustomerRemarks,HaulwayRemarks,Remarks,FactTotalPrice,TotalPrice,UnitPrice,FactDispatchCount,DispatchCount,ReceivedWeight,UnloadingWeight,ArriveDate,FactArriveDate,LoadingCapacityRunning,NoLoadingCapacityRunning,Weight,LoadingDate");
+            strSql.Append("Code,DispatchTime,FactDispatchTime,TimeLimit,ReceiptTime,WarningTime,BackTime,FactBackTime,DriverId,Advance,Payee,Repayment,FactRepayment,CarriageUnitPrice,Carriage,FactCarriage,CostTotal,Profit,AddTime,Status,CustomerRemarks,HaulwayRemarks,Remarks,FactTotalPrice,TotalPrice,UnitPrice,FactDispatchCount,DispatchCount,ReceivedWeight,UnloadingWeight,ArriveDate,FactArriveDate,LoadingCapacityRunning,NoLoadingCapacityRunning,Weight,FactWeight,LoadingDate");
             strSql.Append(") values (");
-            strSql.Append("@Code,@DispatchTime,@FactDispatchTime,@TimeLimit,@ReceiptTime,@WarningTime,@BackTime,@FactBackTime,@DriverId,@Advance,@Payee,@Repayment,@FactRepayment,@CarriageUnitPrice,@Carriage,@FactCarriage,@CostTotal,@Profit,@AddTime,@Status,@CustomerRemarks,@HaulwayRemarks,@Remarks,@FactTotalPrice,@TotalPrice,@UnitPrice,@FactDispatchCount,@DispatchCount,@ReceivedWeight,@UnloadingWeight,@ArriveDate,@FactArriveDate,@LoadingCapacityRunning,@NoLoadingCapacityRunning,@Weight,@LoadingDate");
+            strSql.Append("@Code,@DispatchTime,@FactDispatchTime,@TimeLimit,@ReceiptTime,@WarningTime,@BackTime,@FactBackTime,@DriverId,@Advance,@Payee,@Repayment,@FactRepayment,@CarriageUnitPrice,@Carriage,@FactCarriage,@CostTotal,@Profit,@AddTime,@Status,@CustomerRemarks,@HaulwayRemarks,@Remarks,@FactTotalPrice,@TotalPrice,@UnitPrice,@FactDispatchCount,@DispatchCount,@ReceivedWeight,@UnloadingWeight,@ArriveDate,@FactArriveDate,@LoadingCapacityRunning,@NoLoadingCapacityRunning,@Weight,@FactWeight,@LoadingDate");
             strSql.Append(") ");
             strSql.Append(";select @@IDENTITY");
             SqlParameter[] parameters = {
@@ -75,7 +75,8 @@ namespace DTcms.DAL
                         new SqlParameter("@LoadingCapacityRunning", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@NoLoadingCapacityRunning", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@Weight", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@LoadingDate", SqlDbType.DateTime)             
+                        new SqlParameter("@LoadingDate", SqlDbType.DateTime) ,
+                        new SqlParameter("@FactWeight", SqlDbType.Decimal,9)  
               
             };
 
@@ -115,6 +116,7 @@ namespace DTcms.DAL
             parameters[33].Value = model.NoLoadingCapacityRunning;
             parameters[34].Value = model.Weight;
             parameters[35].Value = model.LoadingDate;
+            parameters[36].Value = model.FactWeight;
 
             object obj = DbHelperSQL.GetSingle(strSql.ToString(), parameters);
             if (obj == null)
@@ -174,6 +176,7 @@ namespace DTcms.DAL
             strSql.Append(" LoadingCapacityRunning = @LoadingCapacityRunning , ");
             strSql.Append(" NoLoadingCapacityRunning = @NoLoadingCapacityRunning , ");
             strSql.Append(" Weight = @Weight , ");
+            strSql.Append(" FactWeight = @FactWeight , ");
             strSql.Append(" LoadingDate = @LoadingDate  ");
             strSql.Append(" where Id=@Id ");
 
@@ -214,7 +217,8 @@ namespace DTcms.DAL
                         new SqlParameter("@LoadingCapacityRunning", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@NoLoadingCapacityRunning", SqlDbType.Decimal,9) ,            
                         new SqlParameter("@Weight", SqlDbType.Decimal,9) ,            
-                        new SqlParameter("@LoadingDate", SqlDbType.DateTime)             
+                        new SqlParameter("@LoadingDate", SqlDbType.DateTime),
+                        new SqlParameter("@FactWeight", SqlDbType.Decimal,9)  
               
             };
 
@@ -255,6 +259,7 @@ namespace DTcms.DAL
             parameters[34].Value = model.NoLoadingCapacityRunning;
             parameters[35].Value = model.Weight;
             parameters[36].Value = model.LoadingDate;
+            parameters[37].Value = model.FactWeight;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {
@@ -511,6 +516,23 @@ namespace DTcms.DAL
             }
             strSql.Append(" order by " + filedOrder);
             return DbHelperSQL.Query(strSql.ToString());
+        }
+
+        /// <summary>
+        /// 获得查询分页数据
+        /// </summary>
+        public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("SELECT A.*, B.CarNumber, B.RealName AS Driver ");
+            strSql.Append("FROM mtms_TransportOrder A LEFT JOIN mtms_Driver B ON A.DriverId = B.Id ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(" where " + strWhere);
+            }
+            //throw new Exception(PagingHelper.CreatePagingSql(1, pageSize, pageIndex, strSql.ToString(), filedOrder));
+            recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
+            return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
         }
     }
 }

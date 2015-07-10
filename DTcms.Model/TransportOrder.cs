@@ -55,8 +55,8 @@ namespace DTcms.Model
         /// <summary>
         /// ReceiptTime
         /// </summary>		
-        private DateTime _receipttime;
-        public DateTime ReceiptTime
+        private DateTime? _receipttime;
+        public DateTime? ReceiptTime
         {
             get { return _receipttime; }
             set { _receipttime = value; }
@@ -64,8 +64,8 @@ namespace DTcms.Model
         /// <summary>
         /// WarningTime
         /// </summary>		
-        private DateTime _warningtime;
-        public DateTime WarningTime
+        private DateTime? _warningtime;
+        public DateTime? WarningTime
         {
             get { return _warningtime; }
             set { _warningtime = value; }
@@ -73,8 +73,8 @@ namespace DTcms.Model
         /// <summary>
         /// BackTime
         /// </summary>		
-        private DateTime _backtime;
-        public DateTime BackTime
+        private DateTime? _backtime;
+        public DateTime? BackTime
         {
             get { return _backtime; }
             set { _backtime = value; }
@@ -82,8 +82,8 @@ namespace DTcms.Model
         /// <summary>
         /// FactBackTime
         /// </summary>		
-        private DateTime _factbacktime;
-        public DateTime FactBackTime
+        private DateTime? _factbacktime;
+        public DateTime? FactBackTime
         {
             get { return _factbacktime; }
             set { _factbacktime = value; }
@@ -289,8 +289,8 @@ namespace DTcms.Model
         /// <summary>
         /// ArriveDate
         /// </summary>		
-        private DateTime _arrivedate;
-        public DateTime ArriveDate
+        private DateTime? _arrivedate;
+        public DateTime? ArriveDate
         {
             get { return _arrivedate; }
             set { _arrivedate = value; }
@@ -298,8 +298,8 @@ namespace DTcms.Model
         /// <summary>
         /// FactArriveDate
         /// </summary>		
-        private DateTime _factarrivedate;
-        public DateTime FactArriveDate
+        private DateTime? _factarrivedate;
+        public DateTime? FactArriveDate
         {
             get { return _factarrivedate; }
             set { _factarrivedate = value; }
@@ -332,10 +332,19 @@ namespace DTcms.Model
             set { _weight = value; }
         }
         /// <summary>
+        /// Weight
+        /// </summary>		
+        private decimal _factWeight;
+        public decimal FactWeight
+        {
+            get { return _factWeight; }
+            set { _factWeight = value; }
+        }
+        /// <summary>
         /// LoadingDate
         /// </summary>		
-        private DateTime _loadingdate;
-        public DateTime LoadingDate
+        private DateTime? _loadingdate;
+        public DateTime? LoadingDate
         {
             get { return _loadingdate; }
             set { _loadingdate = value; }
