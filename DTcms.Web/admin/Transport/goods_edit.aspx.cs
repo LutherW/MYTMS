@@ -60,6 +60,7 @@ namespace DTcms.Web.admin.Transport
             txtCategroy.Text = model.CategoryName;
             txtCode.Text = model.Code;
             txtUnit.Text = model.Unit;
+            txtVariety.Text = model.Variety;
          
         }
         #endregion
@@ -75,6 +76,7 @@ namespace DTcms.Web.admin.Transport
             model.CategoryName = txtCategroy.Text.Trim();
             model.Code = string.IsNullOrEmpty(txtCode.Text.Trim()) ? "" : txtCode.Text.Trim();
             model.Unit = txtUnit.Text.Trim();
+            model.Variety = txtVariety.Text.Trim();
 
             if (bll.Add(model) > 0)
             {
@@ -96,6 +98,7 @@ namespace DTcms.Web.admin.Transport
             model.CategoryName = txtCategroy.Text.Trim();
             model.Code = string.IsNullOrEmpty(txtCode.Text.Trim()) ? "" : txtCode.Text.Trim();
             model.Unit = txtUnit.Text.Trim();
+            model.Variety = txtVariety.Text.Trim();
 
             if (bll.Update(model))
             {

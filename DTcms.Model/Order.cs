@@ -251,6 +251,24 @@ namespace DTcms.Model
             set { _freight = value; }
         }
         /// <summary>
+        /// Freight
+        /// </summary>		
+        private decimal _unpaidFreight;
+        public decimal UnpaidFreight
+        {
+            get { return _unpaidFreight; }
+            set { _unpaidFreight = value; }
+        }
+        /// <summary>
+        /// Freight
+        /// </summary>		
+        private decimal _paidFreight;
+        public decimal PaidFreight
+        {
+            get { return _paidFreight; }
+            set { _paidFreight = value; }
+        }
+        /// <summary>
         /// HandlingCharge
         /// </summary>		
         private decimal _handlingcharge;

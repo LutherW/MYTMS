@@ -52,6 +52,14 @@ namespace DTcms.Model
             get { return _code; }
             set { _code = value; }
         }
-
+        /// <summary>
+        /// Variety
+        /// </summary>		
+        private string _variety;
+        public string Variety
+        {
+            get { return _variety; }
+            set { _variety = value; }
+        }
     }
 }

@@ -34,16 +34,17 @@ namespace DTcms.DAL
         {
             StringBuilder strSql = new StringBuilder();
             strSql.Append("insert into mtms_Goods(");
-            strSql.Append("Name,CategoryName,Unit,Code");
+            strSql.Append("Name,CategoryName,Unit,Code,Variety");
             strSql.Append(") values (");
-            strSql.Append("@Name,@CategoryName,@Unit,@Code");
+            strSql.Append("@Name,@CategoryName,@Unit,@Code,@Variety");
             strSql.Append(") ");
             strSql.Append(";select @@IDENTITY");
             SqlParameter[] parameters = {
 			            new SqlParameter("@Name", SqlDbType.VarChar,254) ,            
                         new SqlParameter("@CategoryName", SqlDbType.VarChar,254) ,            
                         new SqlParameter("@Unit", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Code", SqlDbType.VarChar,254)             
+                        new SqlParameter("@Code", SqlDbType.VarChar,254),
+                        new SqlParameter("@Variety", SqlDbType.VarChar,254) 
               
             };
 
@@ -51,6 +52,7 @@ namespace DTcms.DAL
             parameters[1].Value = model.CategoryName;
             parameters[2].Value = model.Unit;
             parameters[3].Value = model.Code;
+            parameters[4].Value = model.Variety;
 
             object obj = DbHelperSQL.GetSingle(strSql.ToString(), parameters);
             if (obj == null)
@@ -78,6 +80,7 @@ namespace DTcms.DAL
             strSql.Append(" Name = @Name , ");
             strSql.Append(" CategoryName = @CategoryName , ");
             strSql.Append(" Unit = @Unit , ");
+            strSql.Append(" Variety = @Variety , ");
             strSql.Append(" Code = @Code  ");
             strSql.Append(" where Id=@Id ");
 
@@ -86,7 +89,8 @@ namespace DTcms.DAL
                         new SqlParameter("@Name", SqlDbType.VarChar,254) ,            
                         new SqlParameter("@CategoryName", SqlDbType.VarChar,254) ,            
                         new SqlParameter("@Unit", SqlDbType.VarChar,254) ,            
-                        new SqlParameter("@Code", SqlDbType.VarChar,254)             
+                        new SqlParameter("@Code", SqlDbType.VarChar,254)  ,
+                        new SqlParameter("@Variety", SqlDbType.VarChar,254) 
               
             };
 
@@ -95,6 +99,7 @@ namespace DTcms.DAL
             parameters[2].Value = model.CategoryName;
             parameters[3].Value = model.Unit;
             parameters[4].Value = model.Code;
+            parameters[5].Value = model.Variety;
             int rows = DbHelperSQL.ExecuteSql(strSql.ToString(), parameters);
             if (rows > 0)
             {

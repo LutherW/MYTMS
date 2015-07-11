@@ -73,6 +73,10 @@
     <dt>单位</dt>
     <dd><asp:TextBox ID="txtUnit" runat="server" CssClass="input small"></asp:TextBox></dd>
   </dl>
+    <dl>
+    <dt>品种</dt>
+    <dd><asp:TextBox ID="txtVariety" runat="server" CssClass="input small"></asp:TextBox></dd>
+  </dl>
 </div>
 
 <!--/内容-->

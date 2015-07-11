@@ -138,6 +138,11 @@ namespace DTcms.Web.UI
             string msbox = "parent.jsprint(\"" + msgtitle + "\", \"" + url + "\", \"" + msgcss + "\", " + callback + ")";
             ClientScript.RegisterClientScriptBlock(Page.GetType(), "JsPrint", msbox, true);
         }
+
+        protected void JscriptMsg(string js)
+        {
+            ClientScript.RegisterClientScriptBlock(Page.GetType(), "JsPrint", js, true);
+        }
         #endregion
 
     }

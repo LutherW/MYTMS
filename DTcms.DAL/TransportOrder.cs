@@ -271,6 +271,14 @@ namespace DTcms.DAL
             }
         }
 
+        public int UpdateField(SqlConnection conn, SqlTransaction trans, int id, string strValue)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("update mtms_TransportOrder set " + strValue);
+            strSql.Append(" where Id=" + id);
+
+            return DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString());
+        }
 
         /// <summary>
         /// 删除一条数据

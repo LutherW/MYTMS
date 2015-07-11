@@ -39,11 +39,11 @@
         function showOrders(id) {
             var dialog = $.dialog({
                 title: '订单列表',
-                content: 'url:order_list.aspx?action=<%=DTEnums.ActionEnum.Add %>&transportOrderId=' + id,
+                content: 'url:dialog/dialog_order_list.aspx?transportOrderId=' + id,
                 min: false,
                 max: false,
                 lock: true,
-                width: 700
+                width: 1300
             });
         }
     </script>

@@ -36,19 +36,6 @@
                     $("#txtNoLoadingCapacityRunning").val("0.00");
                 }
             });
-
-            $("#ddlGoods").change(function () {
-                var val = $(this).val();
-                if (val > 0) {
-                    $.getJSON("../../tools/Goods.ashx", { "action": "details", "id": val }, function (data) {
-                        if (data.status == 1) {
-                            $("#txtUnit").val(data.unit);
-                        }
-                    });
-                } else {
-                    $("#txtUnit").val("");
-                }
-            });
         });
 
         function closeDialog() {
@@ -78,7 +65,6 @@
                     <ul>
                         <li><a href="javascript:;" onclick="tabs(this);" class="selected">基本信息</a></li>
                         <li><a href="javascript:;" onclick="tabs(this);">客户信息</a></li>
-                        <li><a href="javascript:;" onclick="tabs(this);">货物信息</a></li>
                     </ul>
                 </div>
             </div>
@@ -135,7 +121,7 @@
             <dl>
                 <dt>重量</dt>
                 <dd>
-                    <asp:TextBox ID="txtWeight" runat="server" Text="0.00" CssClass="input small" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>元</dd>
+                    <asp:TextBox ID="txtWeight" runat="server" Text="0.00" CssClass="input small" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox></dd>
             </dl>
             <dl>
                 <dt>运费</dt>
@@ -155,7 +141,7 @@
             <dl>
                 <dt>装卸费</dt>
                 <dd>
-                    <asp:TextBox ID="txtHandlingCharge" runat="server" CssClass="input high" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>元</dd>
+                    <asp:TextBox ID="txtHandlingCharge" runat="server" Text="0.00" CssClass="input high" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>元</dd>
             </dl>
         </div>
 
@@ -215,23 +201,12 @@
                 <dd>
                     <asp:TextBox ID="txtNoLoadingCapacityRunning" runat="server" CssClass="input small" Text="0.00"></asp:TextBox></dd>
             </dl>
-
-        </div>
-
-        <div class="tab-content" style="display: none;">
             <dl>
                 <dt>承运货物</dt>
                 <dd>
                     <div class="rule-single-select" style="z-index:1007">
                         <asp:DropDownList ID="ddlGoods" runat="server" datatype="*" errormsg="请选择承运货物" sucmsg=" "></asp:DropDownList>
                     </div>
-                    <span class="Validform_checktip"></span>
-                </dd>
-            </dl>
-            <dl>
-                <dt>计量单位</dt>
-                <dd>
-                    <asp:TextBox ID="txtUnit" runat="server" CssClass="input small"></asp:TextBox>
                     <span class="Validform_checktip"></span>
                 </dd>
             </dl>
