@@ -102,6 +102,12 @@ namespace DTcms.BLL
         {
             return dal.GetList(Top, strWhere, filedOrder);
         }
+
+        public DataSet GetPrintList(int Top, string strWhere, string filedOrder)
+        {
+            return dal.GetPrintList(Top, strWhere, filedOrder);
+        }
+
         /// <summary>
         /// 获得数据列表
         /// </summary>
@@ -248,6 +254,12 @@ namespace DTcms.BLL
         {
             return dal.GetList(pageSize, pageIndex, strWhere, filedOrder, out recordCount);
         }
+
+        public DataSet GetFullList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
+        {
+            return dal.GetFullList(pageSize, pageIndex, strWhere, filedOrder, out recordCount);
+        }
+
         #endregion
 
     }

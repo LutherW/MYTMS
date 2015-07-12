@@ -59,36 +59,28 @@ namespace DTcms.Web.admin.Business
             BLL.TransportOrder bll = new BLL.TransportOrder();
             Model.TransportOrder model = bll.GetModel(_id);
 
-            labFactDispatchTime.Text = model.FactDispatchTime.Value.ToString("yyyy-MM-dd");
-            txtFactBackTime.Text = DateTime.Now.ToString("yyyy-MM-dd");
-            labMotorcade.Text = model.MotorcadeName;
-            labCarNumber.Text = model.CarNumber;
-            labDriver.Text = model.Driver;
-            labAdvance.Text = model.Advance.ToString();
-            labPayee.Text = model.Driver;
+            txtFactArriveDate.Text = model.FactArriveDate.Value.ToString("yyyy-MM-dd");
+            txtFactDispatchCount.Text = model.FactDispatchCount.ToString();
+            txtFactWeight.Text = model.FactWeight.ToString();
+            txtReceivedWeight.Text = model.FactWeight.ToString();
+            txtUnloadingWeight.Text = model.FactWeight.ToString();
+            txtFactCarriage.Text = model.FactCarriage.ToString();
             txtRepayment.Text = model.Advance.ToString();
             txtFactRepayment.Text = "0.00";
 
-            BLL.TransportOrderItem itemBll = new BLL.TransportOrderItem();
-            DataTable dt = itemBll.GetList(" TransportOrderId = " + model.Id + "").Tables[0];
+            BLL.Order itemBll = new BLL.Order();
+            DataTable dt = itemBll.GetPrintList(0, " and A.TransportOrderId = " + model.Id + "", " order by A.Id desc").Tables[0];
             foreach (DataRow dr in dt.Rows)
             {
                 transportOrderItems += "<tr data-value=\"" + dr["Id"].ToString() + "\">";
-                transportOrderItems += "<td width=\"5%\"><input type=\"hidden\" name=\"transportOrderItemId\" value=\"" + dr["Id"].ToString() + "\"/></td>";
-                transportOrderItems += "<td align=\"left\">" + dr["OrderCode"].ToString() + "</td>";
-                transportOrderItems += "<td width=\"10%\"><select name='roundStatus'>";
-                transportOrderItems += "<option value='往'>往</option>";
-                transportOrderItems += "<option value='返'>返</option>";
-                transportOrderItems += "<option value='往返'>往返</option>";
-                transportOrderItems += "</select></td>";
+                transportOrderItems += "<td width=\"5%\"><input type=\"hidden\" name=\"Id\" value=\"" + dr["Id"].ToString() + "\"/></td>";
+                transportOrderItems += "<td align=\"left\">" + dr["BillNumber"].ToString() + "</td>";
                 transportOrderItems += "<td width=\"10%\">" + dr["Shipper"].ToString() + "</td>";
                 transportOrderItems += "<td width=\"10%\">" + dr["Receiver"].ToString()  + "</td>";
-                transportOrderItems += "<td width=\"10%\">" + dr["Goods"].ToString()  + "</td>";
-                transportOrderItems += "<td width=\"9%\">" + dr["Unit"].ToString()  + "</td>";
-                transportOrderItems += "<td width=\"6%\"><input type=\"text\" name=\"factDispatchCount\" class=\"input small\" value=\"" + dr["FactDispatchCount"].ToString() + "\" style='width:50px'/></td>";
-                transportOrderItems += "<td width=\"5%\"><input type=\"text\" name=\"factReceivedCount\" class=\"input small\" value=\"" + dr["FactReceivedCount"].ToString() + "\" style='width:50px'/></td>";
-                transportOrderItems += "<td width=\"5%\">￥" + string.Format("{0:N2}",dr["UnitPrice"].ToString())+ "</td>";
-                transportOrderItems += "<td width=\"5%\">￥<input type=\"text\" name=\"totalPrice\" value=\"" + dr["TotalPrice"].ToString() + "\" style='width:50px'/></td>";
+                transportOrderItems += "<td width=\"10%\">" + dr["GoodsName"].ToString() + "</td>";
+                transportOrderItems += "<td width=\"6%\">￥<input type=\"text\" name=\"UnitPrice\" class=\"input small\" value=\"" + dr["UnitPrice"].ToString() + "\" style='width:50px'/></td>";
+                transportOrderItems += "<td width=\"5%\"><input type=\"text\" name=\"Weight\" class=\"input small\" value=\"" + dr["Weight"].ToString() + "\" style='width:50px'/></td>";
+                transportOrderItems += "<td width=\"5%\">￥<input type=\"text\" name=\"Freight\" value=\"" + dr["Freight"].ToString() + "\" style='width:50px'/></td>";
                 transportOrderItems += "</tr>";
             }
 
@@ -106,15 +98,6 @@ namespace DTcms.Web.admin.Business
         }
         #endregion
 
-        #region 增加操作=================================
-        private bool DoAdd()
-        {
-            bool result = false;
-            
-            return result;
-        }
-        #endregion
-
         #region 修改操作=================================
         private bool DoEdit(int _id)
         {
@@ -122,44 +105,38 @@ namespace DTcms.Web.admin.Business
             BLL.TransportOrder bll = new BLL.TransportOrder();
             Model.TransportOrder model = bll.GetModel(_id);
 
-            model.FactBackTime = Utils.StrToDateTime(txtFactBackTime.Text.Trim(), DateTime.Now);
+            model.FactArriveDate = Utils.StrToDateTime(txtFactArriveDate.Text.Trim(), DateTime.Now);
+            model.BackTime = Utils.StrToDateTime(txtBackTime.Text.Trim(), DateTime.Now);
             model.Repayment = Utils.StrToDecimal(txtRepayment.Text.Trim(), 0.00M);
             model.FactRepayment = Utils.StrToDecimal(txtFactRepayment.Text.Trim(), 0.00M);
-            model.Carriage = Utils.StrToDecimal(txtCarriage.Text.Trim(), 0.00M);
+            model.FactDispatchCount = Utils.StrToDecimal(txtFactDispatchCount.Text.Trim(), 0.00M);
+            model.FactWeight = Utils.StrToDecimal(txtFactWeight.Text.Trim(), 0.00M);
+            model.ReceivedWeight = Utils.StrToDecimal(txtReceivedWeight.Text.Trim(), 0.00M);
+            model.UnloadingWeight = Utils.StrToDecimal(txtUnloadingWeight.Text.Trim(), 0.00M);
+            model.FactCarriage = Utils.StrToDecimal(txtFactCarriage.Text.Trim(), 0.00M);
             model.Status = 2;
 
-            string[] itemIds = Request.Params.GetValues("transportOrderItemId");
-            string[] factDispatchCounts = Request.Params.GetValues("factDispatchCount");
-            string[] factReceivedCounts = Request.Params.GetValues("factReceivedCount");
-            string[] totalPrices = Request.Params.GetValues("totalPrice");
-            string[] roundStatus = Request.Params.GetValues("roundStatus");
+            string[] ids = Request.Params.GetValues("Id");
+            string[] unitPrices = Request.Params.GetValues("UnitPrice");
+            string[] weights = Request.Params.GetValues("Weight");
+            string[] freights = Request.Params.GetValues("Freight");
 
             string[] costItemNames = Request.Params.GetValues("costItemName");
             string[] monies = Request.Params.GetValues("money");
 
 
-            List<Model.TransportOrderItem> item_list = new List<Model.TransportOrderItem>();
-            BLL.TransportOrderItem itemBll = new BLL.TransportOrderItem();
-            Model.TransportOrderItem item;
+            List<Model.Order> item_list = new List<Model.Order>();
+            BLL.Order orderBLL = new BLL.Order();
+            Model.Order item;
 
-            List<Model.Order> orders = new List<Model.Order>();
-            BLL.Order orderBll = new BLL.Order();
-            Model.Order order;
-            for (int i = 0; i < itemIds.Length; i++)
+            for (int i = 0; i < ids.Length; i++)
             {
-                item = itemBll.GetModel(Utils.StrToInt(itemIds[i], 0));
+                item = orderBLL.GetModel(Utils.StrToInt(ids[i], 0));
                 if (item != null)
                 {
-                    decimal oldFactDispatchCount = item.FactDispatchCount;
-                    decimal newFactDispatchCount = Utils.StrToDecimal(factDispatchCounts[i], 0.00M);
-                    order = orderBll.GetModel(item.OrderId);
-                    order.DispatchedCount += newFactDispatchCount - oldFactDispatchCount;
-                    orders.Add(order);
-
-                    item.FactDispatchCount = newFactDispatchCount;
-                    item.FactReceivedCount = Utils.StrToDecimal(factReceivedCounts[i], 0.00M);
-                    item.TotalPrice = Utils.StrToDecimal(totalPrices[i], 0.00M);
-                    item.RoundStatus = roundStatus[i];
+                    item.UnitPrice = Utils.StrToDecimal(unitPrices[i], 0.00M);
+                    item.Weight = Utils.StrToDecimal(weights[i], 0.00M);
+                    item.Freight = Utils.StrToDecimal(freights[i], 0.00M);
                     item_list.Add(item);
                 }
             }
@@ -173,7 +150,7 @@ namespace DTcms.Web.admin.Business
                 consumption_list.Add(consumption);
             }
 
-            if (bll.Update(model, item_list, consumption_list, orders))
+            if (bll.Update(model, item_list, consumption_list))
             {
                 AddAdminLog(DTEnums.ActionEnum.Edit.ToString(), "回车报账信息:" + model.Code); //记录日志
                 result = true;
@@ -194,16 +171,6 @@ namespace DTcms.Web.admin.Business
                     return;
                 }
                 JscriptMsg("回车报账成功！", "expenses_register_list.aspx", "Success");
-            }
-            else //添加
-            {
-                ChkAdminLevel("expenses_register_list", DTEnums.ActionEnum.Add.ToString()); //检查权限
-                if (!DoAdd())
-                {
-                    JscriptMsg("保存过程中发生错误！", "", "Error");
-                    return;
-                }
-                JscriptMsg("添加运输单成功！", "expenses_register_list.aspx", "Success");
             }
         }
     }

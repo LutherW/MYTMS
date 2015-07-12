@@ -48,7 +48,15 @@ namespace DTcms.Web.admin.Business
         #region 绑定类别=================================
         private void TreeBind(string strWhere)
         {
-            
+            BLL.Driver driverBll = new BLL.Driver();
+            DataTable driverDT = driverBll.GetList(0, "IsDimission != 1 ", "Id desc").Tables[0];
+
+            ddlDriver.Items.Clear();
+            ddlDriver.Items.Add(new ListItem("请选择司机", ""));
+            foreach (DataRow dr in driverDT.Rows)
+            {
+                this.ddlDriver.Items.Add(new ListItem(string.Format("{0}({1})", dr["CarNumber"].ToString(), dr["RealName"].ToString()), dr["Id"].ToString()));
+            }
         }
         #endregion
 
@@ -58,40 +66,23 @@ namespace DTcms.Web.admin.Business
             BLL.TransportOrder bll = new BLL.TransportOrder();
             Model.TransportOrder model = bll.GetModel(_id);
 
-            labMotorcade.Text = model.MotorcadeName;
-            labCarNumber.Text = model.CarNumber;
-            labDriver.Text = model.Driver;
-            labPayee.Text = model.Driver;
-
-            BLL.TransportOrderItem itemBll = new BLL.TransportOrderItem();
-            DataTable dt = itemBll.GetList(" TransportOrderId = " + model.Id + "").Tables[0];
-            foreach (DataRow dr in dt.Rows)
-            {
-                string dispatchCount = dr["DispatchCount"].ToString().Equals("0.00") ? "包车" : dr["DispatchCount"].ToString();
-                transportOrderItems += "<tr data-value=\"" + dr["OrderId"].ToString() + "\">";
-                transportOrderItems += "<td width=\"5%\"><input type=\"hidden\" name=\"transportOrderItemId\" value=\"" + dr["Id"].ToString() + "\"/></td>";
-                transportOrderItems += "<td align=\"left\">" + dr["OrderCode"].ToString() + "</td>";
-                transportOrderItems += "<td width=\"10%\">" + dr["BillNumber"].ToString() + "</td>";
-                transportOrderItems += "<td width=\"10%\">" + dr["Shipper"].ToString() + "</td>";
-                transportOrderItems += "<td width=\"10%\">" + dr["Receiver"].ToString()  + "</td>";
-                transportOrderItems += "<td width=\"10%\">" + dr["Goods"].ToString()  + "</td>";
-                transportOrderItems += "<td width=\"9%\" align=\"center\">" + dr["Unit"].ToString()  + "</td>";
-                transportOrderItems += "<td width=\"6%\">" + dispatchCount + "</td>";
-                transportOrderItems += "<td width=\"5%\">" + dr["FactDispatchCount"].ToString() + "</td>";
-                transportOrderItems += "<td width=\"5%\">￥" + dr["UnitPrice"].ToString()  + "</td>";
-                transportOrderItems += "<td width=\"5%\">￥" + dr["TotalPrice"].ToString() + "</td>";
-                transportOrderItems += "</tr>";
-            }
-          
+            ddlDriver.SelectedValue = model.DriverId.ToString();
+            txtFactDispatchTime.Text = model.DispatchTime.ToString("yyyy-MM-dd");
+            txtFactDispatchCount.Text = model.DispatchCount.ToString();
+            txtFactWeight.Text = model.Weight.ToString();
+            txtLoadingDate.Text = DateTime.Now.ToString("yyyy-MM-dd");
+            txtPayee.Text = GetDriverName(model.DriverId);
         }
-        #endregion
 
-        #region 增加操作=================================
-        private bool DoAdd()
+        private string GetDriverName(int driverId) 
         {
-            bool result = false;
-            
-            return result;
+            Model.Driver driver = new BLL.Driver().GetModel(driverId);
+            if (driver != null)
+            {
+                return driver.RealName;
+            }
+
+            return "";
         }
         #endregion
 
@@ -103,33 +94,17 @@ namespace DTcms.Web.admin.Business
             Model.TransportOrder model = bll.GetModel(_id);
 
             model.FactDispatchTime = Utils.StrToDateTime(txtFactDispatchTime.Text.Trim(), DateTime.Now);
+            model.FactDispatchCount = Utils.StrToDecimal(txtFactDispatchCount.Text.Trim(), 0.00M);
+            model.FactWeight = Utils.StrToDecimal(txtFactWeight.Text.Trim(), 0.00M);
+            model.LoadingDate = Utils.StrToDateTime(txtLoadingDate.Text.Trim(), DateTime.Now); 
             model.Advance = Utils.StrToDecimal(txtAdvance.Text.Trim(), 0.00M);
-            model.AddTime = DateTime.Now;
-            model.Payee = labPayee.Text;
+            model.Payee = txtPayee.Text.Trim();
+            model.ArriveDate = Utils.StrToDateTime(txtArriveDate.Text.Trim(), DateTime.Now); 
             model.Status = 1;
 
-            //string[] itemIds = Request.Params.GetValues("transportOrderItemId");
-            //string[] factDispatchCounts = Request.Params.GetValues("factDispatchCount");
-
-
-            List<Model.TransportOrderItem> item_list = new List<Model.TransportOrderItem>();
-            //BLL.TransportOrderItem itemBll = new BLL.TransportOrderItem();
-
-            //Model.TransportOrderItem item;
-            //for (int i = 0; i < itemIds.Length; i++)
-            //{
-            //    item = itemBll.GetModel(Utils.StrToInt(itemIds[i], 0));
-            //    if (item != null)
-            //    {
-            //        item.FactDispatchCount = Utils.StrToDecimal(factDispatchCounts[i], item.FactDispatchCount);
-            //        item_list.Add(item);
-            //    }
-            //}
-
-            if (bll.Update(model,item_list))
+            if (bll.Update(model))
             {
-                AddAdminLog(DTEnums.ActionEnum.Edit.ToString(), "登记出车信息:" + model.Code); //记录日志
-                result = true;
+                result = true; 
             }
             return result;
         }
@@ -146,17 +121,7 @@ namespace DTcms.Web.admin.Business
                     JscriptMsg("保存过程中发生错误！", "", "Error");
                     return;
                 }
-                JscriptMsg("修改运输单成功！", "dispatch_register_list.aspx", "Success");
-            }
-            else //添加
-            {
-                ChkAdminLevel("dispatch_register_list", DTEnums.ActionEnum.Add.ToString()); //检查权限
-                if (!DoAdd())
-                {
-                    JscriptMsg("保存过程中发生错误！", "", "Error");
-                    return;
-                }
-                JscriptMsg("添加运输单成功！", "dispatch_register_list.aspx", "Success");
+                JscriptMsg("出车登记成功！", "dispatch_register_list.aspx", "Success");
             }
         }
     }

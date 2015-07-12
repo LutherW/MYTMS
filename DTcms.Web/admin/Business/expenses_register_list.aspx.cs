@@ -16,8 +16,6 @@ namespace DTcms.Web.admin.Business
         protected int pageSize;
 
         protected string _carNumber;
-        protected string _customer1;
-        protected string _customer2;
         protected string _beginTime;
         protected string _endTime;
         protected string keywords = string.Empty;
@@ -26,8 +24,6 @@ namespace DTcms.Web.admin.Business
         {
             ChkAdminLevel("expenses_register_list", DTEnums.ActionEnum.View.ToString()); //检查权限
             _carNumber = DTRequest.GetQueryString("carNumber");
-            _customer1 = DTRequest.GetQueryString("customer1");
-            _customer2 = DTRequest.GetQueryString("customer2");
             _beginTime = DTRequest.GetQueryString("beginTime");
             _endTime = DTRequest.GetQueryString("endTime");
             this.keywords = DTRequest.GetQueryString("keywords");
@@ -36,21 +32,21 @@ namespace DTcms.Web.admin.Business
             if (!Page.IsPostBack)
             {
                 TreeBind(""); //绑定类别
-                RptBind("Status = 1" + CombSqlTxt(_carNumber, _customer1, _customer2, _beginTime, _endTime, this.keywords), "Id desc");
+                RptBind("A.Status=1" + CombSqlTxt(_carNumber, _beginTime, _endTime, this.keywords), "DispatchTime desc");
             }
         }
 
         #region 绑定组别=================================
         private void TreeBind(string strWhere)
         {
-            BLL.Vehicle goodsBll = new BLL.Vehicle();
-            DataTable goodsDT = goodsBll.GetList(0, strWhere, "Id desc").Tables[0];
+            BLL.Driver driverBll = new BLL.Driver();
+            DataTable driverDT = driverBll.GetList(0, "IsDimission != 1 ", "Id desc").Tables[0];
 
-            ddlCarNumber.Items.Clear();
-            ddlCarNumber.Items.Add(new ListItem("不限", ""));
-            foreach (DataRow dr in goodsDT.Rows)
+            ddlDriver.Items.Clear();
+            ddlDriver.Items.Add(new ListItem("不限", ""));
+            foreach (DataRow dr in driverDT.Rows)
             {
-                this.ddlCarNumber.Items.Add(new ListItem(dr["CarCode"].ToString(), dr["CarCode"].ToString()));
+                this.ddlDriver.Items.Add(new ListItem(string.Format("{0}({1})", dr["CarNumber"].ToString(), dr["RealName"].ToString()), dr["CarNumber"].ToString()));
             }
         }
         #endregion
@@ -61,7 +57,7 @@ namespace DTcms.Web.admin.Business
             this.page = DTRequest.GetQueryInt("page", 1);
             if (!string.IsNullOrEmpty(_carNumber))
             {
-                ddlCarNumber.SelectedValue = _carNumber;
+                ddlDriver.SelectedValue = _carNumber;
             }
             if (!string.IsNullOrEmpty(_beginTime))
             {
@@ -73,67 +69,37 @@ namespace DTcms.Web.admin.Business
             }
             this.txtKeywords.Text = this.keywords;
             BLL.TransportOrder bll = new BLL.TransportOrder();
-            this.rptList.DataSource = bll.GetTransportOrders(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
+            this.rptList.DataSource = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
             this.rptList.DataBind();
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("expenses_register_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}&page={6}",
-                _carNumber, _customer1, _customer2,_beginTime,_endTime, this.keywords, "__id__");
+            string pageUrl = Utils.CombUrlTxt("expenses_register_list.aspx", "carNumber={0}&beginTime={1}&endTime={2}&keywords={3}&page={4}",
+                _carNumber, _beginTime, _endTime, this.keywords, "__id__");
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
         }
-
-        protected string GetTransportOrderItems(string transportOrderId) 
-        {
-            BLL.TransportOrderItem itemBll = new BLL.TransportOrderItem();
-            string shippers = string.Empty;
-            string goods = string.Empty;
-            string loadingAddress = string.Empty;
-            string unloadingAddress = string.Empty;
-            DataSet ds = itemBll.GetList(0, "TransportOrderId = " + transportOrderId + "", "Shipper, Goods, LoadingAddress, UnloadingAddress");
-            if (ds != null && ds.Tables[0].Rows.Count  > 0)
-            {
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-                    shippers += dr["Shipper"].ToString() + ",";
-                    goods += dr["Goods"].ToString() + ",";
-                    loadingAddress += dr["LoadingAddress"].ToString() + ",";
-                    unloadingAddress += dr["UnloadingAddress"].ToString() + ",";
-                }
-                shippers = shippers.TrimEnd(',');
-                goods = goods.TrimEnd(',');
-                loadingAddress = loadingAddress.TrimEnd(',');
-                unloadingAddress = unloadingAddress.TrimEnd(',');
-            }
-
-            string html = string.Format("<td align=\"center\">{0}</td><td align=\"center\">{1}</td><td align=\"center\">{2}</td><td align=\"center\">{3}</td>",
-                shippers, goods, loadingAddress, unloadingAddress);
-
-            return html;
-        }
-
         #endregion
 
         #region 组合SQL查询语句==========================
-        protected string CombSqlTxt(string carNumber, string customer1, string customer2, string beginTime, string endTime, string _keywords)
+        protected string CombSqlTxt(string carNumber, string beginTime, string endTime, string _keywords)
         {
             StringBuilder strTemp = new StringBuilder();
             if (!string.IsNullOrEmpty(carNumber))
             {
-                strTemp.Append(" and CarNumber='" + carNumber + "'");
+                strTemp.Append(" and B.CarNumber='" + carNumber + "'");
             }
             if (!string.IsNullOrEmpty(beginTime))
             {
-                strTemp.Append(" and FactDispatchTime>='" + beginTime + "'");
+                strTemp.Append(" and A.FactDispatchTime>='" + beginTime + "'");
             }
             if (!string.IsNullOrEmpty(endTime))
             {
-                strTemp.Append(" and FactDispatchTime<='" + endTime + "'");
+                strTemp.Append(" and A.FactDispatchTime<='" + endTime + "'");
             }
             _keywords = _keywords.Replace("'", "");
             if (!string.IsNullOrEmpty(_keywords))
             {
-                strTemp.Append(" and (MotorcadeName like '%" + _keywords + "%' or Driver like '%" + _keywords + "%' or Code like '%" + _keywords + "%')");
+                strTemp.Append(" and (A.Payee like '%" + _keywords + "%')");
             }
             return strTemp.ToString();
         }
@@ -157,15 +123,15 @@ namespace DTcms.Web.admin.Business
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("expenses_register_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}",
-                _carNumber, _customer1, _customer2, txtBeginTime.Text, txtEndTime.Text, txtKeywords.Text));
+            Response.Redirect(Utils.CombUrlTxt("expenses_register_list.aspx", "carNumber={0}&beginTime={1}&endTime={2}&keywords={3}",
+                _carNumber, txtBeginTime.Text, txtEndTime.Text, txtKeywords.Text));
         }
 
         //筛选类别
-        protected void ddlCarNumber_SelectedIndexChanged(object sender, EventArgs e)
+        protected void ddlDriver_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("expenses_register_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}",
-                ddlCarNumber.SelectedValue, _customer1, _customer2,_beginTime, _endTime, keywords));
+            Response.Redirect(Utils.CombUrlTxt("expenses_register_list.aspx", "carNumber={0}&beginTime={1}&endTime={2}&keywords={3}",
+                ddlDriver.SelectedValue, _beginTime, _endTime, keywords));
         }
 
         //设置分页数量
@@ -179,8 +145,8 @@ namespace DTcms.Web.admin.Business
                     Utils.WriteCookie("expenses_register_list_page_size", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("expenses_register_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}",
-                _carNumber, _customer1, _customer2,_beginTime,_endTime, this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("expenses_register_list.aspx", "carNumber={0}&beginTime={1}&endTime={2}&keywords={3}",
+                _carNumber, _beginTime, _endTime, this.keywords));
         }
     }
 }

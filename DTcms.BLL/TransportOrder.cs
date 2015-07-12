@@ -102,6 +102,11 @@ namespace DTcms.BLL
         {
             return dal.GetList(Top, strWhere, filedOrder);
         }
+
+        public DataSet GetSelectList(int Top, string strWhere, string filedOrder)
+        {
+            return dal.GetSelectList(Top, strWhere, filedOrder);
+        }
         /// <summary>
         /// 获得数据列表
         /// </summary>

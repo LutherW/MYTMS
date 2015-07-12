@@ -454,6 +454,32 @@ namespace DTcms.DAL
             return DbHelperSQL.Query(strSql.ToString());
         }
 
+        public DataSet GetPrintList(int Top, string strWhere, string filedOrder)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("SELECT A.*, B.Name AS GoodsName, B.CategoryName AS GoodsCategory, B.Variety AS GoodsVariety, ");
+            strSql.Append("C.ShortName AS Shipper, D.ShortName AS Receiver, ");
+            strSql.Append("E.Status AS TransportOrderStatus, E.DispatchTime AS DispatchTime, ");
+            strSql.Append("F.RealName AS DriverName, F.CarNumber AS CarNumber, F.LinkTel AS DriverTel ");
+            strSql.Append("FROM mtms_Order A ");
+            strSql.Append("LEFT JOIN mtms_Goods B ON A.GoodsId = B.Id  ");
+            strSql.Append("LEFT JOIN mtms_Customer C ON A.ShipperId = C.Id ");
+            strSql.Append("LEFT JOIN mtms_Customer D ON A.ReceiverId = D.Id, ");
+            strSql.Append("mtms_TransportOrder E  ");
+            strSql.Append("LEFT JOIN mtms_Driver F ON E.DriverId = F.Id ");
+            strSql.Append("WHERE A.TransportOrderId = E.Id ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(strWhere);
+            }
+            if (filedOrder.Trim() != "")
+            {
+                strSql.Append(filedOrder);
+            }
+
+            return DbHelperSQL.Query(strSql.ToString());
+        }
+
         /// <summary>
         /// 获得查询分页数据
         /// </summary>
@@ -475,5 +501,27 @@ namespace DTcms.DAL
             return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
         }
 
+        public DataSet GetFullList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("SELECT A.*, B.Name AS GoodsName, B.CategoryName AS GoodsCategory, B.Variety AS GoodsVariety, ");
+            strSql.Append("C.ShortName AS Shipper, D.ShortName AS Receiver, ");
+            strSql.Append("E.Status AS TransportOrderStatus, E.DispatchTime AS DispatchTime, ");
+            strSql.Append("F.RealName AS DriverName, F.CarNumber AS CarNumber, F.LinkTel AS DriverTel ");
+            strSql.Append("FROM mtms_Order A ");
+            strSql.Append("LEFT JOIN mtms_Goods B ON A.GoodsId = B.Id  ");
+            strSql.Append("LEFT JOIN mtms_Customer C ON A.ShipperId = C.Id ");
+            strSql.Append("LEFT JOIN mtms_Customer D ON A.ReceiverId = D.Id, ");
+            strSql.Append("mtms_TransportOrder E  ");
+            strSql.Append("LEFT JOIN mtms_Driver F ON E.DriverId = F.Id ");
+            strSql.Append("WHERE A.TransportOrderId = E.Id ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(strWhere);
+            }
+
+            recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
+            return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
+        }
     }
 }

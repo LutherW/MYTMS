@@ -74,13 +74,15 @@
             <dl>
                 <dt>接单时间</dt>
                 <dd>
-                    <span class="input-date"><asp:TextBox ID="txtAcceptOrderTime" runat="server" CssClass="input normal date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox><i>日期</i></span>
+                    <span class="input-date">
+                        <asp:TextBox ID="txtAcceptOrderTime" runat="server" CssClass="input normal date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox><i>日期</i></span>
                     <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
                 <dt>要求到货时间</dt>
                 <dd>
-                    <span class="input-date"><asp:TextBox ID="txtArrivedTime" runat="server" CssClass="input normal date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox><i>日期</i></span>
+                    <span class="input-date">
+                        <asp:TextBox ID="txtArrivedTime" runat="server" CssClass="input normal date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox><i>日期</i></span>
                     <span class="Validform_checktip"></span></dd>
             </dl>
             <dl>
@@ -149,7 +151,7 @@
             <dl>
                 <dt>提货地址</dt>
                 <dd>
-                    <div class="rule-single-select" style="z-index:11013">
+                    <div class="rule-single-select" style="z-index: 11004">
                         <asp:DropDownList ID="ddlLoadingAddress" runat="server" datatype="*" errormsg="请选择提货地址" sucmsg=" "></asp:DropDownList>
                     </div>
                     <span class="Validform_checktip"></span>
@@ -158,17 +160,17 @@
             <dl>
                 <dt>目的地址</dt>
                 <dd>
-                    <div class="rule-single-select" style="z-index:11004">
+                    <div class="rule-single-select" style="z-index: 11003">
                         <asp:DropDownList ID="ddlUnloadingAddress" runat="server" datatype="*" errormsg="请选择目的地址" sucmsg=" "></asp:DropDownList>
                     </div>
                     <span class="Validform_checktip"></span>
                 </dd>
             </dl>
-            
+
             <dl>
                 <dt>托运方</dt>
                 <dd>
-                    <div class="rule-single-select" style="z-index:11000">
+                    <div class="rule-single-select" style="z-index: 11002">
                         <asp:DropDownList ID="ddlShipper" runat="server" datatype="*" errormsg="请选择托运方" sucmsg=" "></asp:DropDownList>
                     </div>
                     <span class="Validform_checktip"></span>
@@ -177,7 +179,7 @@
             <dl>
                 <dt>收货方</dt>
                 <dd>
-                    <div class="rule-single-select" style="z-index:1006">
+                    <div class="rule-single-select" style="z-index: 11001">
                         <asp:DropDownList ID="ddlReceiver" runat="server" datatype="*" errormsg="请选择收货方" sucmsg=" "></asp:DropDownList>
                     </div>
                     <span class="Validform_checktip"></span>
@@ -186,7 +188,7 @@
             <dl>
                 <dt>运输路线</dt>
                 <dd>
-                    <div class="rule-single-select" style="z-index:11000">
+                    <div class="rule-single-select" style="z-index: 11000">
                         <asp:DropDownList ID="ddlHaulway" runat="server" datatype="*" errormsg="请选择运输路线" sucmsg=" "></asp:DropDownList>
                     </div>
                     <span class="Validform_checktip"></span></dd>
@@ -204,7 +206,7 @@
             <dl>
                 <dt>承运货物</dt>
                 <dd>
-                    <div class="rule-single-select" style="z-index:1007">
+                    <div class="rule-single-select" style="z-index: 1007">
                         <asp:DropDownList ID="ddlGoods" runat="server" datatype="*" errormsg="请选择承运货物" sucmsg=" "></asp:DropDownList>
                     </div>
                     <span class="Validform_checktip"></span>

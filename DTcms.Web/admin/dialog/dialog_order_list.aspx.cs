@@ -45,34 +45,34 @@ namespace DTcms.Web.admin.dialog
         #region 绑定组别=================================
         private void TreeBind(string strWhere)
         {
-            BLL.Goods goodsBll = new BLL.Goods();
-            DataTable goodsDT = goodsBll.GetList(0, strWhere, "Id desc").Tables[0];
+            //BLL.Goods goodsBll = new BLL.Goods();
+            //DataTable goodsDT = goodsBll.GetList(0, strWhere, "Id desc").Tables[0];
 
-            ddlGoods.Items.Clear();
-            ddlGoods.Items.Add(new ListItem("承运货物", ""));
-            foreach (DataRow dr in goodsDT.Rows)
-            {
-                this.ddlGoods.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
-            }
+            //ddlGoods.Items.Clear();
+            //ddlGoods.Items.Add(new ListItem("承运货物", ""));
+            //foreach (DataRow dr in goodsDT.Rows)
+            //{
+            //    this.ddlGoods.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
+            //}
 
-            BLL.Customer customerBll = new BLL.Customer();
-            DataTable customerDT = customerBll.GetList(0, strWhere, "Id desc").Tables[0];
+            //BLL.Customer customerBll = new BLL.Customer();
+            //DataTable customerDT = customerBll.GetList(0, strWhere, "Id desc").Tables[0];
 
-            ddlCustomer1.Items.Clear();
-            ddlCustomer1.Items.Add(new ListItem("托运方", ""));
-            ddlCustomer2.Items.Clear();
-            ddlCustomer2.Items.Add(new ListItem("收货方", ""));
-            foreach (DataRow dr in customerDT.Rows)
-            {
-                if (!dr["Category"].ToString().Equals("托运方"))
-                {
-                    this.ddlCustomer2.Items.Add(new ListItem(dr["ShortName"].ToString(), dr["Id"].ToString()));
-                }
-                if (!dr["Category"].ToString().Equals("收货方"))
-                {
-                    this.ddlCustomer1.Items.Add(new ListItem(dr["ShortName"].ToString(), dr["Id"].ToString()));
-                }
-            }
+            //ddlCustomer1.Items.Clear();
+            //ddlCustomer1.Items.Add(new ListItem("托运方", ""));
+            //ddlCustomer2.Items.Clear();
+            //ddlCustomer2.Items.Add(new ListItem("收货方", ""));
+            //foreach (DataRow dr in customerDT.Rows)
+            //{
+            //    if (!dr["Category"].ToString().Equals("托运方"))
+            //    {
+            //        this.ddlCustomer2.Items.Add(new ListItem(dr["ShortName"].ToString(), dr["Id"].ToString()));
+            //    }
+            //    if (!dr["Category"].ToString().Equals("收货方"))
+            //    {
+            //        this.ddlCustomer1.Items.Add(new ListItem(dr["ShortName"].ToString(), dr["Id"].ToString()));
+            //    }
+            //}
         }
         #endregion
 
@@ -80,27 +80,27 @@ namespace DTcms.Web.admin.dialog
         private void RptBind(string _strWhere, string _orderby)
         {
             this.page = DTRequest.GetQueryInt("page", 1);
-            if (_goods > 0)
-            {
-                ddlGoods.SelectedValue = _goods.ToString();
-            }
-            if (_customer1 > 0)
-            {
-                ddlCustomer1.SelectedValue = _customer1.ToString();
-            }
-            if (_customer2 > 0)
-            {
-                ddlCustomer2.SelectedValue = _customer2.ToString();
-            }
-            if (!string.IsNullOrEmpty(_beginTime))
-            {
-                txtBeginTime.Text = _beginTime;
-            }
-            if (!string.IsNullOrEmpty(_endTime))
-            {
-                txtEndTime.Text = _endTime;
-            }
-            this.txtKeywords.Text = this.keywords;
+            //if (_goods > 0)
+            //{
+            //    ddlGoods.SelectedValue = _goods.ToString();
+            //}
+            //if (_customer1 > 0)
+            //{
+            //    ddlCustomer1.SelectedValue = _customer1.ToString();
+            //}
+            //if (_customer2 > 0)
+            //{
+            //    ddlCustomer2.SelectedValue = _customer2.ToString();
+            //}
+            //if (!string.IsNullOrEmpty(_beginTime))
+            //{
+            //    txtBeginTime.Text = _beginTime;
+            //}
+            //if (!string.IsNullOrEmpty(_endTime))
+            //{
+            //    txtEndTime.Text = _endTime;
+            //}
+            //this.txtKeywords.Text = this.keywords;
             BLL.Order bll = new BLL.Order();
             this.rptList.DataSource = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
             this.rptList.DataBind();
@@ -162,30 +162,30 @@ namespace DTcms.Web.admin.dialog
         #endregion
 
         //关健字查询
-        protected void btnSearch_Click(object sender, EventArgs e)
-        {
-            Response.Redirect(Utils.CombUrlTxt("dialog_order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}&transportOrderId=" + this.transportOrderId + "",
-                _goods.ToString(), _customer1.ToString(), _customer2.ToString(), txtBeginTime.Text, txtEndTime.Text, txtKeywords.Text));
-        }
+        //protected void btnSearch_Click(object sender, EventArgs e)
+        //{
+        //    Response.Redirect(Utils.CombUrlTxt("dialog_order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}&transportOrderId=" + this.transportOrderId + "",
+        //        _goods.ToString(), _customer1.ToString(), _customer2.ToString(), txtBeginTime.Text, txtEndTime.Text, txtKeywords.Text));
+        //}
 
-        //筛选类别
-        protected void ddlGoods_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Response.Redirect(Utils.CombUrlTxt("dialog_order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}&transportOrderId=" + this.transportOrderId + "",
-                ddlGoods.SelectedValue, _customer1.ToString(), _customer2.ToString(), _beginTime, _endTime, this.keywords));
-        }
+        ////筛选类别
+        //protected void ddlGoods_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    Response.Redirect(Utils.CombUrlTxt("dialog_order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}&transportOrderId=" + this.transportOrderId + "",
+        //        ddlGoods.SelectedValue, _customer1.ToString(), _customer2.ToString(), _beginTime, _endTime, this.keywords));
+        //}
 
-        protected void ddlCustomer1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Response.Redirect(Utils.CombUrlTxt("dialog_order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}&transportOrderId=" + this.transportOrderId + "",
-                _goods.ToString(), ddlCustomer1.SelectedValue, _customer2.ToString(), _beginTime, _endTime, this.keywords));
-        }
+        //protected void ddlCustomer1_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    Response.Redirect(Utils.CombUrlTxt("dialog_order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}&transportOrderId=" + this.transportOrderId + "",
+        //        _goods.ToString(), ddlCustomer1.SelectedValue, _customer2.ToString(), _beginTime, _endTime, this.keywords));
+        //}
 
-        protected void ddlCustomer2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Response.Redirect(Utils.CombUrlTxt("dialog_order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}&transportOrderId=" + this.transportOrderId + "",
-                _goods.ToString(), _customer1.ToString(), ddlCustomer2.SelectedValue, _beginTime, _endTime, this.keywords));
-        }
+        //protected void ddlCustomer2_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    Response.Redirect(Utils.CombUrlTxt("dialog_order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}&transportOrderId=" + this.transportOrderId + "",
+        //        _goods.ToString(), _customer1.ToString(), ddlCustomer2.SelectedValue, _beginTime, _endTime, this.keywords));
+        //}
 
         //设置分页数量
         protected void txtPageNum_TextChanged(object sender, EventArgs e)

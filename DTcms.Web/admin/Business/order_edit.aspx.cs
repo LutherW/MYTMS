@@ -13,7 +13,7 @@ namespace DTcms.Web.admin.Business
         string defaultpassword = "0|0|0|0"; //默认显示密码
         protected string action = DTEnums.ActionEnum.Add.ToString(); //操作类型
         private int id = 0;
-        private int transportOrderId = 0;
+        //private int transportOrderId = 0;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -22,6 +22,7 @@ namespace DTcms.Web.admin.Business
             {
                 this.action = DTEnums.ActionEnum.Edit.ToString();//修改类型
                 this.id = DTRequest.GetQueryInt("id");
+                //this.transportOrderId = DTRequest.GetQueryInt("transportOrderId");
                 if (this.id == 0)
                 {
                     JscriptMsg("传输参数不正确！", "back", "Error");
@@ -36,12 +37,12 @@ namespace DTcms.Web.admin.Business
             if (!string.IsNullOrEmpty(_action) && _action == DTEnums.ActionEnum.Add.ToString())
             {
                 this.action = DTEnums.ActionEnum.Add.ToString();//修改类型
-                this.transportOrderId = DTRequest.GetQueryInt("transportOrderId");
-                if (this.transportOrderId == 0)
-                {
-                    JscriptMsg("传输参数不正确！", "back", "Error");
-                    return;
-                }
+                //this.transportOrderId = DTRequest.GetQueryInt("transportOrderId");
+                //if (this.transportOrderId == 0)
+                //{
+                //    JscriptMsg("传输参数不正确！", "back", "Error");
+                //    return;
+                //}
             }
             if (!Page.IsPostBack)
             {
@@ -110,6 +111,15 @@ namespace DTcms.Web.admin.Business
             {
                 this.ddlGoods.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
             }
+
+            BLL.TransportOrder transportOrderBLL = new BLL.TransportOrder();
+            DataTable transportOrderDT = transportOrderBLL.GetSelectList(0, " A.Status = 0", "Id DESC").Tables[0];
+            ddlTransportOrder.Items.Clear();
+            ddlTransportOrder.Items.Add(new ListItem("请选择运输单", ""));
+            foreach (DataRow dr in transportOrderDT.Rows)
+            {
+                this.ddlTransportOrder.Items.Add(new ListItem(string.Format("{0}({1})", dr["CarNumber"].ToString(), dr["Code"].ToString()), dr["Id"].ToString()));
+            }
         }
 
         protected void ddlHaulway_SelectedIndexChanged(object sender, EventArgs e)
@@ -126,46 +136,6 @@ namespace DTcms.Web.admin.Business
             }
         }
 
-        protected void ddlShipper_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(ddlShipper.SelectedValue))
-            {
-                BLL.Customer bll = new BLL.Customer();
-                Model.Customer m = bll.GetModel(Convert.ToInt32(ddlShipper.SelectedValue));
-                if (m != null)
-                {
-                    txtShipperLinkMan.Text = m.LinkMan;
-                    txtShipperLinkTel.Text = m.LinkTel;
-                }
-            }
-        }
-
-        protected void ddlReceiver_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(ddlReceiver.SelectedValue))
-            {
-                BLL.Customer bll = new BLL.Customer();
-                Model.Customer m = bll.GetModel(Convert.ToInt32(ddlReceiver.SelectedValue));
-                if (m != null)
-                {
-                    txtReceiverLinkMan.Text = m.LinkMan;
-                    txtReceiverLinkTel.Text = m.LinkTel;
-                }
-            }
-        }
-
-        protected void ddlGoods_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(ddlGoods.SelectedValue))
-            {
-                BLL.Goods bll = new BLL.Goods();
-                Model.Goods m = bll.GetModel(Convert.ToInt32(ddlGoods.SelectedValue));
-                if (m != null)
-                {
-                    txtUnit.Text = m.Unit;
-                }
-            }
-        }
         #endregion
 
         #region 赋值操作=================================
@@ -174,32 +144,23 @@ namespace DTcms.Web.admin.Business
             BLL.Order bll = new BLL.Order();
             Model.Order model = bll.GetModel(_id);
 
-            txtCode.Text = model.Code;
+            ddlTransportOrder.SelectedValue = model.TransportOrderId.ToString();
             txtAcceptOrderTime.Text = model.AcceptOrderTime.ToString("yyyy-MM-dd");
             txtArrivedTime.Text = model.ArrivedTime.ToString("yyyy-MM-dd");
-            txtQuantity.Text = model.Quantity.ToString();
-            chkIsCharteredCar.Checked = model.IsCharteredCar == 1;
-            if (!string.IsNullOrEmpty(model.Haulway))
-            {
-                ddlHaulway.Items.FindByText(model.Haulway).Selected = true;
-            }
-            txtLoadingCapacityRunning.Text = model.LoadingCapacityRunning.ToString();
-            txtNoLoadingCapacityRunning.Text = model.NoLoadingCapacityRunning.ToString();
-            if (!string.IsNullOrEmpty(model.Shipper))
-            {
-                ddlShipper.Items.FindByText(model.Shipper).Selected = true;
-            }
-            txtShipperLinkMan.Text = model.ShipperLinkMan;
-            txtShipperLinkTel.Text = model.ShipperLinkTel;
-            if (!string.IsNullOrEmpty(model.Receiver))
-            {
-                ddlReceiver.Items.FindByText(model.Receiver).Selected = true;
-            }
-            txtReceiverLinkMan.Text = model.ReceiverLinkMan;
-            txtReceiverLinkTel.Text = model.ReceiverLinkTel;
             txtContractNumber.Text = model.ContractNumber;
             txtBillNumber.Text = model.BillNumber;
             txtWeighbridgeNumber.Text = model.WeighbridgeNumber;
+            txtQuantity.Text = model.Quantity.ToString();
+            chkIsCharteredCar.Checked = model.IsCharteredCar == 1;
+            chkIsWeightNote.Checked = model.IsWeightNote;
+            chkIsAllotted.Checked = model.IsAllotted;
+            txtUnitPrice.Text = model.UnitPrice.ToString();
+            txtWeight.Text = model.Weight.ToString();
+            txtFreight.Text = model.Freight.ToString();
+            txtPaidFreight.Text = model.PaidFreight.ToString();
+            txtUnpaidFreight.Text = model.UnpaidFreight.ToString();
+            txtHandlingCharge.Text = model.HandlingCharge.ToString();
+
             if (!string.IsNullOrEmpty(model.LoadingAddress))
             {
                 ddlLoadingAddress.Items.FindByText(model.LoadingAddress).Selected = true;
@@ -208,11 +169,15 @@ namespace DTcms.Web.admin.Business
             {
                 ddlUnloadingAddress.Items.FindByText(model.UnloadingAddress).Selected = true;
             }
-            if (!string.IsNullOrEmpty(model.Goods))
+            ddlShipper.SelectedValue = model.ShipperId.ToString();
+            ddlReceiver.SelectedValue = model.ReceiverId.ToString();
+            if (!string.IsNullOrEmpty(model.Haulway))
             {
-                ddlGoods.Items.FindByText(model.Goods).Selected = true;
+                ddlHaulway.Items.FindByText(model.Haulway).Selected = true;
             }
-            txtUnit.Text = model.Unit;
+            txtLoadingCapacityRunning.Text = model.LoadingCapacityRunning.ToString();
+            txtNoLoadingCapacityRunning.Text = model.NoLoadingCapacityRunning.ToString();
+            ddlGoods.SelectedValue = model.GoodsId.ToString();
             txtRemarks.Text = model.Remarks;
         }
         #endregion
@@ -224,34 +189,34 @@ namespace DTcms.Web.admin.Business
             Model.Order model = new Model.Order();
             BLL.Order bll = new BLL.Order();
 
-            model.Code = txtCode.Text.Trim();
+            model.TransportOrderId = Convert.ToInt32(ddlTransportOrder.SelectedValue);
+            model.Code = string.Format("No{0}", DateTime.Now.ToString("yyyyMMddhhmmss"));
             model.AcceptOrderTime = Convert.ToDateTime(txtAcceptOrderTime.Text.Trim());
             model.ArrivedTime = Convert.ToDateTime(txtArrivedTime.Text.Trim());
-            model.Shipper = ddlShipper.SelectedItem.Text;
-            model.ShipperLinkMan = txtShipperLinkMan.Text.Trim();
-            model.ShipperLinkTel = txtShipperLinkTel.Text.Trim();
-            model.Receiver = ddlReceiver.SelectedItem.Text;
-            model.ReceiverLinkMan = txtReceiverLinkMan.Text.Trim();
-            model.ReceiverLinkTel = txtReceiverLinkTel.Text.Trim();
             model.ContractNumber = txtContractNumber.Text.Trim();
-            model.LoadingAddress = ddlLoadingAddress.SelectedItem.Text;
-            model.UnloadingAddress = ddlUnloadingAddress.SelectedItem.Text;
-            model.Goods = ddlGoods.SelectedItem.Text;
-            model.Unit = txtUnit.Text.Trim();
+            model.BillNumber = txtBillNumber.Text.Trim();
+            model.WeighbridgeNumber = txtWeighbridgeNumber.Text.Trim();
             model.IsCharteredCar = chkIsCharteredCar.Checked ? 1 : 0;
             model.Quantity = Convert.ToDecimal(txtQuantity.Text.Trim());
-            model.DispatchedCount = 0.00M;
+            model.IsWeightNote = chkIsWeightNote.Checked;
+            model.IsAllotted = chkIsAllotted.Checked;
+            model.UnitPrice = Convert.ToDecimal(txtUnitPrice.Text.Trim());
+            model.Weight = Convert.ToDecimal(txtWeight.Text.Trim());
+            model.Freight = Convert.ToDecimal(txtFreight.Text.Trim());
+            model.PaidFreight = Convert.ToDecimal(txtPaidFreight.Text.Trim());
+            model.UnpaidFreight = Convert.ToDecimal(txtUnpaidFreight.Text.Trim());
+            model.HandlingCharge = Convert.ToDecimal(txtHandlingCharge.Text.Trim());
+            model.LoadingAddress = ddlLoadingAddress.SelectedItem.Text;
+            model.UnloadingAddress = ddlUnloadingAddress.SelectedItem.Text;
+            model.ShipperId = Convert.ToInt32(ddlShipper.SelectedValue);
+            model.ReceiverId = Convert.ToInt32(ddlReceiver.SelectedValue);
             model.Haulway = ddlHaulway.SelectedItem.Text;
             model.LoadingCapacityRunning = Convert.ToDecimal(txtLoadingCapacityRunning.Text.Trim());
             model.NoLoadingCapacityRunning = Convert.ToDecimal(txtNoLoadingCapacityRunning.Text.Trim());
-            model.BillNumber = txtBillNumber.Text.Trim();
-            model.WeighbridgeNumber = txtWeighbridgeNumber.Text.Trim();
-            //model.Formula = ddlFormula.SelectedItem.Text;
-            //model.UnitPrice = Convert.ToDecimal(txtUnitPrice.Text.Trim());
-            //model.TotalPrice = Convert.ToDecimal(txtTotalPrice.Text.Trim());
-            //model.SettleAccountsWay = ddlSettleAccountsWay.SelectedValue;
+            model.GoodsId = Convert.ToInt32(ddlGoods.SelectedValue);
             model.Status = 0;
             model.Remarks = txtRemarks.Text.Trim();
+            model.CreateDateTime = DateTime.Now;
 
             if (bll.Add(model) > 0)
             {
@@ -269,26 +234,30 @@ namespace DTcms.Web.admin.Business
             BLL.Order bll = new BLL.Order();
             Model.Order model = bll.GetModel(_id);
 
+            model.TransportOrderId = Convert.ToInt32(ddlTransportOrder.SelectedValue);
             model.AcceptOrderTime = Convert.ToDateTime(txtAcceptOrderTime.Text.Trim());
             model.ArrivedTime = Convert.ToDateTime(txtArrivedTime.Text.Trim());
-            model.Shipper = ddlShipper.SelectedItem.Text;
-            model.ShipperLinkMan = txtShipperLinkMan.Text.Trim();
-            model.ShipperLinkTel = txtShipperLinkTel.Text.Trim();
-            model.Receiver = ddlReceiver.SelectedItem.Text;
-            model.ReceiverLinkMan = txtReceiverLinkMan.Text.Trim();
-            model.ReceiverLinkTel = txtReceiverLinkTel.Text.Trim();
             model.ContractNumber = txtContractNumber.Text.Trim();
-            model.LoadingAddress = ddlLoadingAddress.SelectedItem.Text;
-            model.UnloadingAddress = ddlUnloadingAddress.SelectedItem.Text;
-            model.Goods = ddlGoods.SelectedItem.Text;
-            model.Unit = txtUnit.Text.Trim();
+            model.BillNumber = txtBillNumber.Text.Trim();
+            model.WeighbridgeNumber = txtWeighbridgeNumber.Text.Trim();
             model.IsCharteredCar = chkIsCharteredCar.Checked ? 1 : 0;
             model.Quantity = Convert.ToDecimal(txtQuantity.Text.Trim());
+            model.IsWeightNote = chkIsWeightNote.Checked;
+            model.IsAllotted = chkIsAllotted.Checked;
+            model.UnitPrice = Convert.ToDecimal(txtUnitPrice.Text.Trim());
+            model.Weight = Convert.ToDecimal(txtWeight.Text.Trim());
+            model.Freight = Convert.ToDecimal(txtFreight.Text.Trim());
+            model.PaidFreight = Convert.ToDecimal(txtPaidFreight.Text.Trim());
+            model.UnpaidFreight = Convert.ToDecimal(txtUnpaidFreight.Text.Trim());
+            model.HandlingCharge = Convert.ToDecimal(txtHandlingCharge.Text.Trim());
+            model.LoadingAddress = ddlLoadingAddress.SelectedItem.Text;
+            model.UnloadingAddress = ddlUnloadingAddress.SelectedItem.Text;
+            model.ShipperId = Convert.ToInt32(ddlShipper.SelectedValue);
+            model.ReceiverId = Convert.ToInt32(ddlReceiver.SelectedValue);
             model.Haulway = ddlHaulway.SelectedItem.Text;
             model.LoadingCapacityRunning = Convert.ToDecimal(txtLoadingCapacityRunning.Text.Trim());
             model.NoLoadingCapacityRunning = Convert.ToDecimal(txtNoLoadingCapacityRunning.Text.Trim());
-            model.BillNumber = txtBillNumber.Text.Trim();
-            model.WeighbridgeNumber = txtWeighbridgeNumber.Text.Trim();
+            model.GoodsId = Convert.ToInt32(ddlGoods.SelectedValue);
             model.Remarks = txtRemarks.Text.Trim();
 
             if (bll.Update(model))

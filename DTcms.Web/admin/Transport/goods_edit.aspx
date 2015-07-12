@@ -75,7 +75,7 @@
   </dl>
     <dl>
     <dt>品种</dt>
-    <dd><asp:TextBox ID="txtVariety" runat="server" CssClass="input small"></asp:TextBox></dd>
+    <dd><asp:TextBox ID="txtVariety" runat="server" CssClass="input normal"></asp:TextBox></dd>
   </dl>
 </div>
 

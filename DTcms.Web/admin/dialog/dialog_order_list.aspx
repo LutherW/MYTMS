@@ -41,7 +41,7 @@
         <!--/导航栏-->
 
         <!--工具栏-->
-        <div class="toolbar-wrap">
+        <%--<div class="toolbar-wrap">
             <div id="floatHead" class="toolbar">
                 <div class="l-list">
                     <ul class="icon-list">
@@ -76,7 +76,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>--%>
         <!--/工具栏-->
 
         <!--列表-->
@@ -85,7 +85,7 @@
                 <HeaderTemplate>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr>
-                            <th width="4%">选择</th>
+                            <th width="3%"></th>
                             <th align="left">接单时间</th>
                             <th width="6%">提单号</th>
                             <th width="6%">地磅号</th>
@@ -93,19 +93,16 @@
                             <th width="8%">收货方</th>
                             <th width="6%">装货地址</th>
                             <th width="6%">卸货地址</th>
-                            <th width="12%">货物/种类/品种/数量</th>
+                            <th width="15%">货物/种类/品种/数量</th>
                             <th width="8%">单价/重量</th>
                             <th width="9%">运费/已结/下余</th>
                             <th width="6%">装卸费</th>
                             <th width="6%">磅单/调单</th>
-                            <th width="5%">操作</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr>
                         <td align="center">
-                            <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" Style="vertical-align: middle;" />
-                            <asp:HiddenField ID="hidId" Value='<%#Eval("Id")%>' runat="server" />
                         </td>
                         <td><%#string.Format("{0:d}", Eval("AcceptOrderTime"))%></td>
                         <td align="center"><%#Eval("BillNumber")%></td>
@@ -119,11 +116,10 @@
                         <td align="center"><%#string.Format("{0:N2}/{1:N2}/{2:N2}", Eval("Freight"), Eval("PaidFreight"), Eval("UnpaidFreight"))%></td>
                         <td align="center">￥<%#string.Format("{0:N2}", Eval("HandlingCharge"))%></td>
                         <td align="center"><%#string.Format("{0}/{1}", (Eval("IsWeightNote").ToString().Equals("1") ? "是" : "否"), (Eval("IsAllotted").ToString().Equals("1") ? "是" : "否"))%></td>
-                        <td align="center"><a href="dialog_order_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a></td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"14\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"13\">暂无记录</td></tr>" : ""%>
 </table>
                 </FooterTemplate>
             </asp:Repeater>

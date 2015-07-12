@@ -271,6 +271,178 @@ namespace DTcms.DAL
             }
         }
 
+        public bool Update(DTcms.Model.TransportOrder model, IList<Model.Order> orders, IList<Model.Consumption> consumptions)
+        {
+            using (SqlConnection conn = new SqlConnection(DbHelperSQL.connectionString))
+            {
+                conn.Open();
+                using (SqlTransaction trans = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        StringBuilder strSql = new StringBuilder();
+                        strSql.Append("update mtms_TransportOrder set ");
+
+                        strSql.Append(" Code = @Code , ");
+                        strSql.Append(" DispatchTime = @DispatchTime , ");
+                        strSql.Append(" FactDispatchTime = @FactDispatchTime , ");
+                        strSql.Append(" TimeLimit = @TimeLimit , ");
+                        strSql.Append(" ReceiptTime = @ReceiptTime , ");
+                        strSql.Append(" WarningTime = @WarningTime , ");
+                        strSql.Append(" BackTime = @BackTime , ");
+                        strSql.Append(" FactBackTime = @FactBackTime , ");
+                        strSql.Append(" DriverId = @DriverId , ");
+                        strSql.Append(" Advance = @Advance , ");
+                        strSql.Append(" Payee = @Payee , ");
+                        strSql.Append(" Repayment = @Repayment , ");
+                        strSql.Append(" FactRepayment = @FactRepayment , ");
+                        strSql.Append(" CarriageUnitPrice = @CarriageUnitPrice , ");
+                        strSql.Append(" Carriage = @Carriage , ");
+                        strSql.Append(" FactCarriage = @FactCarriage , ");
+                        strSql.Append(" CostTotal = @CostTotal , ");
+                        strSql.Append(" Profit = @Profit , ");
+                        strSql.Append(" AddTime = @AddTime , ");
+                        strSql.Append(" Status = @Status , ");
+                        strSql.Append(" CustomerRemarks = @CustomerRemarks , ");
+                        strSql.Append(" HaulwayRemarks = @HaulwayRemarks , ");
+                        strSql.Append(" Remarks = @Remarks , ");
+                        strSql.Append(" FactTotalPrice = @FactTotalPrice , ");
+                        strSql.Append(" TotalPrice = @TotalPrice , ");
+                        strSql.Append(" UnitPrice = @UnitPrice , ");
+                        strSql.Append(" FactDispatchCount = @FactDispatchCount , ");
+                        strSql.Append(" DispatchCount = @DispatchCount , ");
+                        strSql.Append(" ReceivedWeight = @ReceivedWeight , ");
+                        strSql.Append(" UnloadingWeight = @UnloadingWeight , ");
+                        strSql.Append(" ArriveDate = @ArriveDate , ");
+                        strSql.Append(" FactArriveDate = @FactArriveDate , ");
+                        strSql.Append(" LoadingCapacityRunning = @LoadingCapacityRunning , ");
+                        strSql.Append(" NoLoadingCapacityRunning = @NoLoadingCapacityRunning , ");
+                        strSql.Append(" Weight = @Weight , ");
+                        strSql.Append(" FactWeight = @FactWeight , ");
+                        strSql.Append(" LoadingDate = @LoadingDate  ");
+                        strSql.Append(" where Id=@Id ");
+
+                        SqlParameter[] parameters = {
+			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
+                        new SqlParameter("@Code", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@DispatchTime", SqlDbType.DateTime) ,            
+                        new SqlParameter("@FactDispatchTime", SqlDbType.DateTime) ,            
+                        new SqlParameter("@TimeLimit", SqlDbType.Int,4) ,            
+                        new SqlParameter("@ReceiptTime", SqlDbType.DateTime) ,            
+                        new SqlParameter("@WarningTime", SqlDbType.DateTime) ,            
+                        new SqlParameter("@BackTime", SqlDbType.DateTime) ,            
+                        new SqlParameter("@FactBackTime", SqlDbType.DateTime) ,            
+                        new SqlParameter("@DriverId", SqlDbType.Int,4) ,            
+                        new SqlParameter("@Advance", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@Payee", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@Repayment", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@FactRepayment", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@CarriageUnitPrice", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@Carriage", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@FactCarriage", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@CostTotal", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@Profit", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@AddTime", SqlDbType.DateTime) ,            
+                        new SqlParameter("@Status", SqlDbType.Int,4) ,            
+                        new SqlParameter("@CustomerRemarks", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@HaulwayRemarks", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@Remarks", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@FactTotalPrice", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@TotalPrice", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@UnitPrice", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@FactDispatchCount", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@DispatchCount", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@ReceivedWeight", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@UnloadingWeight", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@ArriveDate", SqlDbType.DateTime) ,            
+                        new SqlParameter("@FactArriveDate", SqlDbType.DateTime) ,            
+                        new SqlParameter("@LoadingCapacityRunning", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@NoLoadingCapacityRunning", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@Weight", SqlDbType.Decimal,9) ,            
+                        new SqlParameter("@LoadingDate", SqlDbType.DateTime),
+                        new SqlParameter("@FactWeight", SqlDbType.Decimal,9)  
+              
+            };
+
+                        parameters[0].Value = model.Id;
+                        parameters[1].Value = model.Code;
+                        parameters[2].Value = model.DispatchTime;
+                        parameters[3].Value = model.FactDispatchTime;
+                        parameters[4].Value = model.TimeLimit;
+                        parameters[5].Value = model.ReceiptTime;
+                        parameters[6].Value = model.WarningTime;
+                        parameters[7].Value = model.BackTime;
+                        parameters[8].Value = model.FactBackTime;
+                        parameters[9].Value = model.DriverId;
+                        parameters[10].Value = model.Advance;
+                        parameters[11].Value = model.Payee;
+                        parameters[12].Value = model.Repayment;
+                        parameters[13].Value = model.FactRepayment;
+                        parameters[14].Value = model.CarriageUnitPrice;
+                        parameters[15].Value = model.Carriage;
+                        parameters[16].Value = model.FactCarriage;
+                        parameters[17].Value = model.CostTotal;
+                        parameters[18].Value = model.Profit;
+                        parameters[19].Value = model.AddTime;
+                        parameters[20].Value = model.Status;
+                        parameters[21].Value = model.CustomerRemarks;
+                        parameters[22].Value = model.HaulwayRemarks;
+                        parameters[23].Value = model.Remarks;
+                        parameters[24].Value = model.FactTotalPrice;
+                        parameters[25].Value = model.TotalPrice;
+                        parameters[26].Value = model.UnitPrice;
+                        parameters[27].Value = model.FactDispatchCount;
+                        parameters[28].Value = model.DispatchCount;
+                        parameters[29].Value = model.ReceivedWeight;
+                        parameters[30].Value = model.UnloadingWeight;
+                        parameters[31].Value = model.ArriveDate;
+                        parameters[32].Value = model.FactArriveDate;
+                        parameters[33].Value = model.LoadingCapacityRunning;
+                        parameters[34].Value = model.NoLoadingCapacityRunning;
+                        parameters[35].Value = model.Weight;
+                        parameters[36].Value = model.LoadingDate;
+                        parameters[37].Value = model.FactWeight;
+
+                        DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+
+                        #region 订单====================
+                        if (orders.Count > 0)
+                        {
+                            Order orderDAL = new Order();
+                            foreach (Model.Order order in orders)
+                            {
+                                orderDAL.Update(order);
+                            }
+                        }
+                        #endregion
+
+                        #region 费用====================
+                        if (consumptions.Count > 0)
+                        {
+                            Consumption consumptionDAL = new Consumption();
+                            foreach (Model.Consumption consumption in consumptions)
+                            {
+                                storeInGoods.StoreInOrderId = model.Id;
+                                storeInGoodsDAL.Add(conn, trans, storeInGoods);
+                                waitingGoodsDAL.UpdateStatus(conn, trans, storeInGoods.StoreWaitingGoodsId, 1);
+                            }
+                        }
+                        #endregion
+
+                        trans.Commit();
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+
+        }
+
         public int UpdateField(SqlConnection conn, SqlTransaction trans, int id, string strValue)
         {
             StringBuilder strSql = new StringBuilder();
@@ -518,6 +690,19 @@ namespace DTcms.DAL
             }
             strSql.Append(" * ");
             strSql.Append(" FROM mtms_TransportOrder ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(" where " + strWhere);
+            }
+            strSql.Append(" order by " + filedOrder);
+            return DbHelperSQL.Query(strSql.ToString());
+        }
+
+        public DataSet GetSelectList(int Top, string strWhere, string filedOrder)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("SELECT A.Id AS Id, A.Code, B.CarNumber, B.RealName AS Driver ");
+            strSql.Append("FROM mtms_TransportOrder A LEFT JOIN mtms_Driver B ON A.DriverId = B.Id ");
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);

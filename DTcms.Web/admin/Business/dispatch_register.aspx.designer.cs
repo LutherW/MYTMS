@@ -22,6 +22,15 @@ namespace DTcms.Web.admin.Business {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
+        /// ddlDriver 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlDriver;
+        
+        /// <summary>
         /// txtFactDispatchTime 控件。
         /// </summary>
         /// <remarks>
@@ -31,31 +40,40 @@ namespace DTcms.Web.admin.Business {
         protected global::System.Web.UI.WebControls.TextBox txtFactDispatchTime;
         
         /// <summary>
-        /// labMotorcade 控件。
+        /// txtArriveDate 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labMotorcade;
+        protected global::System.Web.UI.WebControls.TextBox txtArriveDate;
         
         /// <summary>
-        /// labCarNumber 控件。
+        /// txtFactDispatchCount 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labCarNumber;
+        protected global::System.Web.UI.WebControls.TextBox txtFactDispatchCount;
         
         /// <summary>
-        /// labDriver 控件。
+        /// txtFactWeight 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labDriver;
+        protected global::System.Web.UI.WebControls.TextBox txtFactWeight;
+        
+        /// <summary>
+        /// txtLoadingDate 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtLoadingDate;
         
         /// <summary>
         /// txtAdvance 控件。
@@ -67,13 +85,13 @@ namespace DTcms.Web.admin.Business {
         protected global::System.Web.UI.WebControls.TextBox txtAdvance;
         
         /// <summary>
-        /// labPayee 控件。
+        /// txtPayee 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labPayee;
+        protected global::System.Web.UI.WebControls.TextBox txtPayee;
         
         /// <summary>
         /// btnSubmit 控件。

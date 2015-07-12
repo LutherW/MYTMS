@@ -165,7 +165,7 @@ namespace DTcms.DAL
         {
 
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select Id, Name, CategoryName, Unit, Code  ");
+            strSql.Append("select *  ");
             strSql.Append("  from mtms_Goods ");
             strSql.Append(" where Id=@Id");
             SqlParameter[] parameters = {
@@ -187,6 +187,7 @@ namespace DTcms.DAL
                 model.CategoryName = ds.Tables[0].Rows[0]["CategoryName"].ToString();
                 model.Unit = ds.Tables[0].Rows[0]["Unit"].ToString();
                 model.Code = ds.Tables[0].Rows[0]["Code"].ToString();
+                model.Variety = ds.Tables[0].Rows[0]["Variety"].ToString();
 
                 return model;
             }

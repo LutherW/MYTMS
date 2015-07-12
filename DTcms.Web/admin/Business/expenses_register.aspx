@@ -128,37 +128,16 @@
 
         <div class="tab-content">
             <dl>
-                <dt>出车时间</dt>
-                <dd><asp:Label ID="labFactDispatchTime" runat="server" Text=""></asp:Label></dd>
-            </dl>
-            <dl>
-                <dt>回车时间</dt>
+                <dt>送达时间</dt>
                 <dd>
-                    <span class="input-date"><asp:TextBox ID="txtFactBackTime" runat="server" CssClass="input normal date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox><i>日期</i></span>
+                    <span class="input-date"><asp:TextBox ID="txtFactArriveDate" runat="server" CssClass="input normal date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox><i>日期</i></span>
                     <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
-                <dt>车队</dt>
+                <dt>预计回车时间</dt>
                 <dd>
-                    <asp:Label ID="labMotorcade" runat="server" Text=""></asp:Label>
-                </dd>
-            </dl>
-            <dl>
-                <dt>车号</dt>
-                <dd><asp:Label ID="labCarNumber" runat="server" Text=""></asp:Label></dd>
-            </dl>
-            <dl>
-                <dt>司机</dt>
-                <dd><asp:Label ID="labDriver" runat="server" Text=""></asp:Label></dd>
-            </dl>
-            <dl>
-                <dt>出车领款</dt>
-                <dd><asp:Label ID="labAdvance" runat="server" Text=""></asp:Label></dd>
-            </dl>
-            <dl>
-                <dt>领款人</dt>
-                <dd>
-                    <asp:Label ID="labPayee" runat="server" Text=""></asp:Label></dd>
+                    <span class="input-date"><asp:TextBox ID="txtBackTime" runat="server" CssClass="input normal date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox><i>日期</i></span>
+                    <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
                 <dt>应交还款</dt>
@@ -173,9 +152,33 @@
                     <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
-                <dt>司机费用(工资)</dt>
+                <dt>发货数量</dt>
                 <dd>
-                    <asp:TextBox ID="txtCarriage" runat="server" CssClass="input high" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请输入正确的数字" sucmsg=" ">0.00</asp:TextBox>元
+                    <asp:TextBox ID="txtFactDispatchCount" runat="server" CssClass="input high" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请输入正确的数字" sucmsg=" ">0.00</asp:TextBox>元
+                    <span class="Validform_checktip">*</span></dd>
+            </dl>
+            <dl>
+                <dt>发货重量</dt>
+                <dd>
+                    <asp:TextBox ID="txtFactWeight" runat="server" CssClass="input high" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请输入正确的数字" sucmsg=" ">0.00</asp:TextBox>元
+                    <span class="Validform_checktip">*</span></dd>
+            </dl>
+            <dl>
+                <dt>收货重量</dt>
+                <dd>
+                    <asp:TextBox ID="txtReceivedWeight" runat="server" CssClass="input high" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请输入正确的数字" sucmsg=" ">0.00</asp:TextBox>元
+                    <span class="Validform_checktip">*</span></dd>
+            </dl>
+            <dl>
+                <dt>卸货重量</dt>
+                <dd>
+                    <asp:TextBox ID="txtUnloadingWeight" runat="server" CssClass="input high" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请输入正确的数字" sucmsg=" ">0.00</asp:TextBox>元
+                    <span class="Validform_checktip">*</span></dd>
+            </dl>
+            <dl>
+                <dt>运费</dt>
+                <dd>
+                    <asp:TextBox ID="txtFactCarriage" runat="server" CssClass="input high" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请输入正确的数字" sucmsg=" ">0.00</asp:TextBox>元
                     <span class="Validform_checktip">*</span></dd>
             </dl>
         </div>
@@ -188,16 +191,13 @@
             <table id="transportOrderItems" style="margin-top: 15px; width: 100%; border: none;" class="ltable">
                 <tr data-name="dispatched">
                     <td width="5%"></td>
-                    <td align="left">单据编号</td>
-                    <td width="10%">往返</td>
+                    <td align="left">提单号</td>
                     <td width="10%">托运方</td>
                     <td width="10%">收货方</td>
                     <td width="9%">货物</td>
-                    <td width="6%">计量单位</td>
-                    <td width="9%">实发量</td>
-                    <td width="9%">实收量</td>
-                    <td width="5%">单价</td>
-                    <td width="5%">总价</td>
+                    <td width="9%">单价</td>
+                    <td width="9%">重量</td>
+                    <td width="5%">运费</td>
                 </tr>
                 <%=transportOrderItems %>
             </table>

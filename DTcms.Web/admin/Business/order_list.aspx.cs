@@ -15,28 +15,34 @@ namespace DTcms.Web.admin.Business
         protected int page;
         protected int pageSize;
 
-        protected string _goods;
-        protected string _customer1;
-        protected string _customer2;
+        protected int _goods;
+        protected int _customer1;
+        protected int _customer2;
         protected string _beginTime;
         protected string _endTime;
+        protected string _address1;
+        protected string _address2;
         protected string keywords = string.Empty;
+        private int transportOrderId = 0;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            ChkAdminLevel("customer_list", DTEnums.ActionEnum.View.ToString()); //检查权限
-            _goods = DTRequest.GetQueryString("goods");
-            _customer1 = DTRequest.GetQueryString("customer1");
-            _customer2 = DTRequest.GetQueryString("customer2");
+            ChkAdminLevel("order_list", DTEnums.ActionEnum.View.ToString()); //检查权限
+            this.transportOrderId = DTRequest.GetQueryInt("transportOrderId");
+            _goods = DTRequest.GetQueryInt("goods");
+            _customer1 = DTRequest.GetQueryInt("customer1");
+            _customer2 = DTRequest.GetQueryInt("customer2");
             _beginTime = DTRequest.GetQueryString("beginTime");
             _endTime = DTRequest.GetQueryString("endTime");
+            _address1 = DTRequest.GetQueryString("address1");
+            _address2 = DTRequest.GetQueryString("address2");
             this.keywords = DTRequest.GetQueryString("keywords");
 
             this.pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
             {
                 TreeBind(""); //绑定类别
-                RptBind("Id>0" + CombSqlTxt(_goods, _customer1, _customer2, _beginTime, _endTime, this.keywords), "Id desc");
+                RptBind(CombSqlTxt(_goods, _customer1, _customer2, _beginTime, _endTime, _address1, _address2, this.keywords), "Id desc");
             }
         }
 
@@ -50,7 +56,7 @@ namespace DTcms.Web.admin.Business
             ddlGoods.Items.Add(new ListItem("承运货物", ""));
             foreach (DataRow dr in goodsDT.Rows)
             {
-                this.ddlGoods.Items.Add(new ListItem(dr["Name"].ToString(), dr["Name"].ToString()));
+                this.ddlGoods.Items.Add(new ListItem(dr["Name"].ToString(), dr["Id"].ToString()));
             }
 
             BLL.Customer customerBll = new BLL.Customer();
@@ -64,11 +70,29 @@ namespace DTcms.Web.admin.Business
             {
                 if (!dr["Category"].ToString().Equals("托运方"))
                 {
-                    this.ddlCustomer2.Items.Add(new ListItem(dr["ShortName"].ToString(), dr["ShortName"].ToString()));
+                    this.ddlCustomer2.Items.Add(new ListItem(dr["ShortName"].ToString(), dr["Id"].ToString()));
                 }
-                if (!dr["Category"].ToString().Equals("收货方")) 
+                if (!dr["Category"].ToString().Equals("收货方"))
                 {
-                    this.ddlCustomer1.Items.Add(new ListItem(dr["ShortName"].ToString(), dr["ShortName"].ToString()));
+                    this.ddlCustomer1.Items.Add(new ListItem(dr["ShortName"].ToString(), dr["Id"].ToString()));
+                }
+            }
+
+            BLL.Address addressBll = new BLL.Address();
+            DataTable addressDT = addressBll.GetList(0, strWhere, "Id desc").Tables[0];
+            ddlLoadingAddress.Items.Clear();
+            ddlLoadingAddress.Items.Add(new ListItem("请选择装货地址", ""));
+            ddlUnloadingAddress.Items.Clear();
+            ddlUnloadingAddress.Items.Add(new ListItem("请选择卸货地址", ""));
+            foreach (DataRow dr in addressDT.Rows)
+            {
+                if (!dr["CategoryName"].ToString().Equals("卸货地址"))
+                {
+                    this.ddlLoadingAddress.Items.Add(new ListItem(dr["Name"].ToString(), dr["Name"].ToString()));
+                }
+                if (!dr["CategoryName"].ToString().Equals("装货地址"))
+                {
+                    this.ddlUnloadingAddress.Items.Add(new ListItem(dr["Name"].ToString(), dr["Name"].ToString()));
                 }
             }
         }
@@ -78,17 +102,25 @@ namespace DTcms.Web.admin.Business
         private void RptBind(string _strWhere, string _orderby)
         {
             this.page = DTRequest.GetQueryInt("page", 1);
-            if (!string.IsNullOrEmpty(_goods))
+            if (_goods > 0)
             {
-                ddlGoods.SelectedValue = _goods;
+                ddlGoods.SelectedValue = _goods.ToString();
             }
-            if (!string.IsNullOrEmpty(_customer1))
+            if (_customer1 > 0)
             {
-                ddlCustomer1.SelectedValue = _customer1;
+                ddlCustomer1.SelectedValue = _customer1.ToString();
             }
-            if (!string.IsNullOrEmpty(_customer2))
+            if (_customer2 > 0)
             {
-                ddlCustomer2.SelectedValue = _customer2;
+                ddlCustomer2.SelectedValue = _customer2.ToString();
+            }
+            if (!string.IsNullOrEmpty(_address1))
+            {
+                ddlLoadingAddress.SelectedValue = _address1;
+            }
+            if (!string.IsNullOrEmpty(_address2))
+            {
+                ddlUnloadingAddress.SelectedValue = _address2;
             }
             if (!string.IsNullOrEmpty(_beginTime))
             {
@@ -100,32 +132,32 @@ namespace DTcms.Web.admin.Business
             }
             this.txtKeywords.Text = this.keywords;
             BLL.Order bll = new BLL.Order();
-            this.rptList.DataSource = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
+            this.rptList.DataSource = bll.GetFullList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
             this.rptList.DataBind();
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}&page={6}",
-                _goods, _customer1, _customer2, _beginTime, _endTime, this.keywords, "__id__");
+            string pageUrl = Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}&page={8}",
+                _goods.ToString(), _customer1.ToString(), _customer2.ToString(), _beginTime, _endTime, _address1, _address2, this.keywords, "__id__");
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
         }
         #endregion
 
         #region 组合SQL查询语句==========================
-        protected string CombSqlTxt(string goods, string customer1, string customer2, string beginTime, string endTime, string _keywords)
+        protected string CombSqlTxt(int goods, int customer1, int customer2, string beginTime, string endTime, string address1, string address2, string _keywords)
         {
             StringBuilder strTemp = new StringBuilder();
-            if (!string.IsNullOrEmpty(goods))
+            if (goods > 0)
             {
-                strTemp.Append(" and Goods='" + goods + "'");
+                strTemp.Append(" and A.GoodsId=" + goods + "");
             }
-            if (!string.IsNullOrEmpty(customer1))
+            if (customer1 > 0)
             {
-                strTemp.Append(" and Shipper='" + customer1 + "'");
+                strTemp.Append(" and ShipperId=" + customer1 + "");
             }
-            if (!string.IsNullOrEmpty(customer2))
+            if (customer2 > 0)
             {
-                strTemp.Append(" and Receiver='" + customer2 + "'");
+                strTemp.Append(" and ReceiverId=" + customer2 + "");
             }
             if (!string.IsNullOrEmpty(beginTime))
             {
@@ -135,10 +167,18 @@ namespace DTcms.Web.admin.Business
             {
                 strTemp.Append(" and AcceptOrderTime<='" + endTime + "'");
             }
+            if (!string.IsNullOrEmpty(address1))
+            {
+                strTemp.Append(" and LoadingAddress='" + address1 + "'");
+            }
+            if (!string.IsNullOrEmpty(address2))
+            {
+                strTemp.Append(" and UnloadingAddress='" + address2 + "'");
+            }
             _keywords = _keywords.Replace("'", "");
             if (!string.IsNullOrEmpty(_keywords))
             {
-                strTemp.Append(" and (BillNumber like '%" + _keywords + "%' or Code like '%" + _keywords + "%')");
+                strTemp.Append(" and (BillNumber like '%" + _keywords + "%' or WeighbridgeNumber like '%" + _keywords + "%' or ContractNumber like '%" + _keywords + "%')");
             }
             return strTemp.ToString();
         }
@@ -162,27 +202,39 @@ namespace DTcms.Web.admin.Business
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}",
-                _goods, _customer1, _customer2, txtBeginTime.Text, txtEndTime.Text, txtKeywords.Text));
+            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}",
+                _goods.ToString(), _customer1.ToString(), _customer2.ToString(), txtBeginTime.Text, txtEndTime.Text, _address1, _address2, txtKeywords.Text));
         }
 
         //筛选类别
         protected void ddlGoods_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}",
-                ddlGoods.SelectedValue, _customer1, _customer2, _beginTime, _endTime, this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}",
+                ddlGoods.SelectedValue, _customer1.ToString(), _customer2.ToString(), _beginTime, _endTime, _address1, _address2, this.keywords));
         }
 
         protected void ddlCustomer1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}",
-                _goods, ddlCustomer1.SelectedValue, _customer2, _beginTime, _endTime, this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}",
+                _goods.ToString(), ddlCustomer1.SelectedValue, _customer2.ToString(), _beginTime, _endTime, _address1, _address2, this.keywords));
         }
 
         protected void ddlCustomer2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&keywords={5}",
-                _goods, _customer1, ddlCustomer2.SelectedValue, _beginTime, _endTime, this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}",
+                _goods.ToString(), _customer1.ToString(), ddlCustomer2.SelectedValue, _beginTime, _endTime, _address1, _address2, this.keywords));
+        }
+
+        protected void ddlLoadingAddress_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}",
+                _goods.ToString(), ddlCustomer1.SelectedValue, _customer2.ToString(), _beginTime, _endTime, ddlLoadingAddress.SelectedValue, _address2, this.keywords));
+        }
+
+        protected void ddlUnloadingAddress_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}",
+                _goods.ToString(), _customer1.ToString(), ddlCustomer2.SelectedValue, _beginTime, _endTime, _address1, ddlUnloadingAddress.SelectedValue, this.keywords));
         }
 
         //设置分页数量
@@ -196,8 +248,8 @@ namespace DTcms.Web.admin.Business
                     Utils.WriteCookie("order_list_page_size", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&keywords={3}",
-                _goods, _customer1, _customer2, this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}",
+                _goods.ToString(), _customer1.ToString(), _customer2.ToString(), _beginTime, _endTime, _address1, _address2, this.keywords));
         }
 
 
@@ -226,8 +278,23 @@ namespace DTcms.Web.admin.Business
             }
             AddAdminLog(DTEnums.ActionEnum.Delete.ToString(), "删除订单" + sucCount + "条，失败" + errorCount + "条"); //记录日志
             JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！",
-                Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&keywords={3}", _goods, _customer1, _customer2, this.keywords), "Success");
+                Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}", _goods.ToString(), _customer1.ToString(), _customer2.ToString(), _beginTime, _endTime, _address1, _address2, this.keywords), "Success");
         }
 
+
+        protected string GetStatus(string status) 
+        {
+            switch (status)
+            {
+                case "0":
+                    return "待发车";
+                case "1":
+                    return "待报账";
+                case "2":
+                    return "待回单";
+                default:
+                    return "";
+            }
+        }
     }
 }

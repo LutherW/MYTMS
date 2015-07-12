@@ -40,13 +40,22 @@ namespace DTcms.Web.admin.Business {
         protected global::System.Web.UI.WebControls.Label labFactDispatchTime;
         
         /// <summary>
-        /// labMotorcadeName 控件。
+        /// labDriver 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labMotorcadeName;
+        protected global::System.Web.UI.WebControls.Label labDriver;
+        
+        /// <summary>
+        /// labLinkTel 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label labLinkTel;
         
         /// <summary>
         /// labCarNumber 控件。
@@ -56,15 +65,6 @@ namespace DTcms.Web.admin.Business {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label labCarNumber;
-        
-        /// <summary>
-        /// labDriver 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labDriver;
         
         /// <summary>
         /// labAdvance 控件。

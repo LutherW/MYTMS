@@ -106,7 +106,7 @@
             <a href="dispatch_register_list.aspx" class="back"><i></i><span>返回列表页</span></a>
             <a href="../center.aspx" class="home"><i></i><span>首页</span></a>
             <i class="arrow"></i>
-            <span>出车登记列表</span>
+            <span>出车登记管理</span>
             <i class="arrow"></i>
             <span>出车登记</span>
         </div>
@@ -118,8 +118,7 @@
             <div id="floatHead" class="content-tab">
                 <div class="content-tab-ul-wrap">
                     <ul>
-                        <li><a href="javascript:;" onclick="tabs(this);" class="selected">运输单信息</a></li>
-                        <li><a href="javascript:;" onclick="tabs(this);">承运单信息</a></li>
+                        <li><a href="javascript:;" onclick="tabs(this);" class="selected">登记信息</a></li>
                     </ul>
                 </div>
             </div>
@@ -127,24 +126,38 @@
 
         <div class="tab-content">
             <dl>
+                <dt>司机</dt>
+                <dd><asp:DropDownList ID="ddlDriver" runat="server" datatype="*" errormsg="请选择司机" sucmsg=" " Enabled="false"></asp:DropDownList></dd>
+            </dl>
+            <dl>
                 <dt>出车时间</dt>
                 <dd>
                     <span class="input-date"><asp:TextBox ID="txtFactDispatchTime" runat="server" CssClass="input normal date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox><i>日期</i></span>
                     <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
-                <dt>车队</dt>
+                <dt>预计到达时间</dt>
                 <dd>
-                    <asp:Label ID="labMotorcade" runat="server" Text=""></asp:Label>
-                </dd>
+                    <span class="input-date"><asp:TextBox ID="txtArriveDate" runat="server" CssClass="input normal date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox><i>日期</i></span>
+                    <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
-                <dt>车号</dt>
-                <dd><asp:Label ID="labCarNumber" runat="server" Text=""></asp:Label></dd>
+                <dt>实际发货数量</dt>
+                <dd>
+                    <asp:TextBox ID="txtFactDispatchCount" runat="server" CssClass="input high" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请输入正确的数字" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
-                <dt>司机</dt>
-                <dd><asp:Label ID="labDriver" runat="server" Text=""></asp:Label></dd>
+                <dt>实际重量(吨位)</dt>
+                <dd>
+                    <asp:TextBox ID="txtFactWeight" runat="server" CssClass="input high" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请输入正确的数字" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip">*</span></dd>
+            </dl>
+            <dl>
+                <dt>装货时间</dt>
+                <dd>
+                    <span class="input-date"><asp:TextBox ID="txtLoadingDate" runat="server" CssClass="input normal date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox><i>日期</i></span>
+                    <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
                 <dt>出车支款</dt>
@@ -155,31 +168,9 @@
             <dl>
                 <dt>领款人</dt>
                 <dd>
-                    <asp:Label ID="labPayee" runat="server" Text=""></asp:Label></dd>
+                    <asp:TextBox ID="txtPayee" runat="server" CssClass="input high" datatype="*2-5" errormsg="输入2-100个字符" sucmsg=" "></asp:TextBox>
+                    <span class="Validform_checktip">*</span></dd>
             </dl>
-        </div>
-        <div class="tab-content" style="display: none; padding: 0 0 10px 0;">
-            <table style="margin-top: 15px; width: 100%;">
-                <tr style="padding-bottom: 20px;">
-                    <td colspan="12" style="text-align: center; font-weight: bold;">调度订单项</td>
-                </tr>
-            </table>
-            <table id="transportOrderItems" style="margin-top: 15px; width: 100%; border: none;" class="ltable">
-                <tr data-name="dispatched">
-                    <td width="5%"></td>
-                    <td align="left">单据编号</td>
-                    <td width="10%">提单号</td>
-                    <td width="10%">托运方</td>
-                    <td width="10%">收货方</td>
-                    <td width="9%">货物</td>
-                    <td width="6%">计量单位</td>
-                    <td width="10%">包车/预发/已调</td>
-                    <td width="9%">调度计量</td>
-                    <td width="5%">单价</td>
-                    <td width="5%">总价</td>
-                </tr>
-                <%=transportOrderItems %>
-            </table>
         </div>
         <!--/内容-->
 

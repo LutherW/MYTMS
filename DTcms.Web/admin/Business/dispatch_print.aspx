@@ -19,86 +19,6 @@
     <script type="text/javascript" src="../js/jquery.jqprint-0.3.js"></script>
     <link href="../skin/default/style.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
-        $(function () {
-            //初始化表单验证
-            $("#form1").initValidform();
-
-            $("#orders tr[data-name='dispatching'] :checkbox").click(function () {
-                var checked = $(this).attr("checked");
-                if (checked) {
-                    $(this).removeAttr("checked");
-                    removeTransportOrderItem($(this).val());
-                } else {
-                    $(this).attr("checked", "checked");
-                    var id = $(this).val();
-                    var order = {};
-                    order.id = id;
-                    order.code = $("#code_" + id).html();
-                    order.arrivedTime = $("#arrivedTime_" + id).html();
-                    order.shipper = $("#shipper_" + id).html();
-                    order.receiver = $("#receiver_" + id).html();
-                    order.unit = $("#unit_" + id).html();
-                    order.quantity = $("#quantity_" + id).html();
-                    order.goods = $("#goods_" + id).html();
-                    order.billNumber = $("#billNumber_" + id).html();
-                    order.unitPrice = $("#unitPrice_" + id).html();
-                    order.totalPrice = $("#totalPrice_" + id).html();
-                    addTransportOrderItem(order);
-                }
-            });
-
-            $("#ddlMotorcade").change(function () {
-                var val = $(this).val();
-                if (val != "") {
-                    $.getJSON("../../tools/Vehicle.ashx", { "action": "list", "motorcade": val }, function (data) {
-                        if (data.status == 1) {
-                            var options = "";
-                            $.each(data.vehicles, function (i, n) {
-                                options += "<option value='" + data.vehicles[i].carCode + "'>" + data.vehicles[i].carCode + "</option>"
-                            });
-                            $("#ddlCarNumber").html(options);
-                        }
-                    });
-                }
-            });
-
-            $("#ddlCarNumber").change(function () {
-                var val = $(this).val();
-                if (val != "") {
-                    $.getJSON("../../tools/Driver.ashx", { "action": "details", "carNumber": val }, function (data) {
-                        if (data.status == 1) {
-                            $("#txtDriver").val(data.name);
-                        }
-                    });
-                } else {
-                    $("#txtDriver").val("");
-                }
-            });
-        });
-
-        function addTransportOrderItem(order) {
-            if ($("tr[data-value='" + order.id + "']").length == 0) {
-                var html = "<tr data-value=\"" + order.id + "\">";
-                html += "<td width=\"5%\"><input type=\"hidden\" name=\"orderId\" value=\"" + order.id + "\"/></td>";
-                html += "<td align=\"left\">" + order.code + "</td>";
-                html += "<td width=\"10%\">" + order.billNumber + "</td>";
-                html += "<td width=\"10%\">" + order.shipper + "</td>";
-                html += "<td width=\"10%\">" + order.receiver + "</td>";
-                html += "<td width=\"10%\">" + order.goods + "</td>";
-                html += "<td width=\"9%\" align=\"center\">" + order.unit + "</td>";
-                html += "<td width=\"6%\">" + order.quantity + "</td>";
-                html += "<td width=\"5%\"><input type=\"text\" name=\"factDispatchCount\" value=\"0.00\"/></td>";
-                html += "<td width=\"5%\">" + order.unitPrice + "</td>";
-                html += "<td width=\"5%\">" + order.totalPrice + "</td>";
-                html += "</tr>";
-                $("#transportOrderItems tr[data-name='dispatched']").after(html);
-            }
-        }
-
-        function removeTransportOrderItem(orderId) {
-            $("#transportOrderItems tr").remove("[data-value='" + orderId + "']");
-        }
-
         function print() {
             $("#print_content").jqprint();
         }
@@ -112,7 +32,7 @@
             <a href="dispatch_register_list.aspx" class="back"><i></i><span>返回列表页</span></a>
             <a href="../center.aspx" class="home"><i></i><span>首页</span></a>
             <i class="arrow"></i>
-            <span>出车登记列表</span>
+            <span>出车登记管理</span>
             <i class="arrow"></i>
             <span>派车单打印</span>
         </div>
@@ -146,12 +66,12 @@
                         <asp:Label ID="labCode" runat="server" Text=""></asp:Label></td>
                     <td width="10%" align="right">出车时间：</td>
                     <td align="left"><asp:Label ID="labFactDispatchTime" runat="server" Text=""></asp:Label></td>
-                    <td width="9%" align="right">车队：</td>
-                    <td align="left"><asp:Label ID="labMotorcadeName" runat="server" Text=""></asp:Label></td>
-                    <td width="10%" align="right">车号：</td>
-                    <td align="left"><asp:Label ID="labCarNumber" runat="server" Text=""></asp:Label></td>
                     <td width="8%" align="right">司机：</td>
                     <td align="left"><asp:Label ID="labDriver" runat="server" Text=""></asp:Label></td>
+                    <td width="9%" align="right">联系电话：</td>
+                    <td align="left"><asp:Label ID="labLinkTel" runat="server" Text=""></asp:Label></td>
+                    <td width="10%" align="right">车号：</td>
+                    <td align="left"><asp:Label ID="labCarNumber" runat="server" Text=""></asp:Label></td>
                     <td width="10%" align="right">出车领款：</td>
                     <td align="left">￥<asp:Label ID="labAdvance" runat="server" Text=""></asp:Label></td>
                     <td width="8%" align="right">领款人：</td>
@@ -168,14 +88,15 @@
                     <td width="1%"></td>
                     <td align="left">订单编号</td>
                     <td width="10%">提单号</td>
+                    <td width="10%">磅单号</td>
                     <td width="10%">托运方</td>
                     <td width="10%">收货方</td>
                     <td width="9%">货物</td>
-                    <td width="6%">计量单位</td>
-                    <td width="10%">包车/预发/已调</td>
-                    <td width="9%">调度计量</td>
+                    <td width="10%">数量</td>
+                    <td width="9%">重量(吨位)</td>
                     <td width="5%">单价</td>
                     <td width="5%">总价</td>
+                    <td width="5%">装卸费</td>
                 </tr>
                 <%=transportOrderItems %>
             </table>

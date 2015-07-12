@@ -7,13 +7,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>订单管理</title>
-    <script type="text/javascript" src="../../scripts/jquery/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="../../scripts/lhgdialog/lhgdialog.js?skin=idialog"></script>
+    <script type="text/javascript" src="/scripts/jquery/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="/scripts/lhgdialog/lhgdialog.js?skin=idialog"></script>
     <script type="text/javascript" src="../js/layout.js"></script>
-    <script type="text/javascript" src="../../scripts/datepicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="/scripts/datepicker/WdatePicker.js"></script>
     <script type="text/javascript" charset="utf-8" src="../js/jquery.browser.js"></script>
     <script type="text/javascript" charset="utf-8" src="../js/jquery.jqprint-0.3.js"></script>
-    <link href="../../css/pagination.css" rel="stylesheet" type="text/css" />
+    <link href="/css/pagination.css" rel="stylesheet" type="text/css" />
     <link href="../skin/default/style.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
         $(function () {
@@ -37,6 +37,7 @@
             <i class="arrow"></i>
             <span>订单列表</span>
         </div>
+        <div class="line10"></div>
         <!--/导航栏-->
 
         <!--工具栏-->
@@ -44,7 +45,7 @@
             <div id="floatHead" class="toolbar">
                 <div class="l-list">
                     <ul class="icon-list">
-                        <li><a class="add" href="order_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>"><i></i><span>新增</span></a></li>
+                        <li><a class="add" href="order_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>"><i></i><span>新建</span></a></li>
                         <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
                         <li>
                             <asp:LinkButton ID="btnDelete" runat="server" CssClass="del" OnClientClick="return ExePostBack('btnDelete');" OnClick="btnDelete_Click"><i></i><span>删除</span></asp:LinkButton></li>
@@ -59,6 +60,12 @@
                         </div>
                         <div class="rule-single-select">
                             <asp:DropDownList ID="ddlCustomer2" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlCustomer2_SelectedIndexChanged"></asp:DropDownList>
+                        </div>
+                        <div class="rule-single-select">
+                            <asp:DropDownList ID="ddlLoadingAddress" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlLoadingAddress_SelectedIndexChanged"></asp:DropDownList>
+                        </div>
+                        <div class="rule-single-select">
+                            <asp:DropDownList ID="ddlUnloadingAddress" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlUnloadingAddress_SelectedIndexChanged"></asp:DropDownList>
                         </div>
                     </div>
                 </div>
@@ -85,21 +92,22 @@
                 <HeaderTemplate>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr>
-                            <th width="5%">选择</th>
+                            <th width="3%">选择</th>
+                            <th align="left">接单/计划时间</th>
                             <th width="6%">提单号</th>
                             <th width="6%">地磅号</th>
-                            <th align="left" width="7%">接单时间</th>
-                            <th width="7%">要求到货时间</th>
                             <th width="8%">托运方</th>
-                            <th>收货方</th>
-                            <th width="6%">货物</th>
-                            <th width="6%">计量单位</th>
-                            <th width="8%">包车/预发/已调</th>
-                            <th width="6%">单价</th>
-                            <th width="6%">计算公式</th>
-                            <th width="6%">总价</th>
-                            <th width="6%">结算方式</th>
-                            <th width="5%">操作</th>
+                            <th width="8%">收货方</th>
+                            <th width="5%">装货地址</th>
+                            <th width="5%">卸货地址</th>
+                            <th width="7%">司机</th>
+                            <th width="12%">货物/种类/品种/数量</th>
+                            <th width="6%">单价/重量</th>
+                            <th width="9%">运费/已结/下余</th>
+                            <th width="5%">装卸费</th>
+                            <th width="5%">磅单/调单</th>
+                            <th width="4%">状态</th>
+                            <th width="4%">操作</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
@@ -108,24 +116,25 @@
                             <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" Style="vertical-align: middle;" />
                             <asp:HiddenField ID="hidId" Value='<%#Eval("Id")%>' runat="server" />
                         </td>
+                        <td><%#string.Format("{0:d}/<br/>{1:d}", Eval("AcceptOrderTime"), Eval("DispatchTime"))%></td>
                         <td align="center"><%#Eval("BillNumber")%></td>
                         <td align="center"><%#Eval("WeighbridgeNumber")%></td>
-                        <td><%#string.Format("{0:d}", Eval("AcceptOrderTime"))%></td>
-                        <td align="center"><%#string.Format("{0:d}", Eval("ArrivedTime"))%></td>
                         <td align="center"><%#Eval("Shipper")%></td>
                         <td align="center"><%#Eval("Receiver")%></td>
-                        <td align="center"><%#Eval("Goods")%></td>
-                        <td align="center"><%#Eval("Unit")%></td>
-                        <td align="center"><%#Eval("IsCharteredCar").ToString().Equals("1") ? "包车" : Eval("Quantity").ToString() + "/" + Eval("DispatchedCount").ToString()%></td>
-                        <td align="center">￥<%#string.Format("{0:N2}", Eval("UnitPrice"))%></td>
-                        <td align="center"><%#Eval("Formula")%></td>
-                        <td align="center">￥<%#string.Format("{0:N2}", Eval("TotalPrice"))%></td>
-                        <td align="center"><%#Eval("SettleAccountsWay")%></td>
-                        <td align="center"><a href="order_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">修改</a></td>
+                        <td align="center"><%#Eval("LoadingAddress")%></td>
+                        <td align="center"><%#Eval("UnloadingAddress")%></td>
+                        <td align="center"><%#string.Format("{0}<br/>({1})", Eval("CarNumber"), Eval("DriverTel"))%></td>
+                        <td align="center"><%#string.Format("{0}/{1}/<br/>{2}/{3:N2}", Eval("GoodsName"), Eval("GoodsCategory"), Eval("GoodsVariety"), Eval("Quantity"))%></td>
+                        <td align="center"><%#string.Format("{0:N2}/{1:N2}", Eval("UnitPrice"), Eval("Quantity"))%></td>
+                        <td align="center"><%#string.Format("{0:N2}/<br/>{1:N2}/{2:N2}", Eval("Freight"), Eval("PaidFreight"), Eval("UnpaidFreight"))%></td>
+                        <td align="center">￥<%#string.Format("{0:N2}", Eval("HandlingCharge"))%></td>
+                        <td align="center"><%#string.Format("{0}/{1}", (Eval("IsWeightNote").ToString().Equals("1") ? "是" : "否"), (Eval("IsAllotted").ToString().Equals("1") ? "是" : "否"))%></td>
+                        <td align="center"><%#GetStatus(Eval("TransportOrderStatus").ToString())%></td>
+                        <td align="center"><a href="order_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id") %>">修改</a></td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"19\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"16\">暂无记录</td></tr>" : ""%>
 </table>
                 </FooterTemplate>
             </asp:Repeater>
@@ -144,3 +153,4 @@
     </form>
 </body>
 </html>
+

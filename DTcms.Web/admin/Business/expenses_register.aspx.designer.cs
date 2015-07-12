@@ -22,67 +22,22 @@ namespace DTcms.Web.admin.Business {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// labFactDispatchTime 控件。
+        /// txtFactArriveDate 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labFactDispatchTime;
+        protected global::System.Web.UI.WebControls.TextBox txtFactArriveDate;
         
         /// <summary>
-        /// txtFactBackTime 控件。
+        /// txtBackTime 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtFactBackTime;
-        
-        /// <summary>
-        /// labMotorcade 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labMotorcade;
-        
-        /// <summary>
-        /// labCarNumber 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labCarNumber;
-        
-        /// <summary>
-        /// labDriver 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labDriver;
-        
-        /// <summary>
-        /// labAdvance 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labAdvance;
-        
-        /// <summary>
-        /// labPayee 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labPayee;
+        protected global::System.Web.UI.WebControls.TextBox txtBackTime;
         
         /// <summary>
         /// txtRepayment 控件。
@@ -103,13 +58,49 @@ namespace DTcms.Web.admin.Business {
         protected global::System.Web.UI.WebControls.TextBox txtFactRepayment;
         
         /// <summary>
-        /// txtCarriage 控件。
+        /// txtFactDispatchCount 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCarriage;
+        protected global::System.Web.UI.WebControls.TextBox txtFactDispatchCount;
+        
+        /// <summary>
+        /// txtFactWeight 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFactWeight;
+        
+        /// <summary>
+        /// txtReceivedWeight 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtReceivedWeight;
+        
+        /// <summary>
+        /// txtUnloadingWeight 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtUnloadingWeight;
+        
+        /// <summary>
+        /// txtFactCarriage 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFactCarriage;
         
         /// <summary>
         /// btnSubmit 控件。
