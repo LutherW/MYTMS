@@ -68,12 +68,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="admin\Business\dispatch_print.aspx" />
+    <Content Include="admin\Business\dispatch_records.aspx" />
     <Content Include="admin\Business\dispatch_register.aspx" />
     <Content Include="admin\Business\dispatch_register_list.aspx" />
     <Content Include="admin\Business\expenses_register.aspx" />
     <Content Include="admin\Business\expenses_register_list.aspx" />
     <Content Include="admin\Business\order_edit.aspx" />
     <Content Include="admin\Business\order_list.aspx" />
+    <Content Include="admin\Business\receipt_register.aspx" />
+    <Content Include="admin\Business\receipt_register_list.aspx" />
+    <Content Include="admin\Business\receipt_warning.aspx" />
+    <Content Include="admin\Business\receipt_warning_list.aspx" />
     <Content Include="admin\Business\transportOrder_edit.aspx" />
     <Content Include="admin\Business\transportOrder_list.aspx" />
     <Content Include="admin\center.aspx" />
@@ -101,6 +106,8 @@
     <Content Include="admin\channel\channel_list.aspx" />
     <Content Include="admin\dialog\dialog_channel.aspx" />
     <Content Include="admin\dialog\dialog_rewrite.aspx" />
+    <Content Include="admin\GainAnalysis\total_gain_list.aspx" />
+    <Content Include="admin\GainAnalysis\total_month_gain.aspx" />
     <Content Include="admin\ie6update.html" />
     <Content Include="admin\index.aspx" />
     <Content Include="admin\js\jquery.browser.js" />
@@ -606,6 +613,13 @@
     <Compile Include="admin\Business\dispatch_print.aspx.designer.cs">
       <DependentUpon>dispatch_print.aspx</DependentUpon>
     </Compile>
+    <Compile Include="admin\Business\dispatch_records.aspx.cs">
+      <DependentUpon>dispatch_records.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\Business\dispatch_records.aspx.designer.cs">
+      <DependentUpon>dispatch_records.aspx</DependentUpon>
+    </Compile>
     <Compile Include="admin\Business\dispatch_register.aspx.cs">
       <DependentUpon>dispatch_register.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -647,6 +661,34 @@
     </Compile>
     <Compile Include="admin\Business\order_list.aspx.designer.cs">
       <DependentUpon>order_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\Business\receipt_register.aspx.cs">
+      <DependentUpon>receipt_register.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\Business\receipt_register.aspx.designer.cs">
+      <DependentUpon>receipt_register.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\Business\receipt_register_list.aspx.cs">
+      <DependentUpon>receipt_register_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\Business\receipt_register_list.aspx.designer.cs">
+      <DependentUpon>receipt_register_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\Business\receipt_warning.aspx.cs">
+      <DependentUpon>receipt_warning.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\Business\receipt_warning.aspx.designer.cs">
+      <DependentUpon>receipt_warning.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\Business\receipt_warning_list.aspx.cs">
+      <DependentUpon>receipt_warning_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\Business\receipt_warning_list.aspx.designer.cs">
+      <DependentUpon>receipt_warning_list.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\Business\transportOrder_edit.aspx.cs">
       <DependentUpon>transportOrder_edit.aspx</DependentUpon>
@@ -827,6 +869,20 @@
     <Compile Include="admin\dialog\dialog_rewrite.aspx.cs">
       <DependentUpon>dialog_rewrite.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\GainAnalysis\total_gain_list.aspx.cs">
+      <DependentUpon>total_gain_list.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\GainAnalysis\total_gain_list.aspx.designer.cs">
+      <DependentUpon>total_gain_list.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\GainAnalysis\total_month_gain.aspx.cs">
+      <DependentUpon>total_month_gain.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\GainAnalysis\total_month_gain.aspx.designer.cs">
+      <DependentUpon>total_month_gain.aspx</DependentUpon>
     </Compile>
     <Compile Include="admin\index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>
@@ -1286,7 +1342,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="admin\GainAnalysis\" />
     <Folder Include="aspx\mobile\" />
     <Folder Include="aspx\plugin\" />
     <Folder Include="html\" />

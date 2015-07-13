@@ -39,6 +39,16 @@ namespace DTcms.BLL
             return dal.Update(model);
         }
 
+        public bool Update(DTcms.Model.TransportOrder model, IList<Model.Order> orders, IList<Model.Consumption> consumptions)
+        {
+            return dal.Update(model, orders, consumptions);
+        }
+
+        public bool Update(int id, DateTime warningTime) 
+        {
+            return dal.Update(id, warningTime);
+        }
+
         /// <summary>
         /// 删除一条数据
         /// </summary>
@@ -95,6 +105,12 @@ namespace DTcms.BLL
         {
             return dal.GetList(strWhere);
         }
+
+        public DataSet GetTotalList(string strWhere)
+        {
+            return dal.GetTotalList(strWhere);
+        }
+
         /// <summary>
         /// 获得前几行数据
         /// </summary>

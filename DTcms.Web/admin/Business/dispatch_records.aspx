@@ -6,7 +6,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>发车记录</title>
+    <title>运输单管理</title>
     <script type="text/javascript" src="../../scripts/jquery/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="../../scripts/lhgdialog/lhgdialog.js?skin=idialog"></script>
     <script type="text/javascript" src="../js/layout.js"></script>
@@ -19,10 +19,21 @@
         $(function () {
 
         });
+
         function print() {
             $("#print_content").jqprint();
         }
 
+        function showOrders(id) {
+            var dialog = $.dialog({
+                title: '订单列表',
+                content: 'url:dialog/dialog_order_list.aspx?transportOrderId=' + id,
+                min: false,
+                max: false,
+                lock: true,
+                width: 1300
+            });
+        }
     </script>
 </head>
 
@@ -33,45 +44,30 @@
             <a href="javascript:history.back(-1);" class="back"><i></i><span>返回上一页</span></a>
             <a href="../center.aspx" class="home"><i></i><span>首页</span></a>
             <i class="arrow"></i>
-            <span>发车记录</span>
+            <span>发车记录管理</span>
             <i class="arrow"></i>
-            <span>发车记录列表</span>
+            <span>发车记录</span>
         </div>
         <!--/导航栏-->
 
         <!--工具栏-->
         <div class="toolbar-wrap">
-            <div id="floatHead" class="toolbar">
+            <div id="Div1" class="toolbar">
                 <div class="l-list">
-                    <ul class="icon-list">
-                        <li><a class="all" href="javascript:void(0);" onclick="print();"><i></i><span>打印</span></a></li>
-                    </ul>
                     <div class="menu-list">
                         <span style="font-size: 12px;">车号:
                         </span>
                         <div class="rule-single-select">
-                            <asp:DropDownList ID="ddlCarNumber" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlCarNumber_SelectedIndexChanged"></asp:DropDownList>
+                            <asp:DropDownList ID="ddlDriver" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlDriver_SelectedIndexChanged"></asp:DropDownList>
                         </div>
-                        <span style="font-size: 12px;">托运方:
-                        </span>
-                        <div class="rule-single-select">
-                            <asp:DropDownList ID="ddlCustomer1" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlCustomer1_SelectedIndexChanged"></asp:DropDownList>
-                        </div>
-                        <%--<span style="font-size:12px;">
-                            收货方:
-                        </span>
-                        <div class="rule-single-select">
-                            <asp:DropDownList ID="ddlCustomer2" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlCustomer2_SelectedIndexChanged"></asp:DropDownList>
-                        </div>--%>
                     </div>
                 </div>
                 <div class="r-list">
                     <div style="float: left; margin-right: 10px; font-size: 12px;">
-                        回车时间：<asp:TextBox ID="txtBeginTime" runat="server" CssClass="input" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox>
+                        出车时间：<asp:TextBox ID="txtBeginTime" runat="server" CssClass="input" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox>
                         -
                         <asp:TextBox ID="txtEndTime" runat="server" CssClass="input" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox>
                     </div>
-
                     <div style="float: right;">
                         <asp:TextBox ID="txtKeywords" runat="server" CssClass="keyword" />
                         <asp:LinkButton ID="lbtnSearch" runat="server" CssClass="btn-search" OnClick="btnSearch_Click">查询</asp:LinkButton>
@@ -88,19 +84,19 @@
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
                         <tr>
                             <th width="5%">选择</th>
-                            <th align="left" width="7%">出车时间</th>
-                            <th align="left" width="7%">回车时间</th>
-                            <th width="8%">托运方</th>
-                            <th width="8%">收货方</th>
-                            <th align="left" width="7%">签单时间</th>
-                            <th width="5%">承运货物</th>
-                            <th width="5%">数量</th>
-                            <th width="8%">车号</th>
+                            <th>出车时间</th>
+                            <th>回车时间</th>
+                            <th width="9%">客户描述</th>
+                            <th width="9%">路线描述</th>
                             <th width="5%">司机</th>
-                            <th width="5%">单价</th>
-                            <th width="5%">总运费</th>
+                            <th width="8%">车号</th>
+                            <th width="8%">单价(运价)</th>
+                            <th width="6%">重量</th>
+                            <th width="8%">运费(总价)</th>
+                            <th width="10%">里程(装载/空载公里)</th>
+                            <th width="8%">厂结运费</th>
                             <th width="5%">回单日期</th>
-                            <th width="5%">状态</th>
+                            <th width="7%">状态</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
@@ -109,23 +105,26 @@
                             <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" Style="vertical-align: middle;" />
                             <asp:HiddenField ID="hidId" Value='<%#Eval("Id")%>' runat="server" />
                         </td>
-                        <td><%#string.IsNullOrEmpty(Eval("FactDispatchTime").ToString()) ? "" : Convert.ToDateTime(Eval("FactDispatchTime")).ToString("yyyy/MM/dd")%></td>
-                        <td><%#string.IsNullOrEmpty(Eval("FactBackTime").ToString()) ? "" : Convert.ToDateTime(Eval("FactBackTime")).ToString("yyyy/MM/dd")%></td>
-                        <td align="center"><%#Eval("Shipper")%></td>
-                        <td align="center"><%#Eval("Receiver")%></td>
-                        <td align="center"><%#string.IsNullOrEmpty(Eval("AcceptOrderTime").ToString()) ? "" : Convert.ToDateTime(Eval("AcceptOrderTime")).ToString("yyyy/MM/dd")%></td>
-                        <td align="center"><%#Eval("Goods")%></td>
-                        <td align="center"><%#Eval("FactDispatchCount")%></td>
-                        <td align="center"><%#Eval("CarNumber")%></td>
+                        <td align="center"><%#string.Format("{0:d}", Eval("FactDispatchTime"))%></td>
+                        <td align="center"><%#string.IsNullOrEmpty(Eval("FactBackTime").ToString()) ? "--" : string.Format("{0:d}", Eval("FactBackTime"))%></td>
+                        <td align="center"><%#Eval("CustomerRemarks")%></td>
+                        <td align="center"><%#Eval("HaulwayRemarks")%></td>
                         <td align="center"><%#Eval("Driver")%></td>
-                        <td align="center">￥<%#string.Format("{0:N2}", Eval("UnitPrice"))%></td>
-                        <td align="center">￥<%#string.Format("{0:N2}", Eval("TotalPrice"))%></td>
-                        <td align="center"><%#string.IsNullOrEmpty(Eval("ReceiptTime").ToString()) ? "" : Convert.ToDateTime(Eval("ReceiptTime")).ToString("yyyy/MM/dd")%></td>
-                        <td align="center"><%#GetStatus(Eval("Status").ToString())%></td>
+                        <td align="center"><%#Eval("CarNumber")%></td>
+                        <td align="center">￥<%#string.Format("{0:N2}", Eval("CarriageUnitPrice"))%></td>
+                        <td align="center"><%#string.Format("{0:N2}", Eval("Weight"))%></td>
+                        <td align="center">￥<%#string.Format("{0:N2}", Eval("Carriage"))%></td>
+                        <td align="center"><%#string.Format("{0:N2}/{1:N2}", Eval("LoadingCapacityRunning"), Eval("NoLoadingCapacityRunning"))%></td>
+                        <td align="center">￥<%#GetOrderTotalPrice(Eval("Id").ToString())%></td>
+                        <td><%#string.IsNullOrEmpty(Eval("ReceiptTime").ToString()) ? "--" : string.Format("{0:d}", Eval("ReceiptTime"))%></td>
+                        <td align="center">
+                            <%#GetStatus(Eval("Status").ToString())%>
+                            <a href='javascript:void(0);' onclick="showOrders(<%#Eval("Id") %>);">订单</a>
+                        </td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>
-                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"15\">暂无记录</td></tr>" : ""%>
+                    <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"14\">暂无记录</td></tr>" : ""%>
 </table>
                 </FooterTemplate>
             </asp:Repeater>

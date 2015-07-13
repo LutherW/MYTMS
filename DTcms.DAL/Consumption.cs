@@ -63,6 +63,30 @@ namespace DTcms.DAL
 
         }
 
+        public int Add(SqlConnection conn, SqlTransaction trans, Model.Consumption model)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("insert into mtms_Consumption(");
+            strSql.Append("Name,TransportOrderId,Money");
+            strSql.Append(") values (");
+            strSql.Append("@Name,@TransportOrderId,@Money");
+            strSql.Append(") ");
+            strSql.Append(";select @@IDENTITY");
+            SqlParameter[] parameters = {
+			            new SqlParameter("@Name", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@TransportOrderId", SqlDbType.Int,4) ,            
+                        new SqlParameter("@Money", SqlDbType.Decimal,9)             
+              
+            };
+
+            parameters[0].Value = model.Name;
+            parameters[1].Value = model.TransportOrderId;
+            parameters[2].Value = model.Money;
+
+            return DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+
+        }
+
 
         /// <summary>
         /// 更新一条数据
@@ -125,6 +149,20 @@ namespace DTcms.DAL
             {
                 return false;
             }
+        }
+
+        public bool Delete(SqlConnection conn, SqlTransaction trans, int transportOrderId)
+        {
+
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("delete from mtms_Consumption ");
+            strSql.Append(" where TransportOrderId=@TransportOrderId");
+            SqlParameter[] parameters = {
+					new SqlParameter("@TransportOrderId", SqlDbType.Int,4)
+			};
+            parameters[0].Value = transportOrderId;
+
+            return DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters) > 0;
         }
 
         /// <summary>

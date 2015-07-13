@@ -42,7 +42,7 @@
                             车号:
                         </span>
                         <div class="rule-single-select">
-                            <asp:DropDownList ID="ddlCarNumber" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlCarNumber_SelectedIndexChanged"></asp:DropDownList>
+                            <asp:DropDownList ID="ddlDriver" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlDriver_SelectedIndexChanged"></asp:DropDownList>
                         </div>
                         <%--<span style="font-size:12px;">
                             托运方:
@@ -74,7 +74,7 @@
                         <th width="5%">选择</th>
                         <th align="left">单据编号</th>
                         <th align="left" width="10%">提醒日期</th>
-                        <th align="left" width="10%">回车日期</th>
+                        <th align="left" width="10%">计划回车日期</th>
                         <th width="10%">车号</th>
                         <th width="10%">司机</th>
                         <th width="10%">联系电话</th>
@@ -90,12 +90,12 @@
                     </td>
                     <td><%#Eval("Code")%></td>
                     <td><%#string.Format("{0:d}", Eval("WarningTime"))%></td>
-                    <td><%#string.Format("{0:d}", Eval("FactBackTime"))%></td>
+                    <td><%#string.Format("{0:d}", Eval("BackTime"))%></td>
                     <td align="center"><%#Eval("CarNumber")%></td>
                     <td align="center"><%#Eval("Driver")%></td>
-                    <td align="center"><%#Eval("LinkTel")%></td>
+                    <td align="center"><%#Eval("DriverTel")%></td>
                     <td align="center"><%#Eval("IdCardNumber")%></td>
-                    <td align="center"><%#Eval("LinkAddress")%></td>
+                    <td align="center"><%#Eval("DriverAddress")%></td>
                 </tr>
             </ItemTemplate>
             <FooterTemplate>

@@ -16,59 +16,38 @@ namespace DTcms.Web.admin.GainAnalysis
         protected int pageSize;
 
         protected string _carNumber;
-        protected string _customer1;
-        protected string _customer2;
+        protected string _beginTime;
+        protected string _endTime;
         protected string keywords = string.Empty;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             ChkAdminLevel("total_gain_list", DTEnums.ActionEnum.View.ToString()); //检查权限
             _carNumber = DTRequest.GetQueryString("carNumber");
-            _customer1 = DTRequest.GetQueryString("customer1");
-            _customer2 = DTRequest.GetQueryString("customer2");
+            _beginTime = DTRequest.GetQueryString("beginTime");
+            _endTime = DTRequest.GetQueryString("endTime");
             this.keywords = DTRequest.GetQueryString("keywords");
 
             this.pageSize = GetPageSize(10); //每页数量
-
-
             if (!Page.IsPostBack)
             {
                 TreeBind(""); //绑定类别
-                RptBind("Status = 3" + CombSqlTxt(_carNumber, _customer1, _customer2, this.keywords), "Id desc");
+                RptBind("A.Status >= 2" + CombSqlTxt(_carNumber, _beginTime, _endTime, this.keywords), "FactDispatchTime desc");
             }
         }
 
         #region 绑定组别=================================
         private void TreeBind(string strWhere)
         {
-            BLL.Vehicle goodsBll = new BLL.Vehicle();
-            DataTable goodsDT = goodsBll.GetList(0, strWhere, "Id desc").Tables[0];
+            BLL.Driver driverBll = new BLL.Driver();
+            DataTable driverDT = driverBll.GetList(0, "IsDimission != 1 ", "Id desc").Tables[0];
 
-            ddlCarNumber.Items.Clear();
-            ddlCarNumber.Items.Add(new ListItem("不限", ""));
-            foreach (DataRow dr in goodsDT.Rows)
+            ddlDriver.Items.Clear();
+            ddlDriver.Items.Add(new ListItem("不限", ""));
+            foreach (DataRow dr in driverDT.Rows)
             {
-                this.ddlCarNumber.Items.Add(new ListItem(dr["CarCode"].ToString(), dr["CarCode"].ToString()));
+                this.ddlDriver.Items.Add(new ListItem(string.Format("{0}({1})", dr["CarNumber"].ToString(), dr["RealName"].ToString()), dr["CarNumber"].ToString()));
             }
-
-            BLL.Customer customerBll = new BLL.Customer();
-            DataTable customerDT = customerBll.GetList(0, strWhere, "Id desc").Tables[0];
-
-            //ddlCustomer1.Items.Clear();
-            //ddlCustomer1.Items.Add(new ListItem("不限", ""));
-            //ddlCustomer2.Items.Clear();
-            //ddlCustomer2.Items.Add(new ListItem("不限", ""));
-            //foreach (DataRow dr in customerDT.Rows)
-            //{
-            //    if (!dr["Category"].ToString().Equals("托运方"))
-            //    {
-            //        this.ddlCustomer2.Items.Add(new ListItem(dr["ShortName"].ToString(), dr["ShortName"].ToString()));
-            //    }
-            //    if (!dr["Category"].ToString().Equals("收货方"))
-            //    {
-            //        this.ddlCustomer1.Items.Add(new ListItem(dr["ShortName"].ToString(), dr["ShortName"].ToString()));
-            //    }
-            //}
         }
         #endregion
 
@@ -78,45 +57,39 @@ namespace DTcms.Web.admin.GainAnalysis
             this.page = DTRequest.GetQueryInt("page", 1);
             if (!string.IsNullOrEmpty(_carNumber))
             {
-                ddlCarNumber.SelectedValue = _carNumber;
+                ddlDriver.SelectedValue = _carNumber;
             }
-            //if (!string.IsNullOrEmpty(_customer1))
+            //if (!string.IsNullOrEmpty(_beginTime))
             //{
-            //    ddlCustomer1.SelectedValue = _customer1;
+            //    txtBeginTime.Text = _beginTime;
             //}
-            //if (!string.IsNullOrEmpty(_customer2))
+            //if (!string.IsNullOrEmpty(_endTime))
             //{
-            //    ddlCustomer2.SelectedValue = _customer2;
+            //    txtEndTime.Text = _endTime;
             //}
             this.txtKeywords.Text = this.keywords;
             BLL.TransportOrder bll = new BLL.TransportOrder();
-            this.rptList.DataSource = bll.GetTransportOrders(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
+            this.rptList.DataSource = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
             this.rptList.DataBind();
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("total_gain_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&keywords={3}&page={4}",
-                _carNumber, _customer1, _customer2, this.keywords, "__id__");
+            string pageUrl = Utils.CombUrlTxt("total_gain_list.aspx", "carNumber={0}&beginTime={1}&endTime={2}&keywords={3}&page={4}",
+                _carNumber, _beginTime, _endTime, this.keywords, "__id__");
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
         }
 
-        protected string GetTransportOrderItems(string transportOrderId, string advance, string factRepayment, string carriage) 
+        protected decimal GetOrderTotalPrice(string transportOrderId)
         {
-            decimal totalMoney = 0.00M;
-            BLL.TransportOrderItem itemBll = new BLL.TransportOrderItem();
-            DataSet ds = itemBll.GetList(0, "TransportOrderId = " + transportOrderId + "", "TotalPrice");
-            if (ds != null && ds.Tables[0].Rows.Count  > 0)
-            {
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-                    totalMoney += Utils.StrToDecimal(dr["TotalPrice"].ToString(), 0.00M);
-                }
-            }
+            return new BLL.Order().GetTotalPrice(Convert.ToInt32(transportOrderId));
+        }
 
+        protected decimal GetTotalConsumption(string transportOrderId)
+        {
             decimal totalCost = 0.00M;
             BLL.Consumption consumptionBll = new BLL.Consumption();
             DataSet consumptionDS = consumptionBll.GetList(0, "TransportOrderId = " + transportOrderId + "", "Money");
-            if (ds != null && consumptionDS.Tables[0].Rows.Count > 0)
+            if (consumptionDS != null && consumptionDS.Tables[0].Rows.Count > 0)
             {
                 foreach (DataRow dr in consumptionDS.Tables[0].Rows)
                 {
@@ -124,15 +97,17 @@ namespace DTcms.Web.admin.GainAnalysis
                 }
             }
 
-            decimal gain = totalMoney - Utils.StrToDecimal(advance, 0.00M) + Utils.StrToDecimal(factRepayment, 0.00M) - Utils.StrToDecimal(carriage, 0.00M) - totalCost;
+            return totalCost;
+        }
 
-            string html = string.Format("<td align=\"center\">￥{0}</td><td align=\"center\">￥{1}</td><td align=\"center\">￥{2}</td><td align=\"center\">￥{3}</td><td align=\"center\">￥{4}</td><td align=\"center\">￥{5}</td>",
-                string.Format("{0:N2}", advance), 
-                string.Format("{0:N2}", factRepayment), 
-                string.Format("{0:N2}", carriage), 
-                string.Format("{0:N2}", totalMoney),
-                string.Format("<a href=\"javascript:void(0);\" onclick=\"showCost(" + transportOrderId + ");\">{0:N2}</a>", totalCost), 
-                string.Format("{0:N2}", gain));
+        protected string GetTotal(string transportOrderId, string advance, string factRepayment, string factCarriage) 
+        {
+            decimal orderTotal = GetOrderTotalPrice(transportOrderId);
+            decimal totalCost = GetTotalConsumption(transportOrderId);
+            string html = string.Format("<td align=\"center\">￥{0}</td><td align=\"center\">￥{1}</td><td align=\"center\">￥{2}</td>",
+                string.Format("{0:N2}", orderTotal),
+                string.Format("<a href=\"javascript:void(0);\" onclick=\"showCost(" + transportOrderId + ");\">{0:N2}</a>", totalCost),
+                string.Format("{0:N2}", (orderTotal - totalCost - Convert.ToDecimal(factCarriage) - Convert.ToDecimal(advance) + Convert.ToDecimal(factRepayment))));
 
             return html;
         }
@@ -140,17 +115,25 @@ namespace DTcms.Web.admin.GainAnalysis
         #endregion
 
         #region 组合SQL查询语句==========================
-        protected string CombSqlTxt(string carNumber, string customer1, string customer2, string _keywords)
+        protected string CombSqlTxt(string carNumber, string beginTime, string endTime, string _keywords)
         {
             StringBuilder strTemp = new StringBuilder();
             if (!string.IsNullOrEmpty(carNumber))
             {
-                strTemp.Append(" and CarNumber='" + carNumber + "'");
+                strTemp.Append(" and B.CarNumber='" + carNumber + "'");
+            }
+            if (!string.IsNullOrEmpty(beginTime))
+            {
+                strTemp.Append(" and A.FactDispatchTime>='" + beginTime + "'");
+            }
+            if (!string.IsNullOrEmpty(endTime))
+            {
+                strTemp.Append(" and A.FactDispatchTime<='" + endTime + "'");
             }
             _keywords = _keywords.Replace("'", "");
             if (!string.IsNullOrEmpty(_keywords))
             {
-                strTemp.Append(" and (MotorcadeName like '%" + _keywords + "%' or Driver like '%" + _keywords + "%' or Code like '%" + _keywords + "%')");
+                strTemp.Append(" and (A.CustomerRemarks like '%" + _keywords + "%' or A.HaulwayRemarks like '%" + _keywords + "%')");
             }
             return strTemp.ToString();
         }
@@ -174,28 +157,16 @@ namespace DTcms.Web.admin.GainAnalysis
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("total_gain_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&keywords={3}",
-                _carNumber, _customer1, _customer2, txtKeywords.Text));
+            Response.Redirect(Utils.CombUrlTxt("total_gain_list.aspx", "carNumber={0}&beginTime={1}&endTime={2}&keywords={3}",
+                _carNumber, _beginTime, _endTime, txtKeywords.Text));
         }
 
         //筛选类别
-        protected void ddlCarNumber_SelectedIndexChanged(object sender, EventArgs e)
+        protected void ddlDriver_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("total_gain_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&keywords={3}",
-                ddlCarNumber.SelectedValue, _customer1, _customer2, keywords));
+            Response.Redirect(Utils.CombUrlTxt("total_gain_list.aspx", "carNumber={0}&beginTime={1}&endTime={2}&keywords={3}",
+                ddlDriver.SelectedValue, _beginTime, _endTime, keywords));
         }
-
-        //protected void ddlCustomer1_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    Response.Redirect(Utils.CombUrlTxt("total_gain_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&keywords={3}",
-        //        _carNumber, ddlCustomer1.SelectedValue, _customer2, this.keywords));
-        //}
-
-        //protected void ddlCustomer2_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    Response.Redirect(Utils.CombUrlTxt("total_gain_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&keywords={3}",
-        //        _carNumber, _customer1, ddlCustomer2.SelectedValue, this.keywords));
-        //}
 
         //设置分页数量
         protected void txtPageNum_TextChanged(object sender, EventArgs e)
@@ -208,40 +179,34 @@ namespace DTcms.Web.admin.GainAnalysis
                     Utils.WriteCookie("total_gain_list_page_size", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("total_gain_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&keywords={3}",
-                _carNumber, _customer1, _customer2, this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("total_gain_list.aspx", "carNumber={0}&beginTime={1}&endTime={2}&keywords={3}",
+                _carNumber, _beginTime, _endTime, this.keywords));
         }
 
+        protected string GetStatus(string status)
+        {
+            string strStatus = string.Empty;
+            switch (status)
+            {
+                case "0":
+                    strStatus = "待发车";
+                    break;
+                case "1":
+                    strStatus = "已发车";
+                    break;
+                case "2":
+                    strStatus = "已报账";
+                    break;
+                case "3":
+                    strStatus = "已完成";
+                    break;
+                default:
+                    break;
+            }
 
-        //批量删除
-        //protected void btnDelete_Click(object sender, EventArgs e)
-        //{
-        //    ChkAdminLevel("total_gain_list", DTEnums.ActionEnum.Delete.ToString()); //检查权限
-        //    int sucCount = 0;
-        //    int errorCount = 0;
-        //    BLL.TransportOrder bll = new BLL.TransportOrder();
-        //    BLL.TransportOrderItem itemBll = new BLL.TransportOrderItem();
-        //    for (int i = 0; i < rptList.Items.Count; i++)
-        //    {
-        //        int id = Convert.ToInt32(((HiddenField)rptList.Items[i].FindControl("hidId")).Value);
-        //        CheckBox cb = (CheckBox)rptList.Items[i].FindControl("chkId");
-        //        if (cb.Checked)
-        //        {
-        //            if (bll.Delete(id))
-        //            {
-        //                itemBll.DeleteBy(id);
-        //                sucCount += 1;
-        //            }
-        //            else
-        //            {
-        //                errorCount += 1;
-        //            }
-        //        }
-        //    }
-        //    AddAdminLog(DTEnums.ActionEnum.Delete.ToString(), "删除运输单" + sucCount + "条，失败" + errorCount + "条"); //记录日志
-        //    JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！",
-        //        Utils.CombUrlTxt("total_gain_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&keywords={3}", _carNumber, _customer1, _customer2, this.keywords), "Success");
-        //}
+            return strStatus;
+        }
+
 
     }
 }

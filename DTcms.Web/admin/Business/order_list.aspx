@@ -130,7 +130,9 @@
                         <td align="center">￥<%#string.Format("{0:N2}", Eval("HandlingCharge"))%></td>
                         <td align="center"><%#string.Format("{0}/{1}", (Eval("IsWeightNote").ToString().Equals("1") ? "是" : "否"), (Eval("IsAllotted").ToString().Equals("1") ? "是" : "否"))%></td>
                         <td align="center"><%#GetStatus(Eval("TransportOrderStatus").ToString())%></td>
-                        <td align="center"><a href="order_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id") %>">修改</a></td>
+                        <td align="center">
+                            <%#Eval("Status").ToString().Equals("1") ? "修改" : "<a href=\"order_edit.aspx?action="+DTEnums.ActionEnum.Edit+"&id="+Eval("Id")+"\">修改</a>" %>
+                        </td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>

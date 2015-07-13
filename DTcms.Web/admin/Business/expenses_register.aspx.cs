@@ -73,14 +73,16 @@ namespace DTcms.Web.admin.Business
             foreach (DataRow dr in dt.Rows)
             {
                 transportOrderItems += "<tr data-value=\"" + dr["Id"].ToString() + "\">";
-                transportOrderItems += "<td width=\"5%\"><input type=\"hidden\" name=\"Id\" value=\"" + dr["Id"].ToString() + "\"/></td>";
+                transportOrderItems += "<td width=\"5%\"><input type=\"hidden\" name=\"OrderId\" value=\"" + dr["Id"].ToString() + "\"/></td>";
                 transportOrderItems += "<td align=\"left\">" + dr["BillNumber"].ToString() + "</td>";
-                transportOrderItems += "<td width=\"10%\">" + dr["Shipper"].ToString() + "</td>";
-                transportOrderItems += "<td width=\"10%\">" + dr["Receiver"].ToString()  + "</td>";
-                transportOrderItems += "<td width=\"10%\">" + dr["GoodsName"].ToString() + "</td>";
-                transportOrderItems += "<td width=\"6%\">￥<input type=\"text\" name=\"UnitPrice\" class=\"input small\" value=\"" + dr["UnitPrice"].ToString() + "\" style='width:50px'/></td>";
-                transportOrderItems += "<td width=\"5%\"><input type=\"text\" name=\"Weight\" class=\"input small\" value=\"" + dr["Weight"].ToString() + "\" style='width:50px'/></td>";
-                transportOrderItems += "<td width=\"5%\">￥<input type=\"text\" name=\"Freight\" value=\"" + dr["Freight"].ToString() + "\" style='width:50px'/></td>";
+                transportOrderItems += "<td width=\"13%\">" + dr["Shipper"].ToString() + "</td>";
+                transportOrderItems += "<td width=\"13%\">" + dr["Receiver"].ToString()  + "</td>";
+                transportOrderItems += "<td width=\"12%\">" + dr["GoodsName"].ToString() + "</td>";
+                transportOrderItems += "<td width=\"8%\">￥<input type=\"text\" name=\"UnitPrice\" class=\"input small\" value=\"" + dr["UnitPrice"].ToString() + "\" style='width:50px'/></td>";
+                transportOrderItems += "<td width=\"8%\"><input type=\"text\" name=\"Weight\" class=\"input small\" value=\"" + dr["Weight"].ToString() + "\" style='width:50px'/></td>";
+                transportOrderItems += "<td width=\"8%\">￥<input type=\"text\" name=\"Freight\" value=\"" + dr["Freight"].ToString() + "\" style='width:50px'/></td>";
+                transportOrderItems += "<td width=\"8%\">￥<input type=\"text\" name=\"PaidFreight\" value=\"" + dr["PaidFreight"].ToString() + "\" style='width:50px'/></td>";
+                transportOrderItems += "<td width=\"8%\">￥<input type=\"text\" name=\"UnpaidFreight\" value=\"" + dr["UnpaidFreight"].ToString() + "\" style='width:50px'/></td>";
                 transportOrderItems += "</tr>";
             }
 
@@ -107,6 +109,7 @@ namespace DTcms.Web.admin.Business
 
             model.FactArriveDate = Utils.StrToDateTime(txtFactArriveDate.Text.Trim(), DateTime.Now);
             model.BackTime = Utils.StrToDateTime(txtBackTime.Text.Trim(), DateTime.Now);
+            model.FactBackTime = model.BackTime;
             model.Repayment = Utils.StrToDecimal(txtRepayment.Text.Trim(), 0.00M);
             model.FactRepayment = Utils.StrToDecimal(txtFactRepayment.Text.Trim(), 0.00M);
             model.FactDispatchCount = Utils.StrToDecimal(txtFactDispatchCount.Text.Trim(), 0.00M);
@@ -116,10 +119,12 @@ namespace DTcms.Web.admin.Business
             model.FactCarriage = Utils.StrToDecimal(txtFactCarriage.Text.Trim(), 0.00M);
             model.Status = 2;
 
-            string[] ids = Request.Params.GetValues("Id");
+            string[] ids = Request.Params.GetValues("OrderId");
             string[] unitPrices = Request.Params.GetValues("UnitPrice");
             string[] weights = Request.Params.GetValues("Weight");
             string[] freights = Request.Params.GetValues("Freight");
+            string[] paidFreights = Request.Params.GetValues("PaidFreight");
+            string[] unpaidFreights = Request.Params.GetValues("UnpaidFreight");
 
             string[] costItemNames = Request.Params.GetValues("costItemName");
             string[] monies = Request.Params.GetValues("money");
@@ -129,26 +134,40 @@ namespace DTcms.Web.admin.Business
             BLL.Order orderBLL = new BLL.Order();
             Model.Order item;
 
-            for (int i = 0; i < ids.Length; i++)
+            if (ids != null && unitPrices != null && weights != null && freights != null && paidFreights != null && unpaidFreights != null
+                && ids.Length == unitPrices.Length && ids.Length == weights.Length && ids.Length == freights.Length && ids.Length == paidFreights.Length && ids.Length == unpaidFreights.Length
+                && ids.Length  > 0)
             {
-                item = orderBLL.GetModel(Utils.StrToInt(ids[i], 0));
-                if (item != null)
+                for (int i = 0; i < ids.Length; i++)
                 {
-                    item.UnitPrice = Utils.StrToDecimal(unitPrices[i], 0.00M);
-                    item.Weight = Utils.StrToDecimal(weights[i], 0.00M);
-                    item.Freight = Utils.StrToDecimal(freights[i], 0.00M);
-                    item_list.Add(item);
+                    item = orderBLL.GetModel(Utils.StrToInt(ids[i], 0));
+                    if (item != null)
+                    {
+                        item.UnitPrice = Utils.StrToDecimal(unitPrices[i], 0.00M);
+                        item.Weight = Utils.StrToDecimal(weights[i], 0.00M);
+                        item.Freight = Utils.StrToDecimal(freights[i], 0.00M);
+                        item.PaidFreight = Utils.StrToDecimal(paidFreights[i], 0.00M);
+                        item.UnpaidFreight = Utils.StrToDecimal(unpaidFreights[i], 0.00M);
+                        item_list.Add(item);
+                    }
                 }
             }
+            
             List<Model.Consumption> consumption_list = new List<Model.Consumption>();
-            for (int i = 0; i < costItemNames.Length; i++)
+            if (costItemNames != null && monies != null
+                && costItemNames.Length == monies.Length
+                && costItemNames.Length > 0)
             {
-                Model.Consumption consumption = new Model.Consumption();
-                consumption.Name = costItemNames[i];
-                consumption.Money = Utils.StrToDecimal(monies[i], 0.00M);
-                consumption.TransportOrderId = _id;
-                consumption_list.Add(consumption);
+                for (int i = 0; i < costItemNames.Length; i++)
+                {
+                    Model.Consumption consumption = new Model.Consumption();
+                    consumption.Name = costItemNames[i];
+                    consumption.Money = Utils.StrToDecimal(monies[i], 0.00M);
+                    consumption.TransportOrderId = _id;
+                    consumption_list.Add(consumption);
+                }
             }
+            
 
             if (bll.Update(model, item_list, consumption_list))
             {

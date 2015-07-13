@@ -43,31 +43,13 @@
         <div class="toolbar-wrap">
             <div id="floatHead" class="toolbar">
                 <div class="l-list">
-                    <%--<ul class="icon-list">
-                        <li><a class="add" href="transportOrder_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>"><i></i><span>登记</span></a></li>
-                        <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
-                        <li>
-                            <asp:LinkButton ID="btnDelete" runat="server" CssClass="del" OnClientClick="return ExePostBack('btnDelete');" OnClick="btnDelete_Click"><i></i><span>删除</span></asp:LinkButton></li>
-                    </ul>--%>
                     <div class="menu-list">
                         <span style="font-size:12px;">
                             车号:
                         </span>
                         <div class="rule-single-select">
-                            <asp:DropDownList ID="ddlCarNumber" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlCarNumber_SelectedIndexChanged"></asp:DropDownList>
+                            <asp:DropDownList ID="ddlDriver" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlDriver_SelectedIndexChanged"></asp:DropDownList>
                         </div>
-                        <%--<span style="font-size:12px;">
-                            托运方:
-                        </span>
-                        <div class="rule-single-select">
-                            <asp:DropDownList ID="ddlCustomer1" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlCustomer1_SelectedIndexChanged"></asp:DropDownList>
-                        </div>
-                        <span style="font-size:12px;">
-                            收货方:
-                        </span>
-                        <div class="rule-single-select">
-                            <asp:DropDownList ID="ddlCustomer2" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlCustomer2_SelectedIndexChanged"></asp:DropDownList>
-                        </div>--%>
                     </div>
                 </div>
                 <div class="r-list">
@@ -87,13 +69,12 @@
                         <th align="left">单据编号</th>
                         <th align="left">发车日期</th>
                         <th align="left">回车日期</th>
-                        <th width="8%">车队</th>
                         <th width="8%">车号</th>
                         <th width="8%">司机</th>
                         <th width="7%">出车支款</th>
                         <th width="7%">实交还款</th>
-                        <th width="8%">司机费用</th>
-                        <th width="8%">实际总运费</th>
+                        <th width="8%">司机运费</th>
+                        <th width="8%">厂结运费</th>
                         <th width="8%">总路费</th>
                         <th width="8%">利润</th>
                     </tr>
@@ -104,15 +85,17 @@
                     </td>
                     <td><%#Eval("Code")%></td>
                     <td><%#Convert.ToDateTime(Eval("FactDispatchTime")).ToString("yyyy/MM/dd")%></td>
-                    <td><%#Convert.ToDateTime(Eval("FactBackTime")).ToString("yyyy/MM/dd")%></td>
-                    <td align="center"><%#Eval("MotorcadeName")%></td>
+                    <td><%#string.IsNullOrEmpty(Eval("FactBackTime").ToString()) ? "--" : Convert.ToDateTime(Eval("FactBackTime")).ToString("yyyy/MM/dd")%></td>
                     <td align="center"><%#Eval("CarNumber")%></td>
                     <td align="center"><%#Eval("Driver")%></td>
-                    <%#GetTransportOrderItems(Eval("Id").ToString(), Eval("Advance").ToString(), Eval("FactRepayment").ToString(), Eval("Carriage").ToString()) %>
+                    <td align="center">￥<%#string.Format("{0:N2}", Eval("Advance"))%></td>
+                    <td align="center">￥<%#string.Format("{0:N2}", Eval("FactRepayment"))%></td>
+                    <td align="center">￥<%#string.Format("{0:N2}", Eval("FactCarriage"))%></td>
+                    <%#GetTotal(Eval("Id").ToString(), Eval("Advance").ToString(), Eval("FactRepayment").ToString(), Eval("FactCarriage").ToString()) %>
                 </tr>
             </ItemTemplate>
             <FooterTemplate>
-                <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"13\">暂无记录</td></tr>" : ""%>
+                <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"12\">暂无记录</td></tr>" : ""%>
 </table>
             </FooterTemplate>
         </asp:Repeater>

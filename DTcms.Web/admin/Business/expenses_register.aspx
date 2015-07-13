@@ -20,82 +20,7 @@
         $(function () {
             //初始化表单验证
             $("#form1").initValidform();
-
-            $("#orders tr[data-name='dispatching'] :checkbox").click(function () {
-                var checked = $(this).attr("checked");
-                if (checked) {
-                    $(this).removeAttr("checked");
-                    removeTransportOrderItem($(this).val());
-                } else {
-                    $(this).attr("checked", "checked");
-                    var id = $(this).val();
-                    var order = {};
-                    order.id = id;
-                    order.code = $("#code_" + id).html();
-                    order.arrivedTime = $("#arrivedTime_" + id).html();
-                    order.shipper = $("#shipper_" + id).html();
-                    order.receiver = $("#receiver_" + id).html();
-                    order.unit= $("#unit_" + id).html();
-                    order.quantity = $("#quantity_" + id).html();
-                    order.goods = $("#goods_" + id).html();
-                    order.billNumber = $("#billNumber_" + id).html();
-                    order.unitPrice = $("#unitPrice_" + id).html();
-                    order.totalPrice = $("#totalPrice_" + id).html();
-                    addTransportOrderItem(order);
-                }
-            });
-
-            $("#ddlMotorcade").change(function () {
-                var val = $(this).val();
-                if (val != "") {
-                    $.getJSON("../../tools/Vehicle.ashx", { "action": "list", "motorcade": val }, function (data) {
-                        if (data.status == 1) {
-                            var options = "";
-                            $.each(data.vehicles, function (i, n) {
-                                options += "<option value='" + data.vehicles[i].carCode + "'>" + data.vehicles[i].carCode + "</option>"
-                            });
-                            $("#ddlCarNumber").html(options);
-                        }
-                    });
-                }
-            });
-
-            $("#ddlCarNumber").change(function () {
-                var val = $(this).val();
-                if (val != "") {
-                    $.getJSON("../../tools/Driver.ashx", { "action": "details", "carNumber": val }, function (data) {
-                        if (data.status == 1) {
-                            $("#txtDriver").val(data.name);
-                        }
-                    });
-                } else {
-                    $("#txtDriver").val("");
-                }
-            });
         });
-
-        function addTransportOrderItem(order) {
-            if ($("tr[data-value='" + order.id + "']").length == 0) {
-                var html = "<tr data-value=\"" + order.id + "\">";
-                html += "<td width=\"5%\"><input type=\"hidden\" name=\"orderId\" value=\"" + order.id + "\"/></td>";
-                html += "<td align=\"left\">" + order.code + "</td>";
-                html += "<td width=\"10%\">" + order.billNumber + "</td>";
-                html += "<td width=\"10%\">" + order.shipper + "</td>";
-                html += "<td width=\"10%\">" + order.receiver + "</td>";
-                html += "<td width=\"10%\">" + order.goods + "</td>";
-                html += "<td width=\"9%\">" + order.unit + "</td>";
-                html += "<td width=\"6%\">" + order.quantity + "</td>";
-                html += "<td width=\"5%\"><input type=\"text\" class=\"input small\" name=\"factDispatchCount\" value=\"0.00\" /></td>";
-                html += "<td width=\"5%\">" + order.unitPrice + "</td>";
-                html += "<td width=\"5%\">" + order.totalPrice + "</td>";
-                html += "</tr>";
-                $("#transportOrderItems tr[data-name='dispatched']").after(html);
-            }
-        }
-
-        function removeTransportOrderItem(orderId) {
-            $("#transportOrderItems tr").remove("[data-value='" + orderId + "']");
-        }
     </script>
 </head>
 
@@ -185,19 +110,21 @@
         <div class="tab-content" style="display: none; padding: 0 0 10px 0;">
             <table style="margin-top: 15px; width: 100%;">
                 <tr style="padding-bottom: 20px;">
-                    <td colspan="12" style="text-align: center; font-weight: bold;">调度订单项</td>
+                    <td colspan="12" style="text-align: center; font-weight: bold;">承运订单</td>
                 </tr>
             </table>
             <table id="transportOrderItems" style="margin-top: 15px; width: 100%; border: none;" class="ltable">
                 <tr data-name="dispatched">
                     <td width="5%"></td>
                     <td align="left">提单号</td>
-                    <td width="10%">托运方</td>
-                    <td width="10%">收货方</td>
-                    <td width="9%">货物</td>
-                    <td width="9%">单价</td>
-                    <td width="9%">重量</td>
-                    <td width="5%">运费</td>
+                    <td width="13%">托运方</td>
+                    <td width="13%">收货方</td>
+                    <td width="12%">货物</td>
+                    <td width="8%">单价</td>
+                    <td width="8%">重量</td>
+                    <td width="8%">总运费</td>
+                    <td width="8%">已收运费</td>
+                    <td width="8%">下余运费</td>
                 </tr>
                 <%=transportOrderItems %>
             </table>

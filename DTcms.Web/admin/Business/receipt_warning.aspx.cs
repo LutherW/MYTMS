@@ -69,14 +69,6 @@ namespace DTcms.Web.admin.Business
         }
         #endregion
 
-        #region 增加操作=================================
-        private bool DoAdd()
-        {
-            bool result = false;
-            
-            return result;
-        }
-        #endregion
 
         #region 修改操作=================================
         private bool DoEdit(int _id)
@@ -105,16 +97,6 @@ namespace DTcms.Web.admin.Business
                     return;
                 }
                 JscriptMsg("回单提醒成功！", "receipt_register_list.aspx", "Success");
-            }
-            else //添加
-            {
-                ChkAdminLevel("receipt_register_list", DTEnums.ActionEnum.Add.ToString()); //检查权限
-                if (!DoAdd())
-                {
-                    JscriptMsg("保存过程中发生错误！", "", "Error");
-                    return;
-                }
-                JscriptMsg("添加运输单成功！", "receipt_register_list.aspx", "Success");
             }
         }
     }

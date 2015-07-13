@@ -64,6 +64,11 @@ namespace DTcms.BLL
             return dal.GetModel(Id);
         }
 
+        public decimal GetTotalPrice(int transportOrderId)
+        {
+            return dal.GetTotalPrice(transportOrderId);
+        }
+
         /// <summary>
         /// 得到一个对象实体，从缓存中
         /// </summary>

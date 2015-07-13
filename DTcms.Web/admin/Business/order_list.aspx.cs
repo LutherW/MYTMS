@@ -284,17 +284,26 @@ namespace DTcms.Web.admin.Business
 
         protected string GetStatus(string status) 
         {
+            string strStatus = string.Empty;
             switch (status)
             {
                 case "0":
-                    return "待发车";
+                    strStatus = "待发车";
+                    break;
                 case "1":
-                    return "待报账";
+                    strStatus = "已发车";
+                    break;
                 case "2":
-                    return "待回单";
+                    strStatus = "已报账";
+                    break;
+                case "3":
+                    strStatus = "已完成";
+                    break;
                 default:
-                    return "";
+                    break;
             }
+
+            return strStatus;
         }
     }
 }

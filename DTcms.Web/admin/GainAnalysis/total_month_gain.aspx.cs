@@ -37,7 +37,7 @@ namespace DTcms.Web.admin.GainAnalysis
         #region 数据绑定=================================
         private void RptBind()
         {
-            string sql = " Status = 3 ";
+            string sql = " Status >= 2 ";
             if (!string.IsNullOrEmpty(_beginTime))
             {
                 sql += " AND FactBackTime >= '" + _beginTime + "' ";
@@ -60,14 +60,14 @@ namespace DTcms.Web.admin.GainAnalysis
             }
             string ids = string.Empty;
             BLL.TransportOrder bll = new BLL.TransportOrder();
-            DataSet tods = bll.GetList(sql);
+            DataSet tods = bll.GetTotalList(sql);
             if (tods != null && tods.Tables[0].Rows.Count > 0)
             {
                 foreach (DataRow dr in tods.Tables[0].Rows)
                 {
                     ids += dr["Id"].ToString() + ",";
                     totalFactRepayment += Utils.StrToDecimal(dr["FactRepayment"].ToString(), 0.00M);
-                    totalCarriage += Utils.StrToDecimal(dr["Carriage"].ToString(), 0.00M);
+                    totalCarriage += Utils.StrToDecimal(dr["FactCarriage"].ToString(), 0.00M);
                     totalAdvance += Utils.StrToDecimal(dr["Advance"].ToString(), 0.00M);
                 }
                 if (ids.EndsWith(","))
@@ -77,13 +77,13 @@ namespace DTcms.Web.admin.GainAnalysis
             }
             if (!string.IsNullOrEmpty(ids))
             {
-                BLL.TransportOrderItem itemBll = new BLL.TransportOrderItem();
+                BLL.Order itemBll = new BLL.Order();
                 DataSet itemds = itemBll.GetList(" TransportOrderId IN (" + ids + ") ");
                 if (itemds != null && itemds.Tables[0].Rows.Count > 0)
                 {
                     foreach (DataRow dr in itemds.Tables[0].Rows)
                     {
-                        totalIncome += Utils.StrToDecimal(dr["TotalPrice"].ToString(), 0.00M);
+                        totalIncome += Utils.StrToDecimal(dr["Freight"].ToString(), 0.00M);
                     }
                 }
 
@@ -99,12 +99,7 @@ namespace DTcms.Web.admin.GainAnalysis
                     }
                 }
             }
-            //throw new Exception("totalIncome:" + totalIncome.ToString()
-            //    + "totalFactRepayment:" + totalFactRepayment.ToString()
-            //    + "totalCarriage:" + totalCarriage.ToString()
-            //    + "totalAdvance:" + totalAdvance.ToString()
-            //    + "totalCostItem:" + totalCostItem.ToString()
-            //    );
+
             totalGain = totalIncome + totalFactRepayment - totalCarriage - totalAdvance - totalCostItem;
         }
         #endregion

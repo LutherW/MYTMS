@@ -99,7 +99,8 @@ namespace DTcms.Web.admin.Business
             model.LoadingDate = Utils.StrToDateTime(txtLoadingDate.Text.Trim(), DateTime.Now); 
             model.Advance = Utils.StrToDecimal(txtAdvance.Text.Trim(), 0.00M);
             model.Payee = txtPayee.Text.Trim();
-            model.ArriveDate = Utils.StrToDateTime(txtArriveDate.Text.Trim(), DateTime.Now); 
+            model.ArriveDate = Utils.StrToDateTime(txtArriveDate.Text.Trim(), DateTime.Now);
+            model.FactArriveDate = model.ArriveDate;
             model.Status = 1;
 
             if (bll.Update(model))

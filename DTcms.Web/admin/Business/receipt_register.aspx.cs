@@ -60,18 +60,10 @@ namespace DTcms.Web.admin.Business
             Model.TransportOrder model = bll.GetModel(_id);
 
             txtReceiptTime.Text = DateTime.Now.ToString("yyyy-MM-dd");
+            txtFactBackTime.Text = model.FactBackTime.Value.ToString("yyyy-MM-dd");
             txtRemarks.Text = model.Remarks;
 
           
-        }
-        #endregion
-
-        #region 增加操作=================================
-        private bool DoAdd()
-        {
-            bool result = false;
-            
-            return result;
         }
         #endregion
 
@@ -84,9 +76,10 @@ namespace DTcms.Web.admin.Business
 
             model.Remarks = txtRemarks.Text.Trim();
             model.ReceiptTime = Utils.StrToDateTime(txtReceiptTime.Text.Trim(), DateTime.Now);
+            model.FactBackTime = Utils.StrToDateTime(txtFactBackTime.Text.Trim(), DateTime.Now);
             model.Status = 3;
 
-            if (bll.UpdateReceipt(model))
+            if (bll.Update(model))
             {
                 AddAdminLog(DTEnums.ActionEnum.Edit.ToString(), "回单登记信息:" + model.Code); //记录日志
                 result = true;
@@ -107,16 +100,6 @@ namespace DTcms.Web.admin.Business
                     return;
                 }
                 JscriptMsg("回单登记成功！", "receipt_register_list.aspx", "Success");
-            }
-            else //添加
-            {
-                ChkAdminLevel("receipt_register_list", DTEnums.ActionEnum.Add.ToString()); //检查权限
-                if (!DoAdd())
-                {
-                    JscriptMsg("保存过程中发生错误！", "", "Error");
-                    return;
-                }
-                JscriptMsg("添加运输单成功！", "receipt_register_list.aspx", "Success");
             }
         }
     }

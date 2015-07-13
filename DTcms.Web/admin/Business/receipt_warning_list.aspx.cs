@@ -41,34 +41,15 @@ namespace DTcms.Web.admin.Business
         #region 绑定组别=================================
         private void TreeBind(string strWhere)
         {
-            BLL.Vehicle goodsBll = new BLL.Vehicle();
-            DataTable goodsDT = goodsBll.GetList(0, strWhere, "Id desc").Tables[0];
+            BLL.Driver driverBll = new BLL.Driver();
+            DataTable driverDT = driverBll.GetList(0, "IsDimission != 1 ", "Id desc").Tables[0];
 
-            ddlCarNumber.Items.Clear();
-            ddlCarNumber.Items.Add(new ListItem("车号不限", ""));
-            foreach (DataRow dr in goodsDT.Rows)
+            ddlDriver.Items.Clear();
+            ddlDriver.Items.Add(new ListItem("不限", ""));
+            foreach (DataRow dr in driverDT.Rows)
             {
-                this.ddlCarNumber.Items.Add(new ListItem(dr["CarCode"].ToString(), dr["CarCode"].ToString()));
+                this.ddlDriver.Items.Add(new ListItem(string.Format("{0}({1})", dr["CarNumber"].ToString(), dr["RealName"].ToString()), dr["CarNumber"].ToString()));
             }
-
-            BLL.Customer customerBll = new BLL.Customer();
-            DataTable customerDT = customerBll.GetList(0, strWhere, "Id desc").Tables[0];
-
-            //ddlCustomer1.Items.Clear();
-            //ddlCustomer1.Items.Add(new ListItem("不限", ""));
-            //ddlCustomer2.Items.Clear();
-            //ddlCustomer2.Items.Add(new ListItem("不限", ""));
-            //foreach (DataRow dr in customerDT.Rows)
-            //{
-            //    if (!dr["Category"].ToString().Equals("托运方"))
-            //    {
-            //        this.ddlCustomer2.Items.Add(new ListItem(dr["ShortName"].ToString(), dr["ShortName"].ToString()));
-            //    }
-            //    if (!dr["Category"].ToString().Equals("收货方"))
-            //    {
-            //        this.ddlCustomer1.Items.Add(new ListItem(dr["ShortName"].ToString(), dr["ShortName"].ToString()));
-            //    }
-            //}
         }
         #endregion
 
@@ -78,19 +59,19 @@ namespace DTcms.Web.admin.Business
             this.page = DTRequest.GetQueryInt("page", 1);
             if (!string.IsNullOrEmpty(_carNumber))
             {
-                ddlCarNumber.SelectedValue = _carNumber;
+                ddlDriver.SelectedValue = _carNumber;
             }
-            //if (!string.IsNullOrEmpty(_customer1))
+            //if (!string.IsNullOrEmpty(_beginTime))
             //{
-            //    ddlCustomer1.SelectedValue = _customer1;
+            //    txtBeginTime.Text = _beginTime;
             //}
-            //if (!string.IsNullOrEmpty(_customer2))
+            //if (!string.IsNullOrEmpty(_endTime))
             //{
-            //    ddlCustomer2.SelectedValue = _customer2;
+            //    txtEndTime.Text = _endTime;
             //}
             this.txtKeywords.Text = this.keywords;
             BLL.TransportOrder bll = new BLL.TransportOrder();
-            this.rptList.DataSource = bll.GetTransportOrdersAndDriver(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
+            this.rptList.DataSource = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
             this.rptList.DataBind();
 
             //绑定页码
@@ -98,35 +79,6 @@ namespace DTcms.Web.admin.Business
             string pageUrl = Utils.CombUrlTxt("receipt_register_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&keywords={3}&page={4}",
                 _carNumber, _customer1, _customer2, this.keywords, "__id__");
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
-        }
-
-        protected string GetTransportOrderItems(string transportOrderId)
-        {
-            BLL.TransportOrderItem itemBll = new BLL.TransportOrderItem();
-            string shippers = string.Empty;
-            string goods = string.Empty;
-            string loadingAddress = string.Empty;
-            string unloadingAddress = string.Empty;
-            DataSet ds = itemBll.GetList(0, "TransportOrderId = " + transportOrderId + "", "Shipper, Goods, LoadingAddress, UnloadingAddress");
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-                    shippers += dr["Shipper"].ToString() + ",";
-                    goods += dr["Goods"].ToString() + ",";
-                    loadingAddress += dr["LoadingAddress"].ToString() + ",";
-                    unloadingAddress += dr["UnloadingAddress"].ToString() + ",";
-                }
-                shippers = shippers.TrimEnd(',');
-                goods = goods.TrimEnd(',');
-                loadingAddress = loadingAddress.TrimEnd(',');
-                unloadingAddress = unloadingAddress.TrimEnd(',');
-            }
-
-            string html = string.Format("<td align=\"center\">{0}</td><td align=\"center\">{1}</td><td align=\"center\">{2}</td><td align=\"center\">{3}</td>",
-                shippers, goods, loadingAddress, unloadingAddress);
-
-            return html;
         }
 
         #endregion
@@ -137,12 +89,12 @@ namespace DTcms.Web.admin.Business
             StringBuilder strTemp = new StringBuilder();
             if (!string.IsNullOrEmpty(carNumber))
             {
-                strTemp.Append(" and CarNumber='" + carNumber + "'");
+                strTemp.Append(" and B.CarNumber='" + carNumber + "'");
             }
             _keywords = _keywords.Replace("'", "");
             if (!string.IsNullOrEmpty(_keywords))
             {
-                strTemp.Append(" and (MotorcadeName like '%" + _keywords + "%' or Driver like '%" + _keywords + "%' or Code like '%" + _keywords + "%')");
+                strTemp.Append(" and (A.CustomerRemarks like '%" + _keywords + "%' or A.HaulwayRemarks like '%" + _keywords + "%')");
             }
             return strTemp.ToString();
         }
@@ -171,23 +123,11 @@ namespace DTcms.Web.admin.Business
         }
 
         //筛选类别
-        protected void ddlCarNumber_SelectedIndexChanged(object sender, EventArgs e)
+        protected void ddlDriver_SelectedIndexChanged(object sender, EventArgs e)
         {
             Response.Redirect(Utils.CombUrlTxt("receipt_register_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&keywords={3}",
-                ddlCarNumber.SelectedValue, _customer1, _customer2, keywords));
+                ddlDriver.SelectedValue, _customer1, _customer2, keywords));
         }
-
-        //protected void ddlCustomer1_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    Response.Redirect(Utils.CombUrlTxt("receipt_register_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&keywords={3}",
-        //        _carNumber, ddlCustomer1.SelectedValue, _customer2, this.keywords));
-        //}
-
-        //protected void ddlCustomer2_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    Response.Redirect(Utils.CombUrlTxt("receipt_register_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&keywords={3}",
-        //        _carNumber, _customer1, ddlCustomer2.SelectedValue, this.keywords));
-        //}
 
         //设置分页数量
         protected void txtPageNum_TextChanged(object sender, EventArgs e)
@@ -203,37 +143,5 @@ namespace DTcms.Web.admin.Business
             Response.Redirect(Utils.CombUrlTxt("receipt_register_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&keywords={3}",
                 _carNumber, _customer1, _customer2, this.keywords));
         }
-
-
-        //批量删除
-        //protected void btnDelete_Click(object sender, EventArgs e)
-        //{
-        //    ChkAdminLevel("receipt_register_list", DTEnums.ActionEnum.Delete.ToString()); //检查权限
-        //    int sucCount = 0;
-        //    int errorCount = 0;
-        //    BLL.TransportOrder bll = new BLL.TransportOrder();
-        //    BLL.TransportOrderItem itemBll = new BLL.TransportOrderItem();
-        //    for (int i = 0; i < rptList.Items.Count; i++)
-        //    {
-        //        int id = Convert.ToInt32(((HiddenField)rptList.Items[i].FindControl("hidId")).Value);
-        //        CheckBox cb = (CheckBox)rptList.Items[i].FindControl("chkId");
-        //        if (cb.Checked)
-        //        {
-        //            if (bll.Delete(id))
-        //            {
-        //                itemBll.DeleteBy(id);
-        //                sucCount += 1;
-        //            }
-        //            else
-        //            {
-        //                errorCount += 1;
-        //            }
-        //        }
-        //    }
-        //    AddAdminLog(DTEnums.ActionEnum.Delete.ToString(), "删除运输单" + sucCount + "条，失败" + errorCount + "条"); //记录日志
-        //    JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！",
-        //        Utils.CombUrlTxt("receipt_register_list.aspx", "carNumber={0}&customer1={1}&customer2={2}&keywords={3}", _carNumber, _customer1, _customer2, this.keywords), "Success");
-        //}
-
     }
 }
