@@ -495,8 +495,8 @@ textarea.long592{ width:592px; height:60px; }
 #Validform_msg a.Validform_close:hover{color:#ccc;}
 #Validform_msg .Validform_info{padding:10px;border:1px solid #bbb; border-top:none; text-align:left;}
 /*=====================以上部分是Validform必须的====================*/
-.rule-single-select,.rule-single-checkbox{display:inline-block;}
-.rule-single-select select{height:30px;border:1px solid #dbdbdb;}
+.rule-single-select,.rule-single-checkbox{display:inline-block;*display:inline;}
+.rule-single-select select{height:25px;border:1px solid #dbdbdb;}
 .rule-multi-radio{display:inline-block}
 .rule-multi-radio label {margin-right:5px;}
 .rule-single-select ul{margin:0;}
