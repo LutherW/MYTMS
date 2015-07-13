@@ -43,14 +43,31 @@
         <!--工具栏-->
         <div class="toolbar-wrap">
             <div id="floatHead" class="toolbar">
+                <div>
+                    <div class="l-list" style="margin-bottom: 5px;">
+                        <ul class="icon-list">
+                            <li><a class="add" href="order_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>"><i></i><span>新建</span></a></li>
+                            <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
+                            <li>
+                                <asp:LinkButton ID="btnDelete" runat="server" CssClass="del" OnClientClick="return ExePostBack('btnDelete');" OnClick="btnDelete_Click"><i></i><span>删除</span></asp:LinkButton></li>
+                            <li><a class="all" href="javascript:void(0);" onclick="print();"><i></i><span>打印</span></a></li>
+                        </ul>
+                    </div>
+                    <div class="r-list">
+                        <div style="float: left; margin-right: 10px; font-size: 12px;">
+                            接单时间：<asp:TextBox ID="txtBeginTime" runat="server" CssClass="input" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox>
+                            -
+                        <asp:TextBox ID="txtEndTime" runat="server" CssClass="input" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox>
+                        </div>
+
+                        <div style="float: right;">
+                            <asp:TextBox ID="txtKeywords" runat="server" CssClass="keyword" />
+                            <asp:LinkButton ID="lbtnSearch" runat="server" CssClass="btn-search" OnClick="btnSearch_Click">查询</asp:LinkButton>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
                 <div class="l-list">
-                    <ul class="icon-list">
-                        <li><a class="add" href="order_edit.aspx?action=<%=DTEnums.ActionEnum.Add %>"><i></i><span>新建</span></a></li>
-                        <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
-                        <li>
-                            <asp:LinkButton ID="btnDelete" runat="server" CssClass="del" OnClientClick="return ExePostBack('btnDelete');" OnClick="btnDelete_Click"><i></i><span>删除</span></asp:LinkButton></li>
-                        <li><a class="all" href="javascript:void(0);" onclick="print();"><i></i><span>打印</span></a></li>
-                    </ul>
                     <div class="menu-list">
                         <div class="rule-single-select">
                             <asp:DropDownList ID="ddlGoods" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlGoods_SelectedIndexChanged"></asp:DropDownList>
@@ -67,19 +84,6 @@
                         <div class="rule-single-select">
                             <asp:DropDownList ID="ddlUnloadingAddress" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlUnloadingAddress_SelectedIndexChanged"></asp:DropDownList>
                         </div>
-                    </div>
-                </div>
-
-                <div class="r-list">
-                    <div style="float: left; margin-right: 10px; font-size: 12px;">
-                        接单时间：<asp:TextBox ID="txtBeginTime" runat="server" CssClass="input" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox>
-                        -
-                        <asp:TextBox ID="txtEndTime" runat="server" CssClass="input" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox>
-                    </div>
-
-                    <div style="float: right;">
-                        <asp:TextBox ID="txtKeywords" runat="server" CssClass="keyword" />
-                        <asp:LinkButton ID="lbtnSearch" runat="server" CssClass="btn-search" OnClick="btnSearch_Click">查询</asp:LinkButton>
                     </div>
                 </div>
             </div>

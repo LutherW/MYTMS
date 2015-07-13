@@ -78,9 +78,9 @@
                             <th width="5%">选择</th>
                             <th align="left">运输单编号</th>
                             <th align="left" width="7%">出车时间</th>
-                            <th width="9%">装货时间</th>
-                            <th width="9%">出车支款</th>
-                            <th width="9%">领款人</th>
+                            <th width="8%">装货时间</th>
+                            <th width="8%">出车支款</th>
+                            <th width="8%">领款人</th>
                             <th width="5%">司机</th>
                             <th width="8%">车号</th>
                             <th width="8%">单价(运价)</th>
@@ -88,7 +88,7 @@
                             <th width="5%">重量</th>
                             <th width="5%">数量</th>
                             <th width="10%">里程(装载/空载公里)</th>
-                            <th width="10%">操作</th>
+                            <th width="8%">操作</th>
                         </tr>
                 </HeaderTemplate>
                 <ItemTemplate>
