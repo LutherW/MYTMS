@@ -91,13 +91,13 @@
             <dl>
                 <dt>单价(运价)</dt>
                 <dd>
-                    <asp:TextBox ID="txtCarriageUnitPrice" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
+                    <asp:TextBox ID="txtCarriageUnitPrice" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>元
                     <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>
                 <dt>运费</dt>
                 <dd>
-                    <asp:TextBox ID="txtCarriage" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>
+                    <asp:TextBox ID="txtCarriage" runat="server" CssClass="input high" Text="0.00" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请填写正确的数字" sucmsg=" "></asp:TextBox>元
                     <span class="Validform_checktip">*</span></dd>
             </dl>
             <dl>

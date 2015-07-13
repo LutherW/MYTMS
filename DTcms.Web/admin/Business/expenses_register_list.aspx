@@ -106,8 +106,8 @@
                         <td align="center"><%#Eval("Payee")%></td>
                         <td align="center"><%#Eval("Driver")%></td>
                         <td align="center"><%#Eval("CarNumber")%></td>
-                        <td align="center"><%#string.Format("{0:N2}", Eval("CarriageUnitPrice"))%></td>
-                        <td align="center"><%#string.Format("{0:N2}", Eval("FactCarriage"))%></td>
+                        <td align="center">￥<%#string.Format("{0:N2}", Eval("CarriageUnitPrice"))%></td>
+                        <td align="center">￥<%#string.Format("{0:N2}", Eval("FactCarriage"))%></td>
                         <td align="center"><%#string.Format("{0:N2}", Eval("FactWeight"))%></td>
                         <td align="center"><%#string.Format("{0:N2}", Eval("FactDispatchCount"))%></td>
                         <td align="center"><%#string.Format("{0:N2}/{1:N2}", Eval("LoadingCapacityRunning"), Eval("NoLoadingCapacityRunning"))%></td>
