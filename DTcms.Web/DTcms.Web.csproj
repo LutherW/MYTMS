@@ -145,6 +145,9 @@
     <Content Include="admin\settings\url_rewrite_edit.aspx" />
     <Content Include="admin\settings\url_rewrite_list.aspx" />
     <Content Include="admin\skin\base.css" />
+    <Content Include="admin\skin\default\color.png" />
+    <Content Include="admin\skin\default\ecs-icons.png" />
+    <Content Include="admin\skin\default\folder.png" />
     <Content Include="admin\skin\default\icon_tips.png" />
     <Content Include="admin\skin\default\ie_update.jpg" />
     <Content Include="admin\skin\default\loadimg.gif" />
@@ -152,9 +155,13 @@
     <Content Include="admin\skin\default\login_tit.png" />
     <Content Include="admin\skin\default\logo.png" />
     <Content Include="admin\skin\default\icon_onload.gif" />
+    <Content Include="admin\skin\default\no.png" />
+    <Content Include="admin\skin\default\ok.png" />
     <Content Include="admin\skin\default\order_speed.gif" />
+    <Content Include="admin\skin\default\signin_bg.png" />
     <Content Include="admin\skin\default\skin_icons.png" />
     <Content Include="admin\skin\default\style.css" />
+    <Content Include="admin\skin\default\textbg.gif" />
     <Content Include="admin\skin\default\valid_icons.png" />
     <Content Include="admin\skin\layout.css" />
     <Content Include="admin\Customer\customer_edit.aspx" />
@@ -1400,6 +1407,7 @@
     <Content Include="tools\Driver.ashx" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\PublishProfiles\MYTMS.pubxml" />
     <None Include="Properties\PublishProfiles\配置文件1.pubxml" />
   </ItemGroup>
   <PropertyGroup>
