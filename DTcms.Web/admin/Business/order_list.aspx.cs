@@ -22,8 +22,10 @@ namespace DTcms.Web.admin.Business
         protected string _endTime;
         protected string _address1;
         protected string _address2;
+        private int _isAllot = 0;
         protected string keywords = string.Empty;
         private int transportOrderId = 0;
+        
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -36,13 +38,14 @@ namespace DTcms.Web.admin.Business
             _endTime = DTRequest.GetQueryString("endTime");
             _address1 = DTRequest.GetQueryString("address1");
             _address2 = DTRequest.GetQueryString("address2");
+            _isAllot = DTRequest.GetQueryInt("isAllot");
             this.keywords = DTRequest.GetQueryString("keywords");
 
             this.pageSize = GetPageSize(10); //每页数量
             if (!Page.IsPostBack)
             {
                 TreeBind(""); //绑定类别
-                RptBind(CombSqlTxt(_goods, _customer1, _customer2, _beginTime, _endTime, _address1, _address2, this.keywords), "Id desc");
+                RptBind(CombSqlTxt(_goods, _customer1, _customer2, _beginTime, _endTime, _address1, _address2, _isAllot, this.keywords), "Id desc");
             }
         }
 
@@ -95,6 +98,11 @@ namespace DTcms.Web.admin.Business
                     this.ddlUnloadingAddress.Items.Add(new ListItem(dr["Name"].ToString(), dr["Name"].ToString()));
                 }
             }
+
+            ddlIsAllot.Items.Clear();
+            ddlIsAllot.Items.Add(new ListItem("是否调拨单", "0"));
+            ddlIsAllot.Items.Add(new ListItem("是", "1"));
+            ddlIsAllot.Items.Add(new ListItem("否", "2"));
         }
         #endregion
 
@@ -130,6 +138,10 @@ namespace DTcms.Web.admin.Business
             {
                 txtEndTime.Text = _endTime;
             }
+            if (_isAllot > 0)
+            {
+                ddlIsAllot.SelectedValue = _isAllot.ToString();
+            }
             this.txtKeywords.Text = this.keywords;
             BLL.Order bll = new BLL.Order();
             this.rptList.DataSource = bll.GetFullList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
@@ -137,14 +149,14 @@ namespace DTcms.Web.admin.Business
 
             //绑定页码
             txtPageNum.Text = this.pageSize.ToString();
-            string pageUrl = Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}&page={8}",
-                _goods.ToString(), _customer1.ToString(), _customer2.ToString(), _beginTime, _endTime, _address1, _address2, this.keywords, "__id__");
+            string pageUrl = Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&isAllot={7}&keywords={8}&page={9}",
+                _goods.ToString(), _customer1.ToString(), _customer2.ToString(), _beginTime, _endTime, _address1, _address2, _isAllot.ToString(), this.keywords, "__id__");
             PageContent.InnerHtml = Utils.OutPageList(this.pageSize, this.page, this.totalCount, pageUrl, 8);
         }
         #endregion
 
         #region 组合SQL查询语句==========================
-        protected string CombSqlTxt(int goods, int customer1, int customer2, string beginTime, string endTime, string address1, string address2, string _keywords)
+        protected string CombSqlTxt(int goods, int customer1, int customer2, string beginTime, string endTime, string address1, string address2, int isAllot, string _keywords)
         {
             StringBuilder strTemp = new StringBuilder();
             if (goods > 0)
@@ -175,6 +187,17 @@ namespace DTcms.Web.admin.Business
             {
                 strTemp.Append(" and UnloadingAddress='" + address2 + "'");
             }
+            if (isAllot > 0)
+            {
+                if (isAllot == 1)
+                {
+                    strTemp.Append(" and IsAllotted=1");
+                }
+                else if (isAllot == 2)
+                {
+                    strTemp.Append(" and IsAllotted=0");
+                }
+            }
             _keywords = _keywords.Replace("'", "");
             if (!string.IsNullOrEmpty(_keywords))
             {
@@ -202,39 +225,45 @@ namespace DTcms.Web.admin.Business
         //关健字查询
         protected void btnSearch_Click(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}",
-                _goods.ToString(), _customer1.ToString(), _customer2.ToString(), txtBeginTime.Text, txtEndTime.Text, _address1, _address2, txtKeywords.Text));
+            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&isAllot={7}&keywords={8}",
+                _goods.ToString(), _customer1.ToString(), _customer2.ToString(), txtBeginTime.Text, txtEndTime.Text, _address1, _address2, _isAllot.ToString(), txtKeywords.Text));
         }
 
         //筛选类别
         protected void ddlGoods_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}",
-                ddlGoods.SelectedValue, _customer1.ToString(), _customer2.ToString(), _beginTime, _endTime, _address1, _address2, this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&isAllot={7}&keywords={8}",
+                ddlGoods.SelectedValue, _customer1.ToString(), _customer2.ToString(), _beginTime, _endTime, _address1, _address2, _isAllot.ToString(), this.keywords));
         }
 
         protected void ddlCustomer1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}",
-                _goods.ToString(), ddlCustomer1.SelectedValue, _customer2.ToString(), _beginTime, _endTime, _address1, _address2, this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&isAllot={7}&keywords={8}",
+                _goods.ToString(), ddlCustomer1.SelectedValue, _customer2.ToString(), _beginTime, _endTime, _address1, _address2, _isAllot.ToString(), this.keywords));
         }
 
         protected void ddlCustomer2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}",
-                _goods.ToString(), _customer1.ToString(), ddlCustomer2.SelectedValue, _beginTime, _endTime, _address1, _address2, this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&isAllot={7}&keywords={8}",
+                _goods.ToString(), _customer1.ToString(), ddlCustomer2.SelectedValue, _beginTime, _endTime, _address1, _address2, _isAllot.ToString(), this.keywords));
         }
 
         protected void ddlLoadingAddress_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}",
-                _goods.ToString(), ddlCustomer1.SelectedValue, _customer2.ToString(), _beginTime, _endTime, ddlLoadingAddress.SelectedValue, _address2, this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&isAllot={7}&keywords={8}",
+                _goods.ToString(), ddlCustomer1.SelectedValue, _customer2.ToString(), _beginTime, _endTime, ddlLoadingAddress.SelectedValue, _address2, _isAllot.ToString(), this.keywords));
         }
 
         protected void ddlUnloadingAddress_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}",
-                _goods.ToString(), _customer1.ToString(), ddlCustomer2.SelectedValue, _beginTime, _endTime, _address1, ddlUnloadingAddress.SelectedValue, this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&isAllot={7}&keywords={8}",
+                _goods.ToString(), _customer1.ToString(), ddlCustomer2.SelectedValue, _beginTime, _endTime, _address1, ddlUnloadingAddress.SelectedValue, _isAllot.ToString(), this.keywords));
+        }
+
+        protected void ddlIsAllot_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&isAllot={7}&keywords={8}",
+                _goods.ToString(), _customer1.ToString(), ddlCustomer2.SelectedValue, _beginTime, _endTime, _address1, _address2, ddlIsAllot.SelectedValue, this.keywords));
         }
 
         //设置分页数量
@@ -248,8 +277,8 @@ namespace DTcms.Web.admin.Business
                     Utils.WriteCookie("order_list_page_size", _pagesize.ToString(), 14400);
                 }
             }
-            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}",
-                _goods.ToString(), _customer1.ToString(), _customer2.ToString(), _beginTime, _endTime, _address1, _address2, this.keywords));
+            Response.Redirect(Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&isAllot={7}&keywords={8}",
+                _goods.ToString(), _customer1.ToString(), _customer2.ToString(), _beginTime, _endTime, _address1, _address2, _isAllot.ToString(), this.keywords));
         }
 
 
@@ -278,7 +307,7 @@ namespace DTcms.Web.admin.Business
             }
             AddAdminLog(DTEnums.ActionEnum.Delete.ToString(), "删除订单" + sucCount + "条，失败" + errorCount + "条"); //记录日志
             JscriptMsg("删除成功" + sucCount + "条，失败" + errorCount + "条！",
-                Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&keywords={7}", _goods.ToString(), _customer1.ToString(), _customer2.ToString(), _beginTime, _endTime, _address1, _address2, this.keywords), "Success");
+                Utils.CombUrlTxt("order_list.aspx", "goods={0}&customer1={1}&customer2={2}&beginTime={3}&endTime={4}&address1={5}&address2={6}&isAllot={7}&keywords={8}", _goods.ToString(), _customer1.ToString(), _customer2.ToString(), _beginTime, _endTime, _address1, _address2, _isAllot.ToString(), this.keywords), "Success");
         }
 
 
@@ -294,7 +323,7 @@ namespace DTcms.Web.admin.Business
                     strStatus = "已发车";
                     break;
                 case "2":
-                    strStatus = "已报账";
+                    strStatus = "已回车";
                     break;
                 case "3":
                     strStatus = "已完成";

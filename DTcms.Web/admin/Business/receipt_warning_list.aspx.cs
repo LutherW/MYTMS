@@ -34,7 +34,7 @@ namespace DTcms.Web.admin.Business
             if (!Page.IsPostBack)
             {
                 TreeBind(""); //绑定类别
-                RptBind("Status = 2 AND WarningTime <= '" + DateTime.Now.ToString() + "' " + CombSqlTxt(_carNumber, _customer1, _customer2, this.keywords), "WarningTime asc,Id desc");
+                RptBind("Status = 1 AND WarningTime <= '" + DateTime.Now.ToString() + "' " + CombSqlTxt(_carNumber, _customer1, _customer2, this.keywords), "WarningTime asc,Id desc");
             }
         }
 

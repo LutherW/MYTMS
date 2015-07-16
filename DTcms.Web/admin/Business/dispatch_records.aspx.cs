@@ -167,7 +167,7 @@ namespace DTcms.Web.admin.Business
                     strStatus = "已发车";
                     break;
                 case "2":
-                    strStatus = "已报账";
+                    strStatus = "已回车";
                     break;
                 case "3":
                     strStatus = "已完成";

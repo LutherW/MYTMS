@@ -60,7 +60,7 @@ namespace DTcms.Web.admin.Business
             Model.TransportOrder model = bll.GetModel(_id);
 
             txtReceiptTime.Text = DateTime.Now.ToString("yyyy-MM-dd");
-            txtFactBackTime.Text = model.FactBackTime.Value.ToString("yyyy-MM-dd");
+            txtBackTime.Text = model.ArriveDate.Value.ToString("yyyy-MM-dd");
             txtRemarks.Text = model.Remarks;
 
           
@@ -76,8 +76,9 @@ namespace DTcms.Web.admin.Business
 
             model.Remarks = txtRemarks.Text.Trim();
             model.ReceiptTime = Utils.StrToDateTime(txtReceiptTime.Text.Trim(), DateTime.Now);
-            model.FactBackTime = Utils.StrToDateTime(txtFactBackTime.Text.Trim(), DateTime.Now);
-            model.Status = 3;
+            model.BackTime = Utils.StrToDateTime(txtBackTime.Text.Trim(), DateTime.Now);
+            model.FactBackTime = model.BackTime;
+            model.Status = 2;
 
             if (bll.Update(model))
             {

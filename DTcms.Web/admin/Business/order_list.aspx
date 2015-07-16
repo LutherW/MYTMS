@@ -84,6 +84,9 @@
                         <div class="rule-single-select">
                             <asp:DropDownList ID="ddlUnloadingAddress" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlUnloadingAddress_SelectedIndexChanged"></asp:DropDownList>
                         </div>
+                        <div class="rule-single-select">
+                            <asp:DropDownList ID="ddlIsAllot" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlIsAllot_SelectedIndexChanged"></asp:DropDownList>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -132,7 +135,7 @@
                         <td align="center"><%#string.Format("{0:N2}/{1:N2}", Eval("UnitPrice"), Eval("Quantity"))%></td>
                         <td align="center"><%#string.Format("{0:N2}/<br/>{1:N2}/{2:N2}", Eval("Freight"), Eval("PaidFreight"), Eval("UnpaidFreight"))%></td>
                         <td align="center">￥<%#string.Format("{0:N2}", Eval("HandlingCharge"))%></td>
-                        <td align="center"><%#string.Format("{0}/{1}", (Eval("IsWeightNote").ToString().Equals("1") ? "是" : "否"), (Eval("IsAllotted").ToString().Equals("1") ? "是" : "否"))%></td>
+                        <td align="center"><%#string.Format("{0}/{1}", (Eval("IsWeightNote").ToString().Equals("True") ? "是" : "否"), (Eval("IsAllotted").ToString().Equals("True") ? "是" : "否"))%></td>
                         <td align="center"><%#GetStatus(Eval("TransportOrderStatus").ToString())%></td>
                         <td align="center">
                             <%#Eval("Status").ToString().Equals("1") ? "修改" : "<a href=\"order_edit.aspx?action="+DTEnums.ActionEnum.Edit+"&id="+Eval("Id")+"\">修改</a>" %>

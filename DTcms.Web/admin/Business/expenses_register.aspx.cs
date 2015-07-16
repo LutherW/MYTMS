@@ -60,6 +60,7 @@ namespace DTcms.Web.admin.Business
             Model.TransportOrder model = bll.GetModel(_id);
 
             txtFactArriveDate.Text = model.FactArriveDate.Value.ToString("yyyy-MM-dd");
+            txtFactBackTime.Text = model.BackTime.Value.ToString("yyyy-MM-dd");
             txtFactDispatchCount.Text = model.FactDispatchCount.ToString();
             txtFactWeight.Text = model.FactWeight.ToString();
             txtReceivedWeight.Text = model.FactWeight.ToString();
@@ -108,8 +109,7 @@ namespace DTcms.Web.admin.Business
             Model.TransportOrder model = bll.GetModel(_id);
 
             model.FactArriveDate = Utils.StrToDateTime(txtFactArriveDate.Text.Trim(), DateTime.Now);
-            model.BackTime = Utils.StrToDateTime(txtBackTime.Text.Trim(), DateTime.Now);
-            model.FactBackTime = model.BackTime;
+            model.FactBackTime = Utils.StrToDateTime(txtFactBackTime.Text.Trim(), DateTime.Now);
             model.Repayment = Utils.StrToDecimal(txtRepayment.Text.Trim(), 0.00M);
             model.FactRepayment = Utils.StrToDecimal(txtFactRepayment.Text.Trim(), 0.00M);
             model.FactDispatchCount = Utils.StrToDecimal(txtFactDispatchCount.Text.Trim(), 0.00M);
@@ -117,7 +117,7 @@ namespace DTcms.Web.admin.Business
             model.ReceivedWeight = Utils.StrToDecimal(txtReceivedWeight.Text.Trim(), 0.00M);
             model.UnloadingWeight = Utils.StrToDecimal(txtUnloadingWeight.Text.Trim(), 0.00M);
             model.FactCarriage = Utils.StrToDecimal(txtFactCarriage.Text.Trim(), 0.00M);
-            model.Status = 2;
+            model.Status = 3;
 
             string[] ids = Request.Params.GetValues("OrderId");
             string[] unitPrices = Request.Params.GetValues("UnitPrice");

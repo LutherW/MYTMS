@@ -115,7 +115,7 @@
                         <td align="center"><%#string.Format("{0:N2}/{1:N2}", Eval("UnitPrice"), Eval("Quantity"))%></td>
                         <td align="center"><%#string.Format("{0:N2}/{1:N2}/{2:N2}", Eval("Freight"), Eval("PaidFreight"), Eval("UnpaidFreight"))%></td>
                         <td align="center">￥<%#string.Format("{0:N2}", Eval("HandlingCharge"))%></td>
-                        <td align="center"><%#string.Format("{0}/{1}", (Eval("IsWeightNote").ToString().Equals("1") ? "是" : "否"), (Eval("IsAllotted").ToString().Equals("1") ? "是" : "否"))%></td>
+                        <td align="center"><%#string.Format("{0}/{1}", (Eval("IsWeightNote").ToString().Equals("True") ? "是" : "否"), (Eval("IsAllotted").ToString().Equals("True") ? "是" : "否"))%></td>
                     </tr>
                 </ItemTemplate>
                 <FooterTemplate>

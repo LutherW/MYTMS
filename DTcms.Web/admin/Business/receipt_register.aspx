@@ -56,12 +56,14 @@
                     <span class="input-date"><asp:TextBox ID="txtReceiptTime" runat="server" CssClass="input date normal" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox><i>日期</i></span>
                     <span class="Validform_checktip">*</span></dd>
             </dl>
+            
             <dl>
-                <dt>回车时间</dt>
+                <dt>预计回车时间</dt>
                 <dd>
-                    <span class="input-date"><asp:TextBox ID="txtFactBackTime" runat="server" CssClass="input date normal" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox><i>日期</i></span>
+                    <span class="input-date"><asp:TextBox ID="txtBackTime" runat="server" CssClass="input normal date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" "></asp:TextBox><i>日期</i></span>
                     <span class="Validform_checktip">*</span></dd>
             </dl>
+            
             <dl>
                 <dt>备注</dt>
                 <dd>
