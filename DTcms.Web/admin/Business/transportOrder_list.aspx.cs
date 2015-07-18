@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using DTcms.Common;
+using System.Text.RegularExpressions;
 
 namespace DTcms.Web.admin.Business
 {
@@ -34,6 +35,13 @@ namespace DTcms.Web.admin.Business
                 TreeBind(""); //绑定类别
                 RptBind("A.Status=0" + CombSqlTxt(_carNumber, _beginTime, _endTime, this.keywords), "DispatchTime desc");
             }
+            //string input = @"<a href=""javascript:void(0);"" class=""iView"" id=""562773"">";
+          
+            //foreach (Match m in Regex.Matches(input, @"(?i)<a\b[^>]*?id\s*=(['""]?)(?<id>[^'""]+)\1[^>]*?>"))
+            //{
+            //    reg.InnerHtml = reg.InnerHtml + m.Groups["id"].Value;
+            //}
+
         }
 
         #region 绑定组别=================================

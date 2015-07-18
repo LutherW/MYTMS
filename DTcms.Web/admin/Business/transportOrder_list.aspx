@@ -99,7 +99,7 @@
             </div>
         </div>
         <!--/工具栏-->
-
+       <div id="reg" runat="server"></div>
         <!--列表-->
         <div class="table-container">
             <asp:Repeater ID="rptList" runat="server">

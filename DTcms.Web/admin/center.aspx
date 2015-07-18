@@ -62,9 +62,9 @@
                         <td><span class="arr"></span></td>
                         <td><span class="bg10"><a href="business/dispatch_register_list.aspx">出车登记</a></span></td>
                         <td><span class="arr"></span></td>
-                        <td><span class="bg4"><a href="business/expenses_register_list.aspx">回车报账</a></span></td>
-                        <td><span class="arr"></span></td>
                         <td><span class="bg1"><a href="business/receipt_register_list.aspx">回单登记</a></span></td>
+                        <td><span class="arr"></span></td>
+                        <td><span class="bg4"><a href="business/expenses_register_list.aspx">运费结算</a></span></td>
                     </tr>
                 </table>
     </div>

@@ -1407,6 +1407,7 @@
     <Content Include="tools\Driver.ashx" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\PublishProfiles\fabu.pubxml" />
     <None Include="Properties\PublishProfiles\MYTMS.pubxml" />
     <None Include="Properties\PublishProfiles\配置文件1.pubxml" />
   </ItemGroup>
