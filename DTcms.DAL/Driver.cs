@@ -86,6 +86,52 @@ namespace DTcms.DAL
 
         }
 
+        public int Add(SqlConnection conn, SqlTransaction trans, Model.Driver model)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("insert into mtms_Driver(");
+            strSql.Append("RealName,RealNameCode,CarNumber,IdCardNumber,LinkTel,LinkAddress,BeganWorkDate,IssuedDate,AnnualDate,DrivingLicence,DrivingPermitNumber,DrivingPermitType,IsDimission,Remarks");
+            strSql.Append(") values (");
+            strSql.Append("@RealName,@RealNameCode,@CarNumber,@IdCardNumber,@LinkTel,@LinkAddress,@BeganWorkDate,@IssuedDate,@AnnualDate,@DrivingLicence,@DrivingPermitNumber,@DrivingPermitType,@IsDimission,@Remarks");
+            strSql.Append(") ");
+            strSql.Append(";select @@IDENTITY");
+            SqlParameter[] parameters = {
+			            new SqlParameter("@RealName", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@RealNameCode", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@CarNumber", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@IdCardNumber", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@LinkTel", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@LinkAddress", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@BeganWorkDate", SqlDbType.DateTime) ,            
+                        new SqlParameter("@IssuedDate", SqlDbType.DateTime) ,            
+                        new SqlParameter("@AnnualDate", SqlDbType.DateTime) ,            
+                        new SqlParameter("@DrivingLicence", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@DrivingPermitNumber", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@DrivingPermitType", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@IsDimission", SqlDbType.SmallInt,2) ,            
+                        new SqlParameter("@Remarks", SqlDbType.VarChar,254)             
+              
+            };
+
+            parameters[0].Value = model.RealName;
+            parameters[1].Value = model.RealNameCode;
+            parameters[2].Value = model.CarNumber;
+            parameters[3].Value = model.IdCardNumber;
+            parameters[4].Value = model.LinkTel;
+            parameters[5].Value = model.LinkAddress;
+            parameters[6].Value = model.BeganWorkDate;
+            parameters[7].Value = model.IssuedDate;
+            parameters[8].Value = model.AnnualDate;
+            parameters[9].Value = model.DrivingLicence;
+            parameters[10].Value = model.DrivingPermitNumber;
+            parameters[11].Value = model.DrivingPermitType;
+            parameters[12].Value = model.IsDimission;
+            parameters[13].Value = model.Remarks;
+
+            return DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+
+        }
+
 
         /// <summary>
         /// 更新一条数据
@@ -156,6 +202,65 @@ namespace DTcms.DAL
             }
         }
 
+        public bool Update(SqlConnection conn, SqlTransaction trans, Model.Driver model)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("update mtms_Driver set ");
+
+            strSql.Append(" RealName = @RealName , ");
+            strSql.Append(" RealNameCode = @RealNameCode , ");
+            strSql.Append(" CarNumber = @CarNumber , ");
+            strSql.Append(" IdCardNumber = @IdCardNumber , ");
+            strSql.Append(" LinkTel = @LinkTel , ");
+            strSql.Append(" LinkAddress = @LinkAddress , ");
+            strSql.Append(" BeganWorkDate = @BeganWorkDate , ");
+            strSql.Append(" IssuedDate = @IssuedDate , ");
+            strSql.Append(" AnnualDate = @AnnualDate , ");
+            strSql.Append(" DrivingLicence = @DrivingLicence , ");
+            strSql.Append(" DrivingPermitNumber = @DrivingPermitNumber , ");
+            strSql.Append(" DrivingPermitType = @DrivingPermitType , ");
+            strSql.Append(" IsDimission = @IsDimission , ");
+            strSql.Append(" Remarks = @Remarks  ");
+            strSql.Append(" where Id=@Id ");
+
+            SqlParameter[] parameters = {
+			            new SqlParameter("@Id", SqlDbType.Int,4) ,            
+                        new SqlParameter("@RealName", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@RealNameCode", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@CarNumber", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@IdCardNumber", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@LinkTel", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@LinkAddress", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@BeganWorkDate", SqlDbType.DateTime) ,            
+                        new SqlParameter("@IssuedDate", SqlDbType.DateTime) ,            
+                        new SqlParameter("@AnnualDate", SqlDbType.DateTime) ,            
+                        new SqlParameter("@DrivingLicence", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@DrivingPermitNumber", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@DrivingPermitType", SqlDbType.VarChar,254) ,            
+                        new SqlParameter("@IsDimission", SqlDbType.SmallInt,2) ,            
+                        new SqlParameter("@Remarks", SqlDbType.VarChar,254)             
+              
+            };
+
+            parameters[0].Value = model.Id;
+            parameters[1].Value = model.RealName;
+            parameters[2].Value = model.RealNameCode;
+            parameters[3].Value = model.CarNumber;
+            parameters[4].Value = model.IdCardNumber;
+            parameters[5].Value = model.LinkTel;
+            parameters[6].Value = model.LinkAddress;
+            parameters[7].Value = model.BeganWorkDate;
+            parameters[8].Value = model.IssuedDate;
+            parameters[9].Value = model.AnnualDate;
+            parameters[10].Value = model.DrivingLicence;
+            parameters[11].Value = model.DrivingPermitNumber;
+            parameters[12].Value = model.DrivingPermitType;
+            parameters[13].Value = model.IsDimission;
+            parameters[14].Value = model.Remarks;
+
+            return DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters) > 0;
+        }
+
 
         /// <summary>
         /// 删除一条数据
@@ -181,6 +286,19 @@ namespace DTcms.DAL
             {
                 return false;
             }
+        }
+
+        public bool Delete(SqlConnection conn, SqlTransaction trans, string carNumber)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("delete from mtms_Driver ");
+            strSql.Append(" where CarNumber=@CarNumber");
+            SqlParameter[] parameters = {
+					new SqlParameter("@CarNumber", SqlDbType.VarChar,254)
+			};
+            parameters[0].Value = carNumber;
+
+            return DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters) > 0;
         }
 
         /// <summary>
@@ -267,7 +385,7 @@ namespace DTcms.DAL
         {
 
             StringBuilder strSql = new StringBuilder();
-            strSql.Append("select Id, RealName, RealNameCode, CarNumber, IdCardNumber, LinkTel, LinkAddress, BeganWorkDate, IssuedDate, AnnualDate, DrivingLicence, DrivingPermitNumber, DrivingPermitType, IsDimission, Remarks  ");
+            strSql.Append("select top 1 Id, RealName, RealNameCode, CarNumber, IdCardNumber, LinkTel, LinkAddress, BeganWorkDate, IssuedDate, AnnualDate, DrivingLicence, DrivingPermitNumber, DrivingPermitType, IsDimission, Remarks  ");
             strSql.Append("  from mtms_Driver ");
             strSql.Append(" where CarNumber=@CarNumber");
             SqlParameter[] parameters = {

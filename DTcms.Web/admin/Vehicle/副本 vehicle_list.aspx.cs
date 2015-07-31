@@ -28,22 +28,22 @@ namespace DTcms.Web.admin.Vehicle
             if (!Page.IsPostBack)
             {
                 TreeBind(""); //绑定类别
-                RptBind(CombSqlTxt(this._motorcadeName, this.keywords), " Id desc ");
+                RptBind("Id>0" + CombSqlTxt(this._motorcadeName, this.keywords), "Id desc");
             }
         }
 
         #region 绑定组别=================================
         private void TreeBind(string strWhere)
         {
-            //BLL.Motorcade bll = new BLL.Motorcade();
-            //DataTable dt = bll.GetList(0, strWhere, "Id desc").Tables[0];
+            BLL.Motorcade bll = new BLL.Motorcade();
+            DataTable dt = bll.GetList(0, strWhere, "Id desc").Tables[0];
 
             this.ddlMotorcadeName.Items.Clear();
             this.ddlMotorcadeName.Items.Add(new ListItem("不限", ""));
-            //foreach (DataRow dr in dt.Rows)
-            //{
-            //    this.ddlMotorcadeName.Items.Add(new ListItem(dr["Name"].ToString(), dr["Name"].ToString()));
-            //}
+            foreach (DataRow dr in dt.Rows)
+            {
+                this.ddlMotorcadeName.Items.Add(new ListItem(dr["Name"].ToString(), dr["Name"].ToString()));
+            }
         }
         #endregion
 
@@ -57,7 +57,7 @@ namespace DTcms.Web.admin.Vehicle
             }
             this.txtKeywords.Text = this.keywords;
             BLL.Vehicle bll = new BLL.Vehicle();
-            this.rptList.DataSource = bll.GetMyList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
+            this.rptList.DataSource = bll.GetList(this.pageSize, this.page, _strWhere, _orderby, out this.totalCount);
             this.rptList.DataBind();
 
             //绑定页码
@@ -72,14 +72,14 @@ namespace DTcms.Web.admin.Vehicle
         protected string CombSqlTxt(string motorcadeName, string _keywords)
         {
             StringBuilder strTemp = new StringBuilder();
-            //if (!string.IsNullOrEmpty(motorcadeName))
-            //{
-            //    strTemp.Append(" and MotorcadeName='" + motorcadeName+"'");
-            //}
+            if (!string.IsNullOrEmpty(motorcadeName))
+            {
+                strTemp.Append(" and MotorcadeName='" + motorcadeName+"'");
+            }
             _keywords = _keywords.Replace("'", "");
             if (!string.IsNullOrEmpty(_keywords))
             {
-                strTemp.Append(" and (A.CarCode like '%" + _keywords + "%' or B.RealName like '%" + _keywords + "%' or B.LinkTel like '%" + _keywords + "%') ");
+                strTemp.Append(" and (CarCode like '%" + _keywords + "%' or CarNumber like '%" + _keywords + "%' or MotorcadeName like '%" + _keywords + "%' or MotorcycleType like '%" + _keywords + "%')");
             }
             return strTemp.ToString();
         }
@@ -143,7 +143,7 @@ namespace DTcms.Web.admin.Vehicle
                 CheckBox cb = (CheckBox)rptList.Items[i].FindControl("chkId");
                 if (cb.Checked)
                 {
-                    if (bll.MyDelete(id))
+                    if (bll.Delete(id))
                     {
                         sucCount += 1;
                     }

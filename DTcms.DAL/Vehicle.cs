@@ -78,6 +78,64 @@ namespace DTcms.DAL
 
         }
 
+        public bool Add(Model.Vehicle model, Model.Driver driver)
+        {
+            using (SqlConnection conn = new SqlConnection(DbHelperSQL.connectionString))
+            {
+                conn.Open();
+                using (SqlTransaction trans = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        StringBuilder strSql = new StringBuilder();
+                        strSql.Append("insert into mtms_Vehicle(");
+                        strSql.Append("CarCode,CarNumber,MotorcadeName,MotorcycleType,LoadingCapacity,EngineType,FrameNumber,ChassisNumber,InsuranceNumber,Remarks");
+                        strSql.Append(") values (");
+                        strSql.Append("@CarCode,@CarNumber,@MotorcadeName,@MotorcycleType,@LoadingCapacity,@EngineType,@FrameNumber,@ChassisNumber,@InsuranceNumber,@Remarks");
+                        strSql.Append(") ");
+                        strSql.Append(";select @@IDENTITY");
+                        SqlParameter[] parameters = {
+			                        new SqlParameter("@CarCode", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@CarNumber", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@MotorcadeName", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@MotorcycleType", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@LoadingCapacity", SqlDbType.Decimal,9) ,            
+                                    new SqlParameter("@EngineType", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@FrameNumber", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@ChassisNumber", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@InsuranceNumber", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@Remarks", SqlDbType.VarChar,254)             
+              
+                        };
+
+                        parameters[0].Value = model.CarCode;
+                        parameters[1].Value = model.CarNumber;
+                        parameters[2].Value = model.MotorcadeName;
+                        parameters[3].Value = model.MotorcycleType;
+                        parameters[4].Value = model.LoadingCapacity;
+                        parameters[5].Value = model.EngineType;
+                        parameters[6].Value = model.FrameNumber;
+                        parameters[7].Value = model.ChassisNumber;
+                        parameters[8].Value = model.InsuranceNumber;
+                        parameters[9].Value = model.Remarks;
+
+                        DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+
+                        new Driver().Add(conn, trans, driver);
+
+                        trans.Commit();
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+            
+        }
 
         /// <summary>
         /// 更新一条数据
@@ -136,6 +194,74 @@ namespace DTcms.DAL
             }
         }
 
+        public bool Update(Model.Vehicle model, Model.Driver driver)
+        {
+            using (SqlConnection conn = new SqlConnection(DbHelperSQL.connectionString))
+            {
+                conn.Open();
+                using (SqlTransaction trans = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        StringBuilder strSql = new StringBuilder();
+                        strSql.Append("update mtms_Vehicle set ");
+
+                        strSql.Append(" CarCode = @CarCode , ");
+                        strSql.Append(" CarNumber = @CarNumber , ");
+                        strSql.Append(" MotorcadeName = @MotorcadeName , ");
+                        strSql.Append(" MotorcycleType = @MotorcycleType , ");
+                        strSql.Append(" LoadingCapacity = @LoadingCapacity , ");
+                        strSql.Append(" EngineType = @EngineType , ");
+                        strSql.Append(" FrameNumber = @FrameNumber , ");
+                        strSql.Append(" ChassisNumber = @ChassisNumber , ");
+                        strSql.Append(" InsuranceNumber = @InsuranceNumber , ");
+                        strSql.Append(" Remarks = @Remarks  ");
+                        strSql.Append(" where Id=@Id ");
+
+                        SqlParameter[] parameters = {
+			                        new SqlParameter("@Id", SqlDbType.Int,4) ,            
+                                    new SqlParameter("@CarCode", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@CarNumber", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@MotorcadeName", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@MotorcycleType", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@LoadingCapacity", SqlDbType.Decimal,9) ,            
+                                    new SqlParameter("@EngineType", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@FrameNumber", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@ChassisNumber", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@InsuranceNumber", SqlDbType.VarChar,254) ,            
+                                    new SqlParameter("@Remarks", SqlDbType.VarChar,254)             
+              
+                        };
+
+                        parameters[0].Value = model.Id;
+                        parameters[1].Value = model.CarCode;
+                        parameters[2].Value = model.CarNumber;
+                        parameters[3].Value = model.MotorcadeName;
+                        parameters[4].Value = model.MotorcycleType;
+                        parameters[5].Value = model.LoadingCapacity;
+                        parameters[6].Value = model.EngineType;
+                        parameters[7].Value = model.FrameNumber;
+                        parameters[8].Value = model.ChassisNumber;
+                        parameters[9].Value = model.InsuranceNumber;
+                        parameters[10].Value = model.Remarks;
+
+                        DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+
+                        new Driver().Update(conn, trans, driver);
+
+                        trans.Commit();
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
 
         /// <summary>
         /// 删除一条数据
@@ -161,6 +287,44 @@ namespace DTcms.DAL
             {
                 return false;
             }
+        }
+
+        public bool MyDelete(int Id)
+        {
+            using (SqlConnection conn = new SqlConnection(DbHelperSQL.connectionString))
+            {
+                conn.Open();
+                using (SqlTransaction trans = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        Model.Vehicle vehicle = new Vehicle().GetModel(Id);
+                        StringBuilder strSql = new StringBuilder();
+                        strSql.Append("delete from mtms_Vehicle ");
+                        strSql.Append(" where Id=@Id");
+                        SqlParameter[] parameters = {
+					            new SqlParameter("@Id", SqlDbType.Int,4)
+			            };
+                        parameters[0].Value = Id;
+
+                        DbHelperSQL.ExecuteSql(conn, trans, strSql.ToString(), parameters);
+
+                        if (vehicle != null)
+                        {
+                            new Driver().Delete(conn, trans, vehicle.CarNumber);
+                        }
+
+                        trans.Commit();
+                    }
+                    catch
+                    {
+                        trans.Rollback();
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -274,6 +438,20 @@ namespace DTcms.DAL
             if (strWhere.Trim() != "")
             {
                 strSql.Append(" where " + strWhere);
+            }
+            recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
+            return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));
+        }
+
+        public DataSet GetMyList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
+        {
+            StringBuilder strSql = new StringBuilder();
+            strSql.Append("SELECT A.Id AS Id, A.CarCode, B.RealName, B.LinkTel ");
+            strSql.Append("FROM mtms_Vehicle A, mtms_Driver b ");
+            strSql.Append("WHERE A.CarCode = B.CarNumber ");
+            if (strWhere.Trim() != "")
+            {
+                strSql.Append(strWhere);
             }
             recordCount = Convert.ToInt32(DbHelperSQL.GetSingle(PagingHelper.CreateCountingSql(strSql.ToString())));
             return DbHelperSQL.Query(PagingHelper.CreatePagingSql(recordCount, pageSize, pageIndex, strSql.ToString(), filedOrder));

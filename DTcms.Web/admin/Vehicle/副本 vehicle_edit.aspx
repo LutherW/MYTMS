@@ -54,7 +54,7 @@
         </div>
 
         <div class="tab-content">
-            <%--<dl>
+            <dl>
                 <dt>所属车队</dt>
                 <dd>
                     <div class="rule-single-select" style="z-index:1000">
@@ -62,23 +62,13 @@
                     </div>
                 </dd>
             </dl>
-            --%>
             <dl>
                 <dt>车号</dt>
                 <dd>
                     <asp:TextBox ID="txtCarCode" runat="server" CssClass="input high" datatype="*2-100" errormsg="输入2-100个字符" sucmsg=" "></asp:TextBox>
                     <span class="Validform_checktip">*</span></dd>
             </dl>
-            <dl>
-                <dt>姓名</dt>
-                <dd><asp:TextBox ID="txtRealName" runat="server" CssClass="input normal" datatype="s2-5" errormsg="输入2-5个字符" sucmsg=" "></asp:TextBox> 
-                    <span class="Validform_checktip">*</span></dd>
-            </dl> 
-            <dl>
-                <dt>联系电话</dt>
-                <dd><asp:TextBox ID="txtLinkTel" runat="server" CssClass="input high"></asp:TextBox></dd>
-            </dl>
-            <%--<dl style="display: none;">
+            <dl style="display: none;">
                 <dt>车牌号</dt>
                 <dd>
                     <asp:TextBox ID="txtCarNumber" runat="server" CssClass="input high" sucmsg=" "></asp:TextBox>
@@ -124,7 +114,7 @@
                 <dd>
                     <asp:TextBox ID="txtRemarks" runat="server" CssClass="input" TextMode="MultiLine"></asp:TextBox>
                 </dd>
-            </dl>--%>
+            </dl>
         </div>
 
         <!--/内容-->

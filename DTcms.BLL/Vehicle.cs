@@ -31,6 +31,11 @@ namespace DTcms.BLL
 
         }
 
+        public bool Add(Model.Vehicle model, Model.Driver driver) 
+        {
+            return dal.Add(model, driver);
+        }
+
         /// <summary>
         /// 更新一条数据
         /// </summary>
@@ -38,6 +43,12 @@ namespace DTcms.BLL
         {
             return dal.Update(model);
         }
+
+        public bool Update(Model.Vehicle model, Model.Driver driver)
+        {
+            return dal.Update(model, driver);
+        }
+
 
         /// <summary>
         /// 删除一条数据
@@ -47,6 +58,12 @@ namespace DTcms.BLL
 
             return dal.Delete(Id);
         }
+        public bool MyDelete(int Id)
+        {
+
+            return dal.MyDelete(Id);
+        }
+
         /// <summary>
         /// 批量删除一批数据
         /// </summary>
@@ -159,6 +176,11 @@ namespace DTcms.BLL
         public DataSet GetList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
         {
             return dal.GetList(pageSize, pageIndex, strWhere, filedOrder, out recordCount);
+        }
+
+        public DataSet GetMyList(int pageSize, int pageIndex, string strWhere, string filedOrder, out int recordCount)
+        {
+            return dal.GetMyList(pageSize, pageIndex, strWhere, filedOrder, out recordCount);
         }
         #endregion
 

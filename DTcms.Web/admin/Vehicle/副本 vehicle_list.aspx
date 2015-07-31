@@ -79,7 +79,7 @@
         <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
         <li><asp:LinkButton ID="btnDelete" runat="server" CssClass="del" OnClientClick="return ExePostBack('btnDelete');" onclick="btnDelete_Click"><i></i><span>删除</span></asp:LinkButton></li>
       </ul>
-      <div class="menu-list" style="display:none;">
+      <div class="menu-list">
         <div class="rule-single-select">
           <asp:DropDownList ID="ddlMotorcadeName" runat="server" AutoPostBack="True" onselectedindexchanged="ddlMotorcadeName_SelectedIndexChanged"></asp:DropDownList>
         </div>
@@ -99,9 +99,16 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
   <tr>
     <th width="8%">选择</th>
-    <th align="left">车号</th>
-    <th align="left" >司机</th>
-    <th>联系电话</th>
+    <th align="left" width="10%">车号</th>
+    <th align="left" style="display:none;">车牌号码</th>
+    <th width="8%">所属车队</th>
+    <th width="8%">车型号</th>
+    <th width="8%">载重</th>
+    <th width="8%">发动机型号</th>
+    <th width="8%">车架号</th>
+    <th width="8%">底盘号</th>
+    <th width="8%">保险号</th>
+    <th>备注</th>
     <th width="8%">操作</th>
   </tr>
 </HeaderTemplate>
@@ -116,13 +123,20 @@
         <%#Eval("CarCode")%>
       </a>
     </td>
-    <td align="center"><%#Eval("RealName")%></td>
-    <td align="center"><%#Eval("LinkTel")%></td>
+    <td style="display:none;"><%#Eval("CarNumber")%></td>
+    <td align="center"><%#Eval("MotorcadeName")%></td>
+    <td align="center"><%#Eval("MotorcycleType")%></td>
+    <td align="center"><%#Eval("LoadingCapacity")%></td>
+    <td align="center"><%#Eval("EngineType")%></td>
+    <td align="center"><%#Eval("FrameNumber")%></td>
+    <td align="center"><%#Eval("ChassisNumber")%></td>
+    <td align="center"><%#Eval("InsuranceNumber")%></td>
+    <td align="center"><%#Eval("Remarks")%></td>
     <td align="center"><a href="vehicle_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("id")%>">修改</a></td>
   </tr>
 </ItemTemplate>
 <FooterTemplate>
-  <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"5\">暂无记录</td></tr>" : ""%>
+  <%#rptList.Items.Count == 0 ? "<tr><td align=\"center\" colspan=\"9\">暂无记录</td></tr>" : ""%>
 </table>
 </FooterTemplate>
 </asp:Repeater>

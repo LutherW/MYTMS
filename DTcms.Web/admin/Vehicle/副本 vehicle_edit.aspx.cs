@@ -46,25 +46,25 @@ namespace DTcms.Web.admin.Vehicle
         #region 绑定类别=================================
         private void TreeBind(string strWhere)
         {
-            //BLL.Motorcade bll = new BLL.Motorcade();
-            //DataTable dt = bll.GetList(0, strWhere, "Id desc").Tables[0];
+            BLL.Motorcade bll = new BLL.Motorcade();
+            DataTable dt = bll.GetList(0, strWhere, "Id desc").Tables[0];
 
-            //this.ddlMotorcadeName.Items.Clear();
-            //this.ddlMotorcadeName.Items.Add(new ListItem("请选择车队...", ""));
-            //foreach (DataRow dr in dt.Rows)
-            //{
-            //    this.ddlMotorcadeName.Items.Add(new ListItem(dr["Name"].ToString(), dr["Name"].ToString()));
-            //}
+            this.ddlMotorcadeName.Items.Clear();
+            this.ddlMotorcadeName.Items.Add(new ListItem("请选择车队...", ""));
+            foreach (DataRow dr in dt.Rows)
+            {
+                this.ddlMotorcadeName.Items.Add(new ListItem(dr["Name"].ToString(), dr["Name"].ToString()));
+            }
 
-            //BLL.MotorcycleType mtBLL = new BLL.MotorcycleType();
-            //DataTable mtdt = mtBLL.GetList(0, strWhere, "Id desc").Tables[0];
+            BLL.MotorcycleType mtBLL = new BLL.MotorcycleType();
+            DataTable mtdt = mtBLL.GetList(0, strWhere, "Id desc").Tables[0];
 
-            //this.ddlMotorcycleType.Items.Clear();
-            //this.ddlMotorcycleType.Items.Add(new ListItem("请选择车型...", ""));
-            //foreach (DataRow dr in mtdt.Rows)
-            //{
-            //    this.ddlMotorcycleType.Items.Add(new ListItem(dr["Name"].ToString(), dr["Name"].ToString()));
-            //}
+            this.ddlMotorcycleType.Items.Clear();
+            this.ddlMotorcycleType.Items.Add(new ListItem("请选择车型...", ""));
+            foreach (DataRow dr in mtdt.Rows)
+            {
+                this.ddlMotorcycleType.Items.Add(new ListItem(dr["Name"].ToString(), dr["Name"].ToString()));
+            }
         }
         #endregion
 
@@ -73,18 +73,18 @@ namespace DTcms.Web.admin.Vehicle
         {
             BLL.Vehicle bll = new BLL.Vehicle();
             Model.Vehicle model = bll.GetModel(_id);
-            if (model != null)
-            {
-                txtCarCode.Text = model.CarCode;
 
-                BLL.Driver driverBLL = new BLL.Driver();
-                Model.Driver driver = driverBLL.GetModel(model.CarCode);
-                if (driver != null)
-                {
-                    txtRealName.Text = driver.RealName;
-                    txtLinkTel.Text = driver.LinkTel;
-                }
-            }
+            ddlMotorcadeName.SelectedValue = model.MotorcadeName;
+            txtCarCode.Text = model.CarCode;
+            txtCarNumber.Text = model.CarNumber;
+            ddlMotorcycleType.SelectedValue = model.MotorcycleType;
+            txtEngineType.Text = model.EngineType;
+            txtChassisNumber.Text = model.ChassisNumber;
+            txtFrameNumber.Text = model.FrameNumber;
+            txtInsuranceNumber.Text = model.InsuranceNumber;
+            txtLoadingCapacity.Text = model.LoadingCapacity.ToString();
+            txtRemarks.Text = model.Remarks;
+          
         }
         #endregion
 
@@ -95,36 +95,18 @@ namespace DTcms.Web.admin.Vehicle
             Model.Vehicle model = new Model.Vehicle();
             BLL.Vehicle bll = new BLL.Vehicle();
 
-            model.MotorcadeName = "";
+            model.MotorcadeName = ddlMotorcadeName.SelectedValue;
             model.CarCode = txtCarCode.Text.Trim();
-            model.CarNumber = model.CarCode;
-            model.MotorcycleType = "";
-            model.EngineType = "";
-            model.ChassisNumber = "";
-            model.FrameNumber = "";
-            model.InsuranceNumber = "";
-            model.LoadingCapacity = 0.00M;
-            model.Remarks = "";
+            model.CarNumber = string.IsNullOrEmpty(txtCarNumber.Text.Trim()) ? model.CarCode : txtCarNumber.Text.Trim();
+            model.MotorcycleType = ddlMotorcycleType.SelectedValue;
+            model.EngineType = txtEngineType.Text.Trim();
+            model.ChassisNumber = txtChassisNumber.Text.Trim();
+            model.FrameNumber = txtFrameNumber.Text.Trim();
+            model.InsuranceNumber = txtInsuranceNumber.Text.Trim();
+            model.LoadingCapacity = Utils.StrToDecimal(txtLoadingCapacity.Text.Trim(), 0.00M);
+            model.Remarks = txtRemarks.Text.Trim();
 
-            Model.Driver driver = new Model.Driver();
-            BLL.Driver driverBll = new BLL.Driver();
-
-            driver.CarNumber = model.CarNumber;
-            driver.RealName = txtRealName.Text.Trim();
-            driver.RealNameCode = "";
-            driver.IdCardNumber = "";
-            driver.LinkTel = txtLinkTel.Text.Trim();
-            driver.LinkAddress = "";
-            driver.BeganWorkDate = DateTime.Now;
-            driver.IssuedDate = DateTime.Now;
-            driver.AnnualDate = DateTime.Now;
-            driver.DrivingLicence = "";
-            driver.DrivingPermitNumber = "";
-            driver.DrivingPermitType = "";
-            driver.IsDimission = 0;
-            driver.Remarks = "";
-
-            if (bll.Add(model, driver))
+            if (bll.Add(model) > 0)
             {
                 AddAdminLog(DTEnums.ActionEnum.Add.ToString(), "添加车辆:" + model.CarCode); //记录日志
                 result = true;
@@ -139,39 +121,19 @@ namespace DTcms.Web.admin.Vehicle
             bool result = false;
             BLL.Vehicle bll = new BLL.Vehicle();
             Model.Vehicle model = bll.GetModel(_id);
-            string carNumber = model.CarNumber;
 
-            model.MotorcadeName = "";
+            model.MotorcadeName = ddlMotorcadeName.SelectedValue;
             model.CarCode = txtCarCode.Text.Trim();
-            model.CarNumber = model.CarCode;
-            model.MotorcycleType = "";
-            model.EngineType = "";
-            model.ChassisNumber = "";
-            model.FrameNumber = "";
-            model.InsuranceNumber = "";
-            model.LoadingCapacity = 0.00M;
-            model.Remarks = "";
+            model.CarNumber = string.IsNullOrEmpty(txtCarNumber.Text.Trim()) ? model.CarCode : txtCarNumber.Text.Trim();
+            model.MotorcycleType = ddlMotorcycleType.SelectedValue;
+            model.EngineType = txtEngineType.Text.Trim();
+            model.ChassisNumber = txtChassisNumber.Text.Trim();
+            model.FrameNumber = txtFrameNumber.Text.Trim();
+            model.InsuranceNumber = txtInsuranceNumber.Text.Trim();
+            model.LoadingCapacity = Utils.StrToDecimal(txtLoadingCapacity.Text.Trim(), 0.00M);
+            model.Remarks = txtRemarks.Text.Trim();
 
-            
-            BLL.Driver driverBll = new BLL.Driver();
-            Model.Driver driver = driverBll.GetModel(carNumber);
-
-            driver.CarNumber = model.CarNumber;
-            driver.RealName = txtRealName.Text.Trim();
-            driver.RealNameCode = "";
-            driver.IdCardNumber = "";
-            driver.LinkTel = txtLinkTel.Text.Trim();
-            driver.LinkAddress = "";
-            driver.BeganWorkDate = DateTime.Now;
-            driver.IssuedDate = DateTime.Now;
-            driver.AnnualDate = DateTime.Now;
-            driver.DrivingLicence = "";
-            driver.DrivingPermitNumber = "";
-            driver.DrivingPermitType = "";
-            driver.IsDimission = 0;
-            driver.Remarks = "";
-
-            if (bll.Update(model, driver))
+            if (bll.Update(model))
             {
                 AddAdminLog(DTEnums.ActionEnum.Edit.ToString(), "修改车辆信息:" + model.CarCode); //记录日志
                 result = true;
