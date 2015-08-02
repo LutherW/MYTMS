@@ -99,8 +99,8 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
   <tr>
     <th width="8%">选择</th>
-    <th width="20%" align="left">车号</th>
-    <th width="20%" align="left" >司机</th>
+    <th width="20%">车号</th>
+    <th width="20%">司机</th>
     <th>联系电话</th>
     <th width="8%">操作</th>
   </tr>
@@ -111,7 +111,7 @@
       <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" style="vertical-align:middle;" />
       <asp:HiddenField ID="hidId" Value='<%#Eval("Id")%>' runat="server" />
     </td>
-    <td width="64">
+    <td>
       <a href="vehicle_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">
         <%#Eval("CarCode")%>
       </a>

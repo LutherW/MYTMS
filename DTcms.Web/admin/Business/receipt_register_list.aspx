@@ -112,7 +112,7 @@
                             <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" Style="vertical-align: middle;" />
                             <asp:HiddenField ID="hidId" Value='<%#Eval("Id")%>' runat="server" />
                         </td>
-                        <td width="64">
+                        <td>
                             <%#Eval("Code")%>
                         </td>
                         <td><%#string.Format("{0:d}", Eval("FactArriveDate"))%></td>

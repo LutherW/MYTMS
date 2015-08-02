@@ -95,7 +95,7 @@
                             <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" Style="vertical-align: middle;" />
                             <asp:HiddenField ID="hidId" Value='<%#Eval("Id")%>' runat="server" />
                         </td>
-                        <td width="64">
+                        <td>
                             <%#(Eval("Status").ToString().Equals("0") || Eval("Status").ToString().Equals("1")) ? string.Format("<a href=\"dispatch_register.aspx?action={0}&id={1}\">{2}</a>", DTEnums.ActionEnum.Edit, Eval("Id"), Eval("Code")) : Eval("Code")%>
                         </td>
                         <td><%#string.Format("{0:d}", Eval("DispatchTime"))%></td>

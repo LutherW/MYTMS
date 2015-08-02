@@ -70,7 +70,7 @@
       <asp:CheckBox ID="chkId" CssClass="checkall" runat="server" style="vertical-align:middle;" />
       <asp:HiddenField ID="hidId" Value='<%#Eval("Id")%>' runat="server" />
     </td>
-    <td width="64">
+    <td>
       <a href="driver_edit.aspx?action=<%#DTEnums.ActionEnum.Edit %>&id=<%#Eval("Id")%>">
         <%#Eval("RealName")%>
       </a>
