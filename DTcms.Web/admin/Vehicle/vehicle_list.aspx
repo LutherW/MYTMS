@@ -99,8 +99,8 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
   <tr>
     <th width="8%">选择</th>
-    <th align="left">车号</th>
-    <th align="left" >司机</th>
+    <th width="20%" align="left">车号</th>
+    <th width="20%" align="left" >司机</th>
     <th>联系电话</th>
     <th width="8%">操作</th>
   </tr>
